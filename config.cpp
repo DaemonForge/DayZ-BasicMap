@@ -1062,7 +1062,7 @@ class MapDefaults
 	fontGrid = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
 	fontUnits = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
 	fontNames = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
-	sizeExNames = 0.032;
+	sizeExNames = 0.05;
 	fontInfo = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
 	fontLevel = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
 	text = "#(argb,8,8,3)color(0.95,0.95,0.95,0.95)";
@@ -1394,7 +1394,7 @@ class RscMapControl
 	fontGrid = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
 	fontUnits = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
 	fontNames = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
-	sizeExNames = 0.032;
+	sizeExNames = 0.05;
 	fontInfo = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
 	fontLevel = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
 	text = "#(argb,8,8,3)color(0.95,0.95,0.95,0.95)";

@@ -24,18 +24,20 @@ class BasicMapController{
 		if ( !ctx.Read( data ) ) return;
         if ( GetGame().IsMultiplayer() && GetGame().IsClient() ){
 			ServerMarkers = data.param1;
+			Print("[BASICMAP]Loading " + ServerMarkers.Count() + " Server Markers" );
 		} else if (GetGame().IsMultiplayer() && GetGame().IsServer()){
+			Print("[BASICMAP]Sending " + ServerMarkers.Count() + " Server Markers" );
 			GetRPCManager().SendRPC("BasicMap", "RPCSyncServerData", new Param1< array<ref BasicMapMarker> >( ServerMarkers ), true, sender);
 		}
 	} 
 	
 	void LoadServerMarkers(){
-		JsonFileLoader< array<ref BasicMapMarker> >.JsonSaveFile(ServerMarkersPath, ServerMarkers);
+		JsonFileLoader< array<ref BasicMapMarker> >.JsonLoadFile(ServerMarkersPath, ServerMarkers);
 	}
 	
 	void ServerFirstRun(){
-		ServerMarkers.Insert(new ref BasicMapMarker("Green Mountain", "BasicMap\\gui\\images\\marker.paa", Vector(3693.56, 402.312,6010.05), Vector(173, 3, 252)));
-		ServerMarkers.Insert(new ref BasicMapMarker("Kumyrna", "BasicMap\\gui\\images\\marker.paa", Vector(8345.61, 292.302, 5985.93), Vector(173, 3, 252)));
+		ServerMarkers.Insert(new ref BasicMapMarker("Green Mountain", "BasicMap\\gui\\images\\marker.paa", Vector(3693.56, 402.312,6010.05), Vector(111, 3, 252)));
+		ServerMarkers.Insert(new ref BasicMapMarker("Kumyrna", "BasicMap\\gui\\images\\marker.paa", Vector(8345.61, 292.302, 5985.93), Vector(111, 3, 252)));
 		JsonFileLoader< array<ref BasicMapMarker> >.JsonSaveFile(ServerMarkersPath, ServerMarkers);
 	}
 
@@ -48,12 +50,15 @@ class BasicMapController{
 		int GroupMarkerIndex = ClientMarkersCount;
 		int GroupMarkerCount = ClientMarkersCount + GroupMarkers.Count();
 		if (i < ServerMarkers.Count()){
+			Print("[BASICMAP]Returning Server Marker: " + i);
 			return ServerMarkers.Get(i);
 		} else if ( i < ClientMarkersCount){
 			i = i - ClientMarkersIndex;
+			Print("[BASICMAP]Returning Client Marker: " + i);
 			return ClientMarkers.Get(i);
 		} else if ( i < GroupMarkerCount){
 			i = i - GroupMarkerIndex;
+			Print("[BASICMAP]Returning Group Marker: " + i);
 			return GroupMarkers.Get(i);
 		}
 		return NULL;

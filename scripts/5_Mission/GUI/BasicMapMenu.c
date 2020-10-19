@@ -6,6 +6,7 @@ class BasicMapMenu extends UIScriptedMenu
 	protected bool						m_PanelIsOpen = false; 
 	protected bool						m_IsInitialized = false;
 	
+	protected Widget 					m_MapPanel;
 	protected MapWidget					m_Map;
 	
 	protected Widget 					m_Expand;
@@ -22,6 +23,8 @@ class BasicMapMenu extends UIScriptedMenu
 		}
 		
 		layoutRoot 					= GetGame().GetWorkspace().CreateWidgets("BasicMap/gui/layouts/BasicMap.layout");
+		
+        m_MapPanel 					= Widget.Cast( layoutRoot.FindAnyWidget( "MapPanel" ) );
         m_Map 						= MapWidget.Cast( layoutRoot.FindAnyWidget( "Map" ) );
 		
 		m_Expand					= Widget.Cast( layoutRoot.FindAnyWidget( "Expand" ) );
@@ -85,12 +88,14 @@ class BasicMapMenu extends UIScriptedMenu
 	{
 		if (w == m_Expand){
 			m_ExpandPanel.Show(false);
-			m_Markers.Show(true);
+			m_MapPanel.SetSize(0.82,0.96);
+			m_Markers.SetSize(0.18,0.96);
 			return true;
 		}
 		if (w == m_Minimize){
 			m_ExpandPanel.Show(true);
-			m_Markers.Show(false);
+			m_MapPanel.SetSize(0.98,0.96);
+			m_Markers.SetSize(0,0.96);
 			return true;
 		}
 		return super.OnClick(w, x, y, button);
