@@ -1,0 +1,16 @@
+MetaFileClass {
+ Name "{88DDC577ADB7C4FE}gui/fonts/Oswald/Oswald-Medium/oswald-medium94.edds"
+ Author "desktop-3up08te"
+ ChangeDate -1435178738
+ Configurations {
+  TGAResourceClass PC {
+   SourceFile "oswald-medium94.tga"
+  }
+  TGAResourceClass XBOX_ONE : PC {
+  }
+  TGAResourceClass PS4 : PC {
+  }
+  TGAResourceClass LINUX : PC {
+  }
+ }
+}

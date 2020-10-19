@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<modded_inputs>
+    <inputs>
+        <actions>
+            <input name="UABasicMap" loc="Map" />
+        </actions>
+    </inputs>
+    <preset>
+        <input name="UABasicMap">
+            <btn name="kM" />
+        </input>
+    </preset>
+</modded_inputs>

@@ -1,0 +1,16 @@
+MetaFileClass {
+ Name "{4680A3E279F1DDDB}gui/fonts/Oswald/Oswald-Regular/oswald-regular50.edds"
+ Author "desktop-3up08te"
+ ChangeDate -1434130162
+ Configurations {
+  TGAResourceClass PC {
+   SourceFile "oswald-regular50.tga"
+  }
+  TGAResourceClass XBOX_ONE : PC {
+  }
+  TGAResourceClass PS4 : PC {
+  }
+  TGAResourceClass LINUX : PC {
+  }
+ }
+}

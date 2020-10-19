@@ -1,0 +1,16 @@
+MetaFileClass {
+ Name "{6C606462244F0986}gui/fonts/Oswald/Oswald-SemiBold/oswald-semibold56.edds"
+ Author "desktop-3up08te"
+ ChangeDate -1063982834
+ Configurations {
+  TGAResourceClass PC {
+   SourceFile "oswald-semibold56.tga"
+  }
+  TGAResourceClass XBOX_ONE : PC {
+  }
+  TGAResourceClass PS4 : PC {
+  }
+  TGAResourceClass LINUX : PC {
+  }
+ }
+}
