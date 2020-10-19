@@ -876,7 +876,7 @@ class CfgLocationTypes
 		name = "keypoint";
 		drawStyle = "name";
 		texture = "#(argb,1,1,1)color(0.15,0.15,0.12,0.85)";
-		color[] = {0.3,0.3,0.25,0.99};
+		color[] = {0.25,0.25,0.35,0.99};
 		size = 0;
 		font = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
 		textSize = 0.033;
@@ -887,8 +887,8 @@ class CfgLocationTypes
 	{
 		name = "keypoint";
 		drawStyle = "icon";
-		texture = "#(argb,1,1,1)color(0.2,0.2,0.15,0.99)";
-		color[] = {0.3,0.3,0.25,0.95};
+		texture = "#(argb,1,1,1)color(0.15,0.15,0.25,0.99)";
+		color[] = {0.20,0.20,0.32,0.95};
 		size = 0;
 		font = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
 		textSize = 0.048;
@@ -897,31 +897,31 @@ class CfgLocationTypes
 	};
 	class Capital: Name
 	{
-		color[] = {0.33,0.33,0.15,0.99};
+		color[] = {0.15,0.15,0.35,0.99};
 		textSize = 0.08;
 		importance = 7;
 	};
 	class City: Name
 	{
-		color[] = {0.39,0.39,0.17,0.95};
+		color[] = {0.17,0.17,0.39,0.95};
 		textSize = 0.055;
 		importance = 6;
 	};
 	class Village: Name
 	{
-		color[] = {0.44,0.38,0.3,0.95};
+		color[] = {0.3,0.38,0.48,0.95};
 		textSize = 0.046;
 		importance = 4;
 	};
 	class Local: Name
 	{
-		color[] = {0.44,0.38,0.3,0.95};
+		color[] = {0.3,0.38,0.48,0.95};
 		textSize = 0.035;
 		importance = 2;
 	};
 	class Marine: Name
 	{
-		color[] = {0.05,0.4,0.8,0.8};
+		color[] = {0.05,0.4,0.6,0.8};
 		textSize = 0.03;
 		importance = 2;
 	};
@@ -1012,7 +1012,7 @@ class CfgLocationTypes
 class MapDefaults
 {
 	scaleMin = 0.005;
-	scaleMax = 0.95;
+	scaleMax = 0.90;
 	ptsPerSquareSea = 8;
 	ptsPerSquareTxt = 10;
 	ptsPerSquareCLn = 10;
@@ -1022,16 +1022,16 @@ class MapDefaults
 	ptsPerSquareForEdge = 15;
 	ptsPerSquareRoad = 4;
 	ptsPerSquareObj = 15;
-	scaleDefault = 0.16;
-	maxSatelliteAlpha = 0.3;
-	alphaFadeStartScale = 1;
-	alphaFadeEndScale = 1;
-	userMapPath = "dz\gear\navigation\data\usermap";
-	maxUserMapAlpha = 0.0;
-	alphaUserMapFadeStartScale = 0.3;
-	alphaUserMapFadeEndScale = 0.75;
+	scaleDefault = 0.65;
+	maxSatelliteAlpha = 0.70;
+	alphaFadeStartScale = 2;
+	alphaFadeEndScale = 2;
+	userMapPath = "";
+	maxUserMapAlpha = 0.7;
+	alphaUserMapFadeStartScale = 0.5;
+	alphaUserMapFadeEndScale = 1;
 	showCountourInterval = 1;
-	colorBackground[] = {0.971,0.96,0.952,0.1};
+	colorBackground[] = {0.971,0.96,0.952,0.00};
 	colorSea[] = {0.467,0.631,0.851,0.5};
 	colorForest[] = {0.42,0.51,0.27,0.7};
 	colorForestBorder[] = {0.0,0.0,0.0,0.0};
@@ -1062,6 +1062,7 @@ class MapDefaults
 	fontGrid = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
 	fontUnits = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
 	fontNames = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
+	sizeExNames = 0.032;
 	fontInfo = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
 	fontLevel = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
 	text = "#(argb,8,8,3)color(0.95,0.95,0.95,0.95)";
@@ -1083,7 +1084,7 @@ class MapDefaults
 		size = 14;
 		importance = "0.2 * 14 * 0.05";
 		coefMin = 0.2;
-		coefMax = 3;
+		coefMax = 2;
 	};
 	class SmallTree
 	{
@@ -1092,7 +1093,7 @@ class MapDefaults
 		size = 12;
 		importance = "0.6 * 12 * 0.05";
 		coefMin = 0.2;
-		coefMax = 3;
+		coefMax = 2;
 	};
 	class Rock
 	{
@@ -1188,9 +1189,9 @@ class MapDefaults
 	{
 		icon = "BasicMap\gui\images\well.paa";
 		color[] = {0.2,0.45,0.7,1};
-		size = 18;
-		importance = "1 * 12 * 0.05";
-		coefMin = 0.1;
+		size = 16;
+		importance = "1 * 22 * 0.05";
+		coefMin = 0.5;
 		coefMax = 4;
 	};
 	class Hospital
@@ -1206,7 +1207,7 @@ class MapDefaults
 	{
 		icon = "\dz\gear\navigation\data\map_store_ca.paa";
 		color[] = {1,1,1,1};
-		size = 16;
+		size = 18;
 		importance = "2 * 16 * 0.05";
 		coefMin = 0.1;
 		coefMax = 4;
@@ -1215,7 +1216,7 @@ class MapDefaults
 	{
 		icon = "BasicMap\gui\images\police.paa";
 		color[] = {0.09,0.09,0.20,0.8};
-		size = 14;
+		size = 18;
 		importance = "2 * 16 * 0.05";
 		coefMin = 0.1;
 		coefMax = 2;
@@ -1224,7 +1225,7 @@ class MapDefaults
 	{
 		icon = "\dz\gear\navigation\data\map_firedep_ca.paa";
 		color[] = {0.764,0,0,0.8};
-		size = 14;
+		size = 18;
 		importance = "2 * 16 * 0.05";
 		coefMin = 0.2;
 		coefMax = 2;
@@ -1343,7 +1344,7 @@ class MapDefaults
 class RscMapControl
 {
 	scaleMin = 0.005;
-	scaleMax = 0.95;
+	scaleMax = 0.90;
 	ptsPerSquareSea = 8;
 	ptsPerSquareTxt = 10;
 	ptsPerSquareCLn = 10;
@@ -1353,16 +1354,16 @@ class RscMapControl
 	ptsPerSquareForEdge = 15;
 	ptsPerSquareRoad = 4;
 	ptsPerSquareObj = 15;
-	scaleDefault = 0.16;
-	maxSatelliteAlpha = 0.3;
-	alphaFadeStartScale = 1;
-	alphaFadeEndScale = 1;
-	userMapPath = "dz\gear\navigation\data\usermap";
-	maxUserMapAlpha = 0.0;
+	scaleDefault = 0.65;
+	maxSatelliteAlpha = 0.70;
+	alphaFadeStartScale = 2;
+	alphaFadeEndScale = 2;
+	userMapPath = "";
+	maxUserMapAlpha = 0.7;
 	alphaUserMapFadeStartScale = 0.50;
-	alphaUserMapFadeEndScale = 0.75;
+	alphaUserMapFadeEndScale = 0.95;
 	showCountourInterval = 1;
-	colorBackground[] = {0.971,0.96,0.952,0.1};
+	colorBackground[] = {0.971,0.96,0.952,0.05};
 	colorSea[] = {0.467,0.631,0.851,0.5};
 	colorForest[] = {0.42,0.51,0.27,0.7};
 	colorForestBorder[] = {0.0,0.0,0.0,0.0};
@@ -1393,6 +1394,7 @@ class RscMapControl
 	fontGrid = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
 	fontUnits = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
 	fontNames = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
+	sizeExNames = 0.032;
 	fontInfo = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
 	fontLevel = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
 	text = "#(argb,8,8,3)color(0.95,0.95,0.95,0.95)";
@@ -1414,7 +1416,7 @@ class RscMapControl
 		size = 14;
 		importance = "0.2 * 14 * 0.05";
 		coefMin = 0.2;
-		coefMax = 3;
+		coefMax = 2;
 	};
 	class SmallTree
 	{
@@ -1423,7 +1425,7 @@ class RscMapControl
 		size = 12;
 		importance = "0.6 * 12 * 0.05";
 		coefMin = 0.2;
-		coefMax = 3;
+		coefMax = 2;
 	};
 	class Rock
 	{
@@ -1519,16 +1521,16 @@ class RscMapControl
 	{
 		icon = "BasicMap\gui\images\well.paa";
 		color[] = {0.2,0.45,0.7,1};
-		size = 20;
-		importance = "1 * 12 * 0.05";
-		coefMin = 0.1;
+		size = 18;
+		importance = "1 * 18 * 0.05";
+		coefMin = 0.5;
 		coefMax = 4;
 	};
 	class Hospital
 	{
 		icon = "BasicMap\gui\images\hospital.paa";
 		color[] = {0.15,0.26,0.87,1};
-		size = 20;
+		size = 18;
 		importance = "2 * 16 * 0.05";
 		coefMin = 0.1;
 		coefMax = 4;
@@ -1537,7 +1539,7 @@ class RscMapControl
 	{
 		icon = "\dz\gear\navigation\data\map_store_ca.paa";
 		color[] = {1,1,1,1};
-		size = 20;
+		size = 18;
 		importance = "2 * 16 * 0.05";
 		coefMin = 0.1;
 		coefMax = 4;
@@ -1549,13 +1551,13 @@ class RscMapControl
 		size = 18;
 		importance = "2 * 16 * 0.05";
 		coefMin = 0.1;
-		coefMax = 3;
+		coefMax = 2;
 	};
 	class FireDep
 	{
 		icon = "\dz\gear\navigation\data\map_firedep_ca.paa";
 		color[] = {0.764,0,0,0.8};
-		size = 14;
+		size = 18;
 		importance = "2 * 16 * 0.05";
 		coefMin = 0.2;
 		coefMax = 2;

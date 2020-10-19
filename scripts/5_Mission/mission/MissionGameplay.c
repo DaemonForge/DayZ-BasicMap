@@ -1,5 +1,8 @@
 modded class MissionGameplay extends MissionBase
 {
+	void MissionGameplay(){
+		BasicMap();
+	}
 	
 	override void OnUpdate (float timeslice) {
         super.OnUpdate(timeslice);

@@ -8,7 +8,8 @@ FrameWidgetClass rootFrame {
  hexactsize 0
  vexactsize 0
  {
-  MapWidgetClass Map {
+  PanelWidgetClass MapPanel {
+   ignorepointer 1
    position 0 0
    size 1 1
    halign center_ref
@@ -18,6 +19,29 @@ FrameWidgetClass rootFrame {
    hexactsize 0
    vexactsize 0
    {
+    FrameWidgetClass MapFrame {
+     ignorepointer 1
+     position 0 0
+     size 1 1
+     halign center_ref
+     valign center_ref
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     {
+      MapWidgetClass Map {
+       position 0 0
+       size 1 1
+       halign center_ref
+       valign center_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+      }
+     }
+    }
     PanelWidgetClass Markers {
      ignorepointer 1
      color 0.1098 0.1569 0.298 0.6275
@@ -27,6 +51,8 @@ FrameWidgetClass rootFrame {
      vexactpos 1
      hexactsize 1
      vexactsize 0
+     priority 5
+     draggable 1
      style rover_sim_colorable
      {
       PanelWidgetClass Heading {
@@ -57,7 +83,7 @@ FrameWidgetClass rootFrame {
          "text valign" center
         }
         ButtonWidgetClass Minimize {
-         visible 0
+         visible 1
          size 32 32
          halign right_ref
          hexactpos 1
@@ -101,6 +127,7 @@ FrameWidgetClass rootFrame {
      vexactpos 0
      hexactsize 1
      vexactsize 1
+     priority 5
      {
       ButtonWidgetClass Expand {
        position 0 0

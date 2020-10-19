@@ -11,6 +11,8 @@ class BasicMapMenu extends UIScriptedMenu
 	protected Widget 					m_Expand;
 	protected Widget					m_Minimize;
 	
+	protected Widget					m_ExpandPanel;
+	
 	protected Widget					m_Markers;
 		
 	override Widget Init()
@@ -43,6 +45,10 @@ class BasicMapMenu extends UIScriptedMenu
 	
 	void UpdateMarkers(){
 		m_Map.ClearUserMarks();
+		for (int i = 0; i < BasicMap().Count(); i++) {
+			BasicMapMarker marker = BasicMap().Marker(i);
+			m_Map.AddUserMark(marker.GetPosition(),marker.Name, marker.GetColour(), marker.Icon);
+		}
 		UpdateMe();
 	}
 	
@@ -57,7 +63,7 @@ class BasicMapMenu extends UIScriptedMenu
 	void UpdateMe(){
 		PlayerBase me = PlayerBase.Cast(GetGame().GetPlayer());
 		if (me){
-			m_Map.AddUserMark(me.GetPosition(), "Me", ARGB(230,44,149,163), "BasicMap\\gui\\images\\me.paa");
+			m_Map.AddUserMark(me.GetPosition(), " Me", ARGB(230, 33, 233, 255), "BasicMap\\gui\\images\\me.paa");
 		}
 	}
 	
