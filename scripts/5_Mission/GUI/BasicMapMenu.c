@@ -88,14 +88,16 @@ class BasicMapMenu extends UIScriptedMenu
 	{
 		if (w == m_Expand){
 			m_ExpandPanel.Show(false);
-			m_MapPanel.SetSize(0.82,0.96);
-			m_Markers.SetSize(0.18,0.96);
+			m_MapPanel.SetSize(0.82,1);
+			m_Markers.SetSize(0.18,1);
+			m_Markers.Show(true);
 			return true;
 		}
 		if (w == m_Minimize){
 			m_ExpandPanel.Show(true);
-			m_MapPanel.SetSize(0.98,0.96);
-			m_Markers.SetSize(0,0.96);
+			m_MapPanel.SetSize(0.988,1);
+			m_Markers.Show(false);
+			m_Markers.SetSize(0,1);
 			return true;
 		}
 		return super.OnClick(w, x, y, button);

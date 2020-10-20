@@ -36,8 +36,8 @@ class BasicMapController{
 	}
 	
 	void ServerFirstRun(){
-		ServerMarkers.Insert(new ref BasicMapMarker("Green Mountain", "BasicMap\\gui\\images\\marker.paa", Vector(3693.56, 402.312,6010.05), Vector(111, 3, 252)));
-		ServerMarkers.Insert(new ref BasicMapMarker("Kumyrna", "BasicMap\\gui\\images\\marker.paa", Vector(8345.61, 292.302, 5985.93), Vector(111, 3, 252)));
+		ServerMarkers.Insert(new ref BasicMapMarker("Green Mountain", "BasicMap\\gui\\images\\marker.paa", Vector(3693.56, 402.312,6010.05), {111, 3, 252}));
+		ServerMarkers.Insert(new ref BasicMapMarker("Kumyrna", "BasicMap\\gui\\images\\marker.paa", Vector(8345.61, 292.302, 5985.93),  {111, 3, 252}));
 		JsonFileLoader< array<ref BasicMapMarker> >.JsonSaveFile(ServerMarkersPath, ServerMarkers);
 	}
 

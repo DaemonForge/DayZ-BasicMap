@@ -11,8 +11,8 @@ FrameWidgetClass rootFrame {
   PanelWidgetClass MapPanel {
    visible 1
    ignorepointer 1
-   position 0.01 0
-   size 0.81 0.96
+   position 0 0
+   size 0.988 1
    halign right_ref
    valign center_ref
    hexactpos 0
@@ -50,8 +50,8 @@ FrameWidgetClass rootFrame {
    clipchildren 0
    ignorepointer 1
    color 0.1098 0.1569 0.298 0.7647
-   position 0 0.02
-   size 0.01 0.02
+   position 0 0
+   size 0.012 1
    hexactpos 0
    vexactpos 0
    hexactsize 0
@@ -60,7 +60,7 @@ FrameWidgetClass rootFrame {
    {
     ButtonWidgetClass Expand {
      position 0 0
-     size 1 1
+     size 1 0.02
      hexactpos 0
      vexactpos 0
      hexactsize 0
@@ -74,6 +74,7 @@ FrameWidgetClass rootFrame {
        vexactpos 0
        hexactsize 0
        vexactsize 0
+       image0 "BasicMap/gui/images/expand.paa"
        mode blend
        "src alpha" 1
        stretch 1
@@ -83,12 +84,12 @@ FrameWidgetClass rootFrame {
    }
   }
   PanelWidgetClass Markers {
-   visible 1
+   visible 0
    clipchildren 0
    ignorepointer 1
    color 0.1098 0.1569 0.298 0.7647
-   position 0 0.02
-   size 0.18 0.96
+   position 0 0
+   size 0.18 1
    hexactpos 0
    vexactpos 0
    hexactsize 0
@@ -141,6 +142,7 @@ FrameWidgetClass rootFrame {
          vexactpos 0
          hexactsize 0
          vexactsize 0
+		 image0 "BasicMap/gui/images/minimize.paa"
          mode blend
          "src alpha" 1
          stretch 1

@@ -3,10 +3,10 @@ class BasicMapMarker {
 	string Icon = "BasicMap\\gui\\images\\marker.paa";
 	bool OnHUD = false;
 	vector Pos = Vector(0,0,0);
-	vector Colour = Vector(0,0,0);
-	float Alpha = 0.9;
+	ref array<int> Colour = {0,0,0};
+	int Alpha = 235;
 	
-	void BasicMapMarker(string name, string icon, vector pos, vector colour, float alpha = 0.9, bool onHUD = false){
+	void BasicMapMarker(string name, string icon, vector pos, ref array<int> colour, int alpha = 235, bool onHUD = false){
 		Name = name;
 		Icon = icon;
 		Pos = pos;
@@ -28,7 +28,11 @@ class BasicMapMarker {
 	}
 	
 	int GetColour(){
-		return VectortoRGBA(Colour, Alpha);
+		int a = Alpha;
+		int r = Colour[0];
+		int g  = Colour[1];
+		int b  = Colour[2];
+		return ARGB(a, r, g, b);
 	}
 	
 	int GetColor(){ // :P

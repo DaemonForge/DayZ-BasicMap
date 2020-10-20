@@ -57,11 +57,15 @@ modded class MissionGameplay extends MissionBase
 	}
 	
 	private void BasicMapLockControls() {
+		GetGame().GetMission().GetHud().ShowHudUI( false );
+			GetGame().GetMission().GetHud().ShowQuickbarUI( false );
         GetGame().GetMission().PlayerControlDisable(INPUT_EXCLUDE_MOUSE_ALL);
         GetGame().GetUIManager().ShowUICursor(true);
     }
 
     private void BasicMapUnLockControls() {
+		GetGame().GetMission().GetHud().ShowHudUI( true );
+		GetGame().GetMission().GetHud().ShowQuickbarUI( true );
         GetGame().GetMission().PlayerControlEnable(false);
         GetGame().GetInput().ResetGameFocus();
         GetGame().GetUIManager().ShowUICursor(false);

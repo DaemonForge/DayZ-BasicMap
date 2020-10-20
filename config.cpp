@@ -1009,342 +1009,10 @@ class CfgLocationTypes
 
 
 
-class MapDefaults
-{
-	scaleMin = 0.005;
-	scaleMax = 0.90;
-	ptsPerSquareSea = 8;
-	ptsPerSquareTxt = 10;
-	ptsPerSquareCLn = 10;
-	ptsPerSquareExp = 10;
-	ptsPerSquareCost = 10;
-	ptsPerSquareFor = 9;
-	ptsPerSquareForEdge = 15;
-	ptsPerSquareRoad = 4;
-	ptsPerSquareObj = 15;
-	scaleDefault = 0.65;
-	maxSatelliteAlpha = 0.70;
-	alphaFadeStartScale = 2;
-	alphaFadeEndScale = 2;
-	userMapPath = "";
-	maxUserMapAlpha = 0.7;
-	alphaUserMapFadeStartScale = 0.5;
-	alphaUserMapFadeEndScale = 1;
-	showCountourInterval = 1;
-	colorBackground[] = {0.971,0.96,0.952,0.00};
-	colorSea[] = {0.467,0.631,0.851,0.5};
-	colorForest[] = {0.42,0.51,0.27,0.7};
-	colorForestBorder[] = {0.0,0.0,0.0,0.0};
-	colorRocks[] = {0.1,0.1,0.1,0.4};
-	colorRocksBorder[] = {0.0,0.0,0.0,0.0};
-	colorLevels[] = {0.286,0.177,0.094,0.5};
-	colorMainCountlines[] = {0.572,0.354,0.188,0.5};
-	colorCountlines[] = {0.572,0.354,0.188,0.0};
-	colorMainCountlinesWater[] = {0.491,0.577,0.702,0.6};
-	colorCountlinesWater[] = {0.491,0.577,0.702,0.3};
-	colorPowerLines[] = {0.05,0.05,0.05,0.8};
-	colorRailWay[] = {0.8,0.2,0.0,0.95};
-	colorNames[] = {0.1,0.1,0.1,0.9};
-	colorInactive[] = {1.0,1.0,1.0,0.0};
-	colorOutside[] = {0.0,0.0,0.0,1.0};
-	colorTracks[] = {0.84,0.76,0.65,0.15};
-	colorTracksFill[] = {0.84,0.76,0.65,1.0};
-	colorRoads[] = {0.6,0.6,0.6,0.95};
-	colorRoadsFill[] = {1.0,1.0,1.0,0.9};
-	colorMainRoads[] = {0.9,0.5,0.3,0.90};
-	colorMainRoadsFill[] = {1.0,0.6,0.4,0.95};
-	colorGrid[] = {0.1,0.1,0.1,0.5};
-	colorGridMap[] = {0.1,0.1,0.1,0.5};
-	colorTrails[] = {0.84,0.76,0.65,0.20};
-	colorTrailsFill[] = {0.84,0.76,0.65,0.60};
-	colorMountPoint[] = {0.44,0.38,0.23,0.99};
-	fontLabel = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
-	fontGrid = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
-	fontUnits = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
-	fontNames = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
-	sizeExNames = 0.05;
-	fontInfo = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
-	fontLevel = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
-	text = "#(argb,8,8,3)color(0.95,0.95,0.95,0.95)";
-	class Legend
-	{
-		x = 0.0;
-		y = 0.0;
-		w = 0.0;
-		h = 0.0;
-		font = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
-		sizeEx = 0.02;
-		colorBackground[] = {1,1,1,0.2};
-		color[] = {0.1,0.1,0.1,0.8};
-	};
-	class Bush
-	{
-		icon = "\dz\gear\navigation\data\map_bush_ca.paa";
-		color[] = {0.32,0.42,0.20,0.85};
-		size = 14;
-		importance = "0.2 * 14 * 0.05";
-		coefMin = 0.2;
-		coefMax = 2;
-	};
-	class SmallTree
-	{
-		icon = "\dz\gear\navigation\data\map_smalltree_ca.paa";
-		color[] = {0.33,0.52,0.20,0.85};
-		size = 12;
-		importance = "0.6 * 12 * 0.05";
-		coefMin = 0.2;
-		coefMax = 2;
-	};
-	class Rock
-	{
-		icon = "\dz\gear\navigation\data\map_rock_ca.paa";
-		color[] = {0.18,0.18,0.18,0.85};
-		size = 12;
-		importance = "0.5 * 12 * 0.05";
-		coefMin = 0.2;
-		coefMax = 3;
-	};
-	class Fuelstation
-	{
-		icon = "\dz\gear\navigation\data\map_fuelstation_ca.paa";
-		size = 14;
-		color[] = {0.95,0.95,0.95,1};
-		importance = "2 * 16 * 0.05";
-		coefMin = 0.75;
-		coefMax = 3;
-	};
-	class Lighthouse
-	{
-		icon = "\dz\gear\navigation\data\map_lighthouse_ca.paa";
-		size = 8;
-		color[] = {0.95,0.95,0.95,0.8};
-		importance = "3 * 16 * 0.05";
-		coefMin = 0.8;
-		coefMax = 3;
-	};
-	class Stack
-	{
-		icon = "\dz\gear\navigation\data\map_stack_ca.paa";
-		size = 10;
-		color[] = {1,1,1,0.9};
-		importance = "2 * 16 * 0.05";
-		coefMin = 0.2;
-		coefMax = 2;
-	};
-	class Transmitter
-	{
-		icon = "\dz\gear\navigation\data\map_transmitter_ca.paa";
-		color[] = {1,1,1,0.9};
-		size = 6;
-		importance = "2 * 16 * 0.05";
-		coefMin = 0.2;
-		coefMax = 2;
-	};
-	class Watertower
-	{
-		icon = "\dz\gear\navigation\data\map_watertower_ca.paa";
-		color[] = {0.2,0.45,0.7,0.9};
-		size = 10;
-		importance = "1.2 * 16 * 0.05";
-		coefMin = 0.2;
-		coefMax = 2;
-	};
-	class Shipwreck
-	{
-		icon = "\dz\gear\navigation\data\map_shipwreck_ca.paa";
-		color[] = {1,1,1,0.9};
-		size = 12;
-		importance = "1.2 * 16 * 0.05";
-		coefMin = 0.2;
-		coefMax = 3;
-	};
-	class Monument
-	{
-		icon = "\dz\gear\navigation\data\map_monument_ca.paa";
-		color[] = {1,1,1,0.75};
-		size = 16;
-		importance = "1.2 * 16 * 0.05";
-		coefMin = 0.1;
-		coefMax = 4;
-	};
-	class BusStop
-	{
-		icon = "\dz\gear\navigation\data\map_busstop_ca.paa";
-		color[] = {0.15,0.26,0.87,0.85};
-		size = 10;
-		importance = "1 * 10 * 0.05";
-		coefMin = 0.1;
-		coefMax = 1;
-	};
-	class Fountain
-	{
-		icon = "\dz\gear\navigation\data\map_fountain_ca.paa";
-		color[] = {0.2,0.45,0.7,1};
-		size = 16;
-		importance = "1 * 12 * 0.05";
-		coefMin = 0.1;
-		coefMax = 3;
-	};
-	class Waterpump
-	{
-		icon = "BasicMap\gui\images\well.paa";
-		color[] = {0.2,0.45,0.7,1};
-		size = 16;
-		importance = "1 * 22 * 0.05";
-		coefMin = 0.5;
-		coefMax = 4;
-	};
-	class Hospital
-	{
-		icon = "BasicMap\gui\images\hospital.paa";
-		color[] = {0.15,0.26,0.87,1};
-		size = 18;
-		importance = "2 * 16 * 0.05";
-		coefMin = 0.1;
-		coefMax = 4;
-	};
-	class Store
-	{
-		icon = "\dz\gear\navigation\data\map_store_ca.paa";
-		color[] = {1,1,1,1};
-		size = 18;
-		importance = "2 * 16 * 0.05";
-		coefMin = 0.1;
-		coefMax = 4;
-	};
-	class Police
-	{
-		icon = "BasicMap\gui\images\police.paa";
-		color[] = {0.09,0.09,0.20,0.8};
-		size = 18;
-		importance = "2 * 16 * 0.05";
-		coefMin = 0.1;
-		coefMax = 2;
-	};
-	class FireDep
-	{
-		icon = "\dz\gear\navigation\data\map_firedep_ca.paa";
-		color[] = {0.764,0,0,0.8};
-		size = 18;
-		importance = "2 * 16 * 0.05";
-		coefMin = 0.2;
-		coefMax = 2;
-	};
-	class TouristSign
-	{
-		icon = "\dz\gear\navigation\data\map_tsign_ca.paa";
-		color[] = {1,1,1,0.9};
-		size = 10;
-		importance = "2 * 16 * 0.05";
-		coefMin = 0.1;
-		coefMax = 1;
-	};
-	class Tourism
-	{
-		icon = "\dz\gear\navigation\data\map_tourism_ca.paa";
-		color[] = {1,1,1,0.9};
-		size = 10;
-		importance = "2 * 16 * 0.05";
-		coefMin = 0.1;
-		coefMax = 2;
-	};
-	class Cross
-	{
-		icon = "\dz\gear\navigation\data\map_cross_ca.paa";
-		size = 12;
-		color[] = {1,1,1,0.9};
-		importance = "0.7 * 16 * 0.05";
-		coefMin = 0.1;
-		coefMax = 1;
-	};
-	class Chapel
-	{
-		icon = "\dz\gear\navigation\data\map_chapel_ca.paa";
-		color[] = {1,1,1,0.9};
-		size = 12;
-		importance = "1 * 16 * 0.05";
-		coefMin = 0.9;
-		coefMax = 3;
-	};
-	class Church
-	{
-		icon = "\dz\gear\navigation\data\map_church_ca.paa";
-		color[] = {1,1,1,0.9};
-		size = 10;
-		importance = "2 * 16 * 0.05";
-		coefMin = 0.9;
-		coefMax = 4;
-	};
-	class ViewTower
-	{
-		icon = "\dz\gear\navigation\data\map_viewtower_ca.paa";
-		color[] = {1,1,1,0.9};
-		size = 10;
-		importance = "2.5 * 16 * 0.05";
-		coefMin = 0.5;
-		coefMax = 4;
-	};
-	class TouristShelter
-	{
-		icon = "\dz\gear\navigation\data\map_tshelter_ca.paa";
-		color[] = {1,1,1,0.9};
-		size = 10;
-		importance = "2 * 16 * 0.05";
-		coefMin = 0.5;
-		coefMax = 4;
-	};
-	class Quay
-	{
-		icon = "\dz\gear\navigation\data\map_quay_ca.paa";
-		size = 16;
-		color[] = {1,1,1,0.9};
-		importance = "2 * 16 * 0.05";
-		coefMin = 0.5;
-		coefMax = 4;
-	};
-	class Bunker
-	{
-		icon = "\dz\gear\navigation\data\map_bunker_ca.paa";
-		color[] = {1,1,1,0.9};
-		size = 14;
-		importance = "1.5 * 14 * 0.05";
-		coefMin = 0.25;
-		coefMax = 4;
-	};
-	class Fortress
-	{
-		icon = "\dz\gear\navigation\data\map_fortress_ca.paa";
-		size = 16;
-		color[] = {1,1,1,0.9};
-		importance = "2 * 16 * 0.05";
-		coefMin = 0.25;
-		coefMax = 4;
-	};
-	class Rocks
-	{
-		icon = "\dz\gear\navigation\data\map_rock_ca.paa";
-		color[] = {0.1,0.1,0.1,0.8};
-		size = 12;
-		importance = "0.5 * 12 * 0.05";
-		coefMin = 0.25;
-		coefMax = 4;
-	};
-	class Ruin
-	{
-		icon = "\dz\gear\navigation\data\map_ruin_ca.paa";
-		size = 16;
-		color[] = {1,1,1,0.9};
-		importance = "1.2 * 16 * 0.05";
-		coefMin = 1;
-		coefMax = 4;
-	};
-};
-
-
 class RscMapControl
 {
-	scaleMin = 0.005;
-	scaleMax = 0.90;
+	scaleMin = 0.01;
+	scaleMax = 0.95;
 	ptsPerSquareSea = 8;
 	ptsPerSquareTxt = 10;
 	ptsPerSquareCLn = 10;
@@ -1354,16 +1022,16 @@ class RscMapControl
 	ptsPerSquareForEdge = 15;
 	ptsPerSquareRoad = 4;
 	ptsPerSquareObj = 15;
-	scaleDefault = 0.65;
-	maxSatelliteAlpha = 0.70;
+	scaleDefault = 0.75;
+	maxSatelliteAlpha = 0.80;
 	alphaFadeStartScale = 2;
 	alphaFadeEndScale = 2;
 	userMapPath = "";
-	maxUserMapAlpha = 0.7;
-	alphaUserMapFadeStartScale = 0.50;
-	alphaUserMapFadeEndScale = 0.95;
+	maxUserMapAlpha = 0.9;
+	alphaUserMapFadeStartScale = 0.4;
+	alphaUserMapFadeEndScale = 1;
 	showCountourInterval = 1;
-	colorBackground[] = {0.971,0.96,0.952,0.05};
+	colorBackground[] = {0.0,0.0,0.0,0.00};
 	colorSea[] = {0.467,0.631,0.851,0.5};
 	colorForest[] = {0.42,0.51,0.27,0.7};
 	colorForestBorder[] = {0.0,0.0,0.0,0.0};
@@ -1394,7 +1062,7 @@ class RscMapControl
 	fontGrid = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
 	fontUnits = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
 	fontNames = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
-	sizeExNames = 0.05;
+	sizeExNames = 0.06;
 	fontInfo = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
 	fontLevel = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
 	text = "#(argb,8,8,3)color(0.95,0.95,0.95,0.95)";
@@ -1406,15 +1074,15 @@ class RscMapControl
 		h = 0.0;
 		font = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
 		sizeEx = 0.02;
-		colorBackground[] = {1,1,1,0.2};
-		color[] = {0.1,0.1,0.1,0.8};
+		colorBackground[] = {1,1,1,0.0};
+		color[] = {0.1,0.1,0.1,0.0};
 	};
 	class Bush
 	{
 		icon = "\dz\gear\navigation\data\map_bush_ca.paa";
 		color[] = {0.32,0.42,0.20,0.85};
 		size = 14;
-		importance = "0.2 * 14 * 0.05";
+		importance = "0.2 * 10 * 0.05";
 		coefMin = 0.2;
 		coefMax = 2;
 	};
@@ -1423,106 +1091,16 @@ class RscMapControl
 		icon = "\dz\gear\navigation\data\map_smalltree_ca.paa";
 		color[] = {0.33,0.52,0.20,0.85};
 		size = 12;
-		importance = "0.6 * 12 * 0.05";
+		importance = "0.6 * 8 * 0.05";
 		coefMin = 0.2;
 		coefMax = 2;
-	};
-	class Rock
-	{
-		icon = "\dz\gear\navigation\data\map_rock_ca.paa";
-		color[] = {0.18,0.18,0.18,0.85};
-		size = 12;
-		importance = "0.5 * 12 * 0.05";
-		coefMin = 0.2;
-		coefMax = 3;
-	};
-	class Fuelstation
-	{
-		icon = "\dz\gear\navigation\data\map_fuelstation_ca.paa";
-		size = 14;
-		color[] = {0.95,0.95,0.95,1};
-		importance = "2 * 16 * 0.05";
-		coefMin = 0.75;
-		coefMax = 3;
-	};
-	class Lighthouse
-	{
-		icon = "\dz\gear\navigation\data\map_lighthouse_ca.paa";
-		size = 8;
-		color[] = {0.95,0.95,0.95,0.8};
-		importance = "3 * 16 * 0.05";
-		coefMin = 0.8;
-		coefMax = 3;
-	};
-	class Stack
-	{
-		icon = "\dz\gear\navigation\data\map_stack_ca.paa";
-		size = 10;
-		color[] = {1,1,1,0.9};
-		importance = "2 * 16 * 0.05";
-		coefMin = 0.2;
-		coefMax = 2;
-	};
-	class Transmitter
-	{
-		icon = "\dz\gear\navigation\data\map_transmitter_ca.paa";
-		color[] = {1,1,1,0.9};
-		size = 6;
-		importance = "2 * 16 * 0.05";
-		coefMin = 0.2;
-		coefMax = 2;
-	};
-	class Watertower
-	{
-		icon = "\dz\gear\navigation\data\map_watertower_ca.paa";
-		color[] = {0.2,0.45,0.7,0.9};
-		size = 10;
-		importance = "1.2 * 16 * 0.05";
-		coefMin = 0.2;
-		coefMax = 2;
-	};
-	class Shipwreck
-	{
-		icon = "\dz\gear\navigation\data\map_shipwreck_ca.paa";
-		color[] = {1,1,1,0.9};
-		size = 12;
-		importance = "1.2 * 16 * 0.05";
-		coefMin = 0.2;
-		coefMax = 3;
-	};
-	class Monument
-	{
-		icon = "\dz\gear\navigation\data\map_monument_ca.paa";
-		color[] = {1,1,1,0.75};
-		size = 16;
-		importance = "1.2 * 16 * 0.05";
-		coefMin = 0.1;
-		coefMax = 4;
-	};
-	class BusStop
-	{
-		icon = "\dz\gear\navigation\data\map_busstop_ca.paa";
-		color[] = {0.15,0.26,0.87,0.85};
-		size = 10;
-		importance = "1 * 10 * 0.05";
-		coefMin = 0.1;
-		coefMax = 1;
-	};
-	class Fountain
-	{
-		icon = "\dz\gear\navigation\data\map_fountain_ca.paa";
-		color[] = {0.2,0.45,0.7,1};
-		size = 16;
-		importance = "1 * 12 * 0.05";
-		coefMin = 0.1;
-		coefMax = 3;
 	};
 	class Waterpump
 	{
 		icon = "BasicMap\gui\images\well.paa";
 		color[] = {0.2,0.45,0.7,1};
-		size = 18;
-		importance = "1 * 18 * 0.05";
+		size = 16;
+		importance = "1 * 20 * 0.05";
 		coefMin = 0.5;
 		coefMax = 4;
 	};
@@ -1531,7 +1109,7 @@ class RscMapControl
 		icon = "BasicMap\gui\images\hospital.paa";
 		color[] = {0.15,0.26,0.87,1};
 		size = 18;
-		importance = "2 * 16 * 0.05";
+		importance = "2 * 20 * 0.05";
 		coefMin = 0.1;
 		coefMax = 4;
 	};
@@ -1540,7 +1118,7 @@ class RscMapControl
 		icon = "\dz\gear\navigation\data\map_store_ca.paa";
 		color[] = {1,1,1,1};
 		size = 18;
-		importance = "2 * 16 * 0.05";
+		importance = "2 * 20 * 0.05";
 		coefMin = 0.1;
 		coefMax = 4;
 	};
@@ -1549,7 +1127,7 @@ class RscMapControl
 		icon = "BasicMap\gui\images\police.paa";
 		color[] = {0.09,0.09,0.20,0.8};
 		size = 18;
-		importance = "2 * 16 * 0.05";
+		importance = "2 * 20 * 0.05";
 		coefMin = 0.1;
 		coefMax = 2;
 	};
@@ -1558,99 +1136,9 @@ class RscMapControl
 		icon = "\dz\gear\navigation\data\map_firedep_ca.paa";
 		color[] = {0.764,0,0,0.8};
 		size = 18;
-		importance = "2 * 16 * 0.05";
+		importance = "2 * 20 * 0.05";
 		coefMin = 0.2;
 		coefMax = 2;
-	};
-	class TouristSign
-	{
-		icon = "\dz\gear\navigation\data\map_tsign_ca.paa";
-		color[] = {1,1,1,0.9};
-		size = 10;
-		importance = "2 * 16 * 0.05";
-		coefMin = 0.1;
-		coefMax = 1;
-	};
-	class Tourism
-	{
-		icon = "\dz\gear\navigation\data\map_tourism_ca.paa";
-		color[] = {1,1,1,0.9};
-		size = 10;
-		importance = "2 * 16 * 0.05";
-		coefMin = 0.1;
-		coefMax = 2;
-	};
-	class Cross
-	{
-		icon = "\dz\gear\navigation\data\map_cross_ca.paa";
-		size = 12;
-		color[] = {1,1,1,0.9};
-		importance = "0.7 * 16 * 0.05";
-		coefMin = 0.1;
-		coefMax = 1;
-	};
-	class Chapel
-	{
-		icon = "\dz\gear\navigation\data\map_chapel_ca.paa";
-		color[] = {1,1,1,0.9};
-		size = 12;
-		importance = "1 * 16 * 0.05";
-		coefMin = 0.9;
-		coefMax = 3;
-	};
-	class Church
-	{
-		icon = "\dz\gear\navigation\data\map_church_ca.paa";
-		color[] = {1,1,1,0.9};
-		size = 10;
-		importance = "2 * 16 * 0.05";
-		coefMin = 0.9;
-		coefMax = 4;
-	};
-	class ViewTower
-	{
-		icon = "\dz\gear\navigation\data\map_viewtower_ca.paa";
-		color[] = {1,1,1,0.9};
-		size = 10;
-		importance = "2.5 * 16 * 0.05";
-		coefMin = 0.5;
-		coefMax = 4;
-	};
-	class TouristShelter
-	{
-		icon = "\dz\gear\navigation\data\map_tshelter_ca.paa";
-		color[] = {1,1,1,0.9};
-		size = 10;
-		importance = "2 * 16 * 0.05";
-		coefMin = 0.5;
-		coefMax = 4;
-	};
-	class Quay
-	{
-		icon = "\dz\gear\navigation\data\map_quay_ca.paa";
-		size = 16;
-		color[] = {1,1,1,0.9};
-		importance = "2 * 16 * 0.05";
-		coefMin = 0.5;
-		coefMax = 4;
-	};
-	class Bunker
-	{
-		icon = "\dz\gear\navigation\data\map_bunker_ca.paa";
-		color[] = {1,1,1,0.9};
-		size = 14;
-		importance = "1.5 * 14 * 0.05";
-		coefMin = 0.25;
-		coefMax = 4;
-	};
-	class Fortress
-	{
-		icon = "\dz\gear\navigation\data\map_fortress_ca.paa";
-		size = 16;
-		color[] = {1,1,1,0.9};
-		importance = "2 * 16 * 0.05";
-		coefMin = 0.25;
-		coefMax = 4;
 	};
 	class Rocks
 	{
@@ -1659,15 +1147,6 @@ class RscMapControl
 		size = 12;
 		importance = "0.5 * 12 * 0.05";
 		coefMin = 0.25;
-		coefMax = 4;
-	};
-	class Ruin
-	{
-		icon = "\dz\gear\navigation\data\map_ruin_ca.paa";
-		size = 16;
-		color[] = {1,1,1,0.9};
-		importance = "1.2 * 16 * 0.05";
-		coefMin = 1;
 		coefMax = 4;
 	};
 };
