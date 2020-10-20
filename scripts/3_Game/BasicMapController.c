@@ -50,15 +50,12 @@ class BasicMapController{
 		int GroupMarkerIndex = ClientMarkersCount;
 		int GroupMarkerCount = ClientMarkersCount + GroupMarkers.Count();
 		if (i < ServerMarkers.Count()){
-			Print("[BASICMAP]Returning Server Marker: " + i);
 			return ServerMarkers.Get(i);
 		} else if ( i < ClientMarkersCount){
 			i = i - ClientMarkersIndex;
-			Print("[BASICMAP]Returning Client Marker: " + i);
 			return ClientMarkers.Get(i);
 		} else if ( i < GroupMarkerCount){
 			i = i - GroupMarkerIndex;
-			Print("[BASICMAP]Returning Group Marker: " + i);
 			return GroupMarkers.Get(i);
 		}
 		return NULL;

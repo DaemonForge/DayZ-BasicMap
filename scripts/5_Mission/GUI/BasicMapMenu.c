@@ -38,7 +38,7 @@ class BasicMapMenu extends UIScriptedMenu
 		
 		
         WidgetEventHandler.GetInstance().RegisterOnDoubleClick( m_Map, this, "DoubleClick" );
-		UpdateMarkers();
+		
 		return layoutRoot;
     }
 
@@ -53,6 +53,9 @@ class BasicMapMenu extends UIScriptedMenu
 			m_Map.AddUserMark(marker.GetPosition(),marker.Name, marker.GetColour(), marker.Icon);
 		}
 		UpdateMe();
+		if (m_PanelIsOpen){
+			GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.UpdateMarkers, 18, false);
+		}
 	}
 	
 	void DoubleClick(Widget w, int x, int y, int button) {
@@ -66,7 +69,7 @@ class BasicMapMenu extends UIScriptedMenu
 	void UpdateMe(){
 		PlayerBase me = PlayerBase.Cast(GetGame().GetPlayer());
 		if (me){
-			m_Map.AddUserMark(me.GetPosition(), " Me", ARGB(230, 33, 233, 255), "BasicMap\\gui\\images\\me.paa");
+			m_Map.AddUserMark(me.GetPosition(), " ME", ARGB(230, 33, 233, 255), "BasicMap\\gui\\images\\me.paa");
 		}
 	}
 	
@@ -80,6 +83,9 @@ class BasicMapMenu extends UIScriptedMenu
 	}
 
 	void SetOpen(bool open) {
+		if (!m_PanelIsOpen && open){
+			GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.UpdateMarkers, 18, false);
+		}
 		m_PanelIsOpen = open;
 	}
 	

@@ -807,11 +807,11 @@ class CfgWorlds
 			};
 			class Local_Medvezhilugi
 			{
-				name = "Medvezhi lugi";
+				name = "Medvezhi Lugi";
 			};
 			class Ruin_Voron
 			{
-				name = "Voron";
+				name = "Voron Castle";
 			};
 			class Marine_Glaza
 			{
@@ -903,25 +903,25 @@ class CfgLocationTypes
 	};
 	class City: Name
 	{
-		color[] = {0.17,0.17,0.39,0.95};
+		color[] = {0.17,0.17,0.39,0.99};
 		textSize = 0.055;
 		importance = 6;
 	};
 	class Village: Name
 	{
-		color[] = {0.3,0.38,0.48,0.95};
+		color[] = {0.3,0.38,0.48,0.99};
 		textSize = 0.046;
 		importance = 4;
 	};
 	class Local: Name
 	{
-		color[] = {0.3,0.38,0.48,0.95};
+		color[] = {0.3,0.38,0.48,0.99};
 		textSize = 0.035;
 		importance = 2;
 	};
 	class Marine: Name
 	{
-		color[] = {0.05,0.4,0.6,0.8};
+		color[] = {0.05,0.4,0.6,0.95};
 		textSize = 0.03;
 		importance = 2;
 	};
@@ -1028,7 +1028,7 @@ class RscMapControl
 	alphaFadeEndScale = 2;
 	userMapPath = "";
 	maxUserMapAlpha = 0.9;
-	alphaUserMapFadeStartScale = 0.4;
+	alphaUserMapFadeStartScale = 0.6;
 	alphaUserMapFadeEndScale = 1;
 	showCountourInterval = 1;
 	colorBackground[] = {0.0,0.0,0.0,0.00};
@@ -1062,7 +1062,7 @@ class RscMapControl
 	fontGrid = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
 	fontUnits = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
 	fontNames = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
-	sizeExNames = 0.06;
+	sizeExNames = 0.055;
 	fontInfo = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
 	fontLevel = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
 	text = "#(argb,8,8,3)color(0.95,0.95,0.95,0.95)";
@@ -1098,8 +1098,8 @@ class RscMapControl
 	class Waterpump
 	{
 		icon = "BasicMap\gui\images\well.paa";
-		color[] = {0.2,0.45,0.7,1};
-		size = 16;
+		color[] = {0.30,0.50,1.0,1.0};
+		size = 15;
 		importance = "1 * 20 * 0.05";
 		coefMin = 0.5;
 		coefMax = 4;
@@ -1107,7 +1107,7 @@ class RscMapControl
 	class Hospital
 	{
 		icon = "BasicMap\gui\images\hospital.paa";
-		color[] = {0.15,0.26,0.87,1};
+		color[] = {1.0,0.14,0.50,1};
 		size = 18;
 		importance = "2 * 20 * 0.05";
 		coefMin = 0.1;

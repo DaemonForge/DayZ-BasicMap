@@ -1,7 +1,24 @@
 modded class MissionGameplay extends MissionBase
 {
-	void MissionGameplay(){
+	ref array<ref BasicMapHUDMarker> m_hudMarkers;
+	
+	void OnMissionStart(){
 		BasicMap();
+		GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.UpdateHuDIcons, 3000, true);
+	}
+	
+	void UpdateHuDIcons(){
+		if (!m_hudMarkers){
+			m_hudMarkers = new ref array<ref BasicMapHUDMarker>;
+		}
+		for (int i = 0; i < m_hudMarkers.Count(); i++){
+			m_hudMarkers.Get(i).Show(false);
+		}
+		m_hudMarkers.Clear();
+		for (int j = 0; j < BasicMap().Count(); j++){
+			m_hudMarkers.Insert(new ref BasicMapHUDMarker());
+			m_hudMarkers.Get(j).Init(BasicMap().Marker(j));
+		}
 	}
 	
 	override void OnUpdate (float timeslice) {
