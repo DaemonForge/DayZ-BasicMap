@@ -1,6 +1,6 @@
 class BasicMapController{
-	static string ServerMarkersPath = "$profile:BasicMap\\ServerMarkers.json";
-	static string ClientMarkersPath = "$profile:BasicMap\\ClientMarkers.json";
+	static string ServerMarkersPath = "\\ServerMarkers.json";
+	static string BasicMapPath = "$profile:BasicMap";
 	ref array<ref BasicMapMarker> ServerMarkers = new ref array<ref BasicMapMarker>;
 	
 	ref array<ref BasicMapMarker> ClientMarkers = new ref array<ref BasicMapMarker>;
@@ -11,9 +11,11 @@ class BasicMapController{
 		GetRPCManager().AddRPC( "BasicMap", "RPCSyncServerData", this, SingeplayerExecutionType.Both );
 		if (GetGame().IsMultiplayer() && GetGame().IsClient()){
 			GetRPCManager().SendRPC("BasicMap", "RPCSyncServerData", new Param1< array<ref BasicMapMarker> >( NULL ), true, NULL);
+			
+			LoadClientMarkers();
 		} else {
-			if (!FileExist(ServerMarkersPath)){
-				MakeDirectory("$profile:BasicMap");
+			if (!FileExist(BasicMapPath + ServerMarkersPath)){
+				MakeDirectory(BasicMapPath);
 				ServerFirstRun();
 			} else {
 				 LoadServerMarkers();
@@ -34,15 +36,34 @@ class BasicMapController{
 	} 
 	
 	void LoadServerMarkers(){
-		JsonFileLoader< array<ref BasicMapMarker> >.JsonLoadFile(ServerMarkersPath, ServerMarkers);
+		JsonFileLoader< array<ref BasicMapMarker> >.JsonLoadFile(BasicMapPath + ServerMarkersPath, ServerMarkers);
 	}
 	
 	void ServerFirstRun(){
 		ServerMarkers.Insert(new ref BasicMapMarker("GREEN MOUNTAIN", "BasicMap\\gui\\images\\marker.paa", Vector(3693.56, 402.312,6010.05), {212, 138, 251}));
 		ServerMarkers.Insert(new ref BasicMapMarker("KUMYRNA", "BasicMap\\gui\\images\\marker.paa", Vector(8345.61, 292.302, 5985.93), {212, 138, 251}));
-		JsonFileLoader< array<ref BasicMapMarker> >.JsonSaveFile(ServerMarkersPath, ServerMarkers);
+		JsonFileLoader< array<ref BasicMapMarker> >.JsonSaveFile(BasicMapPath + ServerMarkersPath, ServerMarkers);
 	}
 
+	
+	void LoadClientMarkers(){
+		string server;
+        GetCLIParam("connect", server);
+		string clientPath = BasicMapPath + "\\" + server + ".json";
+		if (FileExist(BasicMapPath + ServerMarkersPath)){
+			JsonFileLoader< array<ref BasicMapMarker> >.JsonLoadFile(clientPath, ClientMarkers);
+		} else {
+			SaveClientMarkers(server);
+		}
+	}
+	
+	void SaveClientMarkers(){
+		string server;
+        GetCLIParam("connect", server);
+		string clientPath = BasicMapPath + "\\" + server + ".json";
+		JsonFileLoader< array<ref BasicMapMarker> >.JsonSaveFile(clientPath, ServerMarkers);
+	}
+	
 	
 	ref BasicMapMarker Marker(int i){
 		int ServerMarkersIndex = 0;
