@@ -2,8 +2,10 @@ class BasicMapController{
 	static string ServerMarkersPath = "$profile:BasicMap\\ServerMarkers.json";
 	static string ClientMarkersPath = "$profile:BasicMap\\ClientMarkers.json";
 	ref array<ref BasicMapMarker> ServerMarkers = new ref array<ref BasicMapMarker>;
+	
 	ref array<ref BasicMapMarker> ClientMarkers = new ref array<ref BasicMapMarker>;
-	ref array<ref BasicMapMarker> GroupMarkers = new ref array<ref BasicMapMarker>;
+	
+	ref map< string, ref BasicMapMarker > ModMarkers = new ref map< string, ref BasicMapMarker >;
 	
 	void Init(){
 		GetRPCManager().AddRPC( "BasicMap", "RPCSyncServerData", this, SingeplayerExecutionType.Both );
@@ -47,23 +49,44 @@ class BasicMapController{
 		int ServerMarkersCount = ServerMarkers.Count();
 		int ClientMarkersIndex = ServerMarkers.Count();
 		int ClientMarkersCount = ClientMarkersIndex + ClientMarkers.Count();
-		int GroupMarkerIndex = ClientMarkersCount;
-		int GroupMarkerCount = ClientMarkersCount + GroupMarkers.Count();
+		int ModMarkersIndex = ClientMarkersCount;
+		int ModMarkersCount = ClientMarkersCount + ModMarkers.Count();
 		if (i < ServerMarkers.Count()){
 			return ServerMarkers.Get(i);
 		} else if ( i < ClientMarkersCount){
 			i = i - ClientMarkersIndex;
 			return ClientMarkers.Get(i);
-		} else if ( i < GroupMarkerCount){
-			i = i - GroupMarkerIndex;
-			return GroupMarkers.Get(i);
+		} else if ( i < ModMarkersCount){
+			i = i - ModMarkersIndex; 
+			return ModMarkers.GetElement(i);
 		}
 		return NULL;
 	}
 	
 	int Count(){
-		return ServerMarkers.Count() + ClientMarkers.Count() + GroupMarkers.Count();
+		return ServerMarkers.Count() + ClientMarkers.Count() + ModMarkers.Count();
 	}
+	
+	ref BasicMapMarker ModMarker(string mod, string key){
+		return ModMarkers.Get(mod+key);
+	}
+	
+	void AddMarker(string mod, string key, ref BasicMapMarker marker){
+		if (ModMarkers.Get(mod+key)){
+			ModMarkers.Set(mod+key, marker);
+		} else {
+			ModMarkers.Insert(mod+key, marker);
+		}
+	}
+	
+	int AddClientMarker(ref BasicMapMarker marker){
+		return ClientMarkers.Insert(marker);
+	}
+	
+	ref BasicMapMarker ClientMarker(int i){
+		return ClientMarkers.Get(i);
+	}
+	
 }
 
 
