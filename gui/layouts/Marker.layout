@@ -55,7 +55,7 @@ FrameWidgetClass rootFrame {
        hexactsize 0
        vexactsize 1
        text "Marker Name"
-       font "BasicMap/gui/fonts/Oswald-Regular/Oswald-Regular16"
+       font "BasicMap/gui/fonts/Oswald-Regular/Oswald-Regular14"
        "shadow size" 10
        "exact text" 1
        "size to text h" 1
@@ -74,7 +74,7 @@ FrameWidgetClass rootFrame {
        hexactsize 0
        vexactsize 1
        text "100m"
-       font "BasicMap/gui/fonts/Oswald-Regular/Oswald-Regular16"
+       font "BasicMap/gui/fonts/Oswald-Regular/Oswald-Regular10"
        "shadow size" 10
        "exact text" 1
        "size to text h" 1

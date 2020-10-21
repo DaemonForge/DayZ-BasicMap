@@ -37,7 +37,7 @@ class BasicMapMenu extends UIScriptedMenu
 		
 		
 		
-        WidgetEventHandler.GetInstance().RegisterOnDoubleClick( m_Map, this, "DoubleClick" );
+        WidgetEventHandler.GetInstance().RegisterOnDoubleClick( m_Map, this, "OnMapDoubleClick" );
 		
 		return layoutRoot;
     }
@@ -50,7 +50,7 @@ class BasicMapMenu extends UIScriptedMenu
 		m_Map.ClearUserMarks();
 		for (int i = 0; i < BasicMap().Count(); i++) {
 			BasicMapMarker marker = BasicMap().Marker(i);
-			m_Map.AddUserMark(marker.GetPosition(),marker.Name, marker.GetColour(), marker.Icon);
+			m_Map.AddUserMark(marker.GetPosition(), " " + marker.GetName(), marker.GetColour(), marker.Icon);
 		}
 		UpdateMe();
 		if (m_PanelIsOpen){
@@ -58,11 +58,31 @@ class BasicMapMenu extends UIScriptedMenu
 		}
 	}
 	
-	void DoubleClick(Widget w, int x, int y, int button) {
+	//Returns world coords of where player clicks on map
+    vector MapClickPosition() {
+		vector pointerPos = GetGame().GetPointerDirection();;
+		vector cameraPos = GetGame().GetCurrentCameraPosition();
+		vector calcPos = cameraPos + ( pointerPos * 1000 );
+		vector pos = m_Map.ScreenToMap( GetGame().GetScreenPos( calcPos ) );
+		Print("Pos: " + pos);
+		float y = GetGame().SurfaceY(pos[0], pos[2]) + 0.3;
+        return Vector(pos[0], y, pos[2]);
+    }
+	
+	void OnMapDoubleClick(Widget w, int x, int y, int button) {
+		vector clickPos = MapClickPosition();
+		float radius = (m_Map.GetScale() * 95) + 5;
+		Print("Scale: " + m_Map.GetScale() + " Radius: " + radius + " ClickPos: " + clickPos);
         if (button == MouseState.LEFT) {
-            
-        } else if (button == MouseState.RIGHT) {
-			
+			string name = "Mark - " + BasicMap().ClientMarkers.Count();
+			if (!BasicMap().GetClientMarkerByVector(clickPos, radius)){
+	            BasicMap().AddClientMarker( new ref BasicMapMarker(name, "BasicMap\\gui\\images\\marker.paa", MapClickPosition(), {119, 136, 198}, 150, true));
+	        	BasicMap().SaveClientMarkers();
+			}
+		} else if (button == MouseState.RIGHT) {
+			if (BasicMap().RemoveClientMarkerByVector(MapClickPosition(), radius)){
+				BasicMap().SaveClientMarkers();
+			}
         }
     }
 	

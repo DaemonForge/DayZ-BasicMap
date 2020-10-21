@@ -53,6 +53,7 @@ class BasicMapController{
 		if (FileExist(BasicMapPath + ServerMarkersPath)){
 			JsonFileLoader< array<ref BasicMapMarker> >.JsonLoadFile(clientPath, ClientMarkers);
 		} else {
+			MakeDirectory(BasicMapPath);
 			SaveClientMarkers();
 		}
 	}
@@ -61,7 +62,7 @@ class BasicMapController{
 		string server;
         GetCLIParam("connect", server);
 		string clientPath = BasicMapPath + "\\" + server + ".json";
-		JsonFileLoader< array<ref BasicMapMarker> >.JsonSaveFile(clientPath, ServerMarkers);
+		JsonFileLoader< array<ref BasicMapMarker> >.JsonSaveFile(clientPath, ClientMarkers);
 	}
 	
 	
@@ -151,6 +152,25 @@ class BasicMapController{
 	
 	ref BasicMapMarker ClientMarker(int i){
 		return ClientMarkers.Get(i);
+	}
+	
+	ref BasicMapMarker GetClientMarkerByVector(vector pos, float distance = 10){
+		for (int i = 0; i < ClientMarkers.Count(); i++){
+			if (vector.Distance(ClientMarkers.Get(i).GetPosition(), pos) < distance){
+				return ClientMarkers.Get(i);
+			}
+		}
+		return NULL;
+	}
+	
+	bool RemoveClientMarkerByVector(vector pos, float distance = 10){
+		for (int i = 0; i < ClientMarkers.Count(); i++){
+			if (vector.Distance(ClientMarkers.Get(i).GetPosition(), pos) < distance){
+				ClientMarkers.Remove(i);
+				return true;
+			}
+		}
+		return false;
 	}
 	
 }

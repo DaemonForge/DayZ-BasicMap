@@ -12,11 +12,11 @@ class BasicMapMarker {
 		Pos = pos;
 		Colour = colour;
 		Alpha = alpha;
-		OnHUD = onHUD;
+		Is3DMarker = onHUD;
 	}
 	
 	void ShowOnHUD(bool onHUD = true){
-		OnHUD = onHUD;
+		Is3DMarker = onHUD;
 	}
 	
 	bool OnHUD(){
@@ -47,20 +47,4 @@ class BasicMapMarker {
 		return GetColour();
 	}
 	
-}
-
-class BasicMapPlayerMarker extends BasicMapMarker{
-	ref DayZPlayer m_player;
-	
-	override string GetName(){
-		if (m_player.GetIdentity()){
-			return m_player.GetIdentity().GetName();
-		}
-		return "";
-	}
-	
-	override vector GetPosition(){
-		return m_player.GetPosition();
-	}
-
 }

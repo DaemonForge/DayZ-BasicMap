@@ -47,7 +47,7 @@ class BasicMapHUDMarker {
 	
 	void Update(){	
 		if (m_MarkerData){
-			if (MarkerVisibleOnScreen() && m_MarkerData.OnHUD){
+			if (MarkerVisibleOnScreen() && m_MarkerData.OnHUD()){
 				
 				float x;
 				float y;
