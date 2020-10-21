@@ -133,6 +133,12 @@ class BasicMapController{
 		}
 	}
 	
+	void ClearMarkers(string key){
+		if (ModMarkers.Get(key)){ 
+			ModMarkers.Remove(key);
+		}
+	}
+	
 	void RemoveMarkerByIndex(string key, int index){
 		if (ModMarkers.Get(key)){
 			ModMarkers.Get(key).Remove(index);
