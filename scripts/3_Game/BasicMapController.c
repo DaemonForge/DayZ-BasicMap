@@ -88,15 +88,21 @@ class BasicMapController{
 		return ServerMarkers.Count() + ClientMarkers.Count() + ModMarkers.Count();
 	}
 	
-	ref BasicMapMarker ModMarker(string mod, string key){
-		return ModMarkers.Get(mod+key);
+	ref BasicMapMarker ModMarker(string key){
+		return ModMarkers.Get(key);
 	}
 	
-	void AddMarker(string mod, string key, ref BasicMapMarker marker){
-		if (ModMarkers.Get(mod+key)){
-			ModMarkers.Set(mod+key, marker);
+	void AddMarker(string key, ref BasicMapMarker marker){
+		if (ModMarkers.Get(key)){
+			ModMarkers.Set(key, marker);
 		} else {
-			ModMarkers.Insert(mod+key, marker);
+			ModMarkers.Insert(key, marker);
+		}
+	}
+	
+	void RemoveMarker(string key){
+		if (ModMarkers.Get(key)){
+			ModMarkers.Remove(key);
 		}
 	}
 	
