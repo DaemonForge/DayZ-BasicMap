@@ -1,7 +1,7 @@
 class BasicMapMarker {
 	string Name = "";
 	string Icon = "BasicMap\\gui\\images\\marker.paa";
-	bool OnHUD = false;
+	bool Is3DMarker = false;
 	vector Pos = Vector(0,0,0);
 	ref array<int> Colour = {0,0,0};
 	int Alpha = 235;
@@ -17,6 +17,14 @@ class BasicMapMarker {
 	
 	void ShowOnHUD(bool onHUD = true){
 		OnHUD = onHUD;
+	}
+	
+	bool OnHUD(){
+		return Is3DMarker;
+	}
+	
+	string GetName(){
+		return Name;
 	}
 	
 	void SetPosition(vector pos){
@@ -39,4 +47,20 @@ class BasicMapMarker {
 		return GetColour();
 	}
 	
+}
+
+class BasicMapPlayerMarker extends BasicMapMarker{
+	ref DayZPlayer m_player;
+	
+	override string GetName(){
+		if (m_player.GetIdentity()){
+			return m_player.GetIdentity().GetName();
+		}
+		return "";
+	}
+	
+	override vector GetPosition(){
+		return m_player.GetPosition();
+	}
+
 }
