@@ -411,15 +411,15 @@ class CfgWorlds
 			};
 			class Camp_Shkolnik
 			{
-				name = "Shkolnik Camp";
+				name = "Camp Shkolnik";
 			};
 			class Camp_Pobeda
 			{
-				name = "Pobeda Camp";
+				name = "Camp Pobeda";
 			};
 			class Camp_Metalurg
 			{
-				name = "Metalurg Camp";
+				name = "Camp Metalurg";
 			};
 			class Hill_Zelenayagora
 			{
@@ -875,8 +875,8 @@ class CfgLocationTypes
 	{
 		name = "keypoint";
 		drawStyle = "name";
-		texture = "#(argb,1,1,1)color(0.15,0.15,0.12,0.85)";
-		color[] = {0.25,0.25,0.35,0.99};
+		texture = "#(argb,1,1,1)color(0.15,0.15,0.12,0.80)";
+		color[] = {0.984, 0.831, 0.541,0.99};
 		size = 0;
 		font = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
 		textSize = 0.033;
@@ -887,8 +887,8 @@ class CfgLocationTypes
 	{
 		name = "keypoint";
 		drawStyle = "icon";
-		texture = "#(argb,1,1,1)color(0.15,0.15,0.25,0.99)";
-		color[] = {0.20,0.20,0.32,0.95};
+		texture = "#(argb,1,1,1)color(0.15,0.15,0.25,0.50)";
+		color[] = {0.984, 0.831, 0.541,0.95};
 		size = 0;
 		font = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
 		textSize = 0.048;
@@ -897,26 +897,26 @@ class CfgLocationTypes
 	};
 	class Capital: Name
 	{
-		color[] = {0.15,0.15,0.35,0.99};
+		color[] = {0.541, 0.702, 0.984,0.95};
 		textSize = 0.08;
 		importance = 7;
 	};
 	class City: Name
 	{
-		color[] = {0.17,0.17,0.39,0.99};
+		color[] = {0.541, 0.702, 0.984,0.99};
 		textSize = 0.055;
 		importance = 6;
 	};
 	class Village: Name
 	{
-		color[] = {0.3,0.38,0.48,0.99};
+		color[] = {0.541, 0.702, 0.984,0.99};
 		textSize = 0.046;
 		importance = 4;
 	};
 	class Local: Name
 	{
-		color[] = {0.3,0.38,0.48,0.99};
-		textSize = 0.035;
+		color[] = {0.541, 0.921, 0.984,0.99};
+		textSize = 0.046;
 		importance = 2;
 	};
 	class Marine: Name
@@ -934,56 +934,56 @@ class CfgLocationTypes
 	};
 	class Camp: NameIcon
 	{
-		color[] = {0.44,0.38,0.3,0.9};
+		color[] = {0.984, 0.831, 0.541,0.9};
 		texture = "\DZ\gear\navigation\data\map_camp_ca.paa";
 		textSize = 0.04;
 		size = 9;
 	};
 	class Hill: NameIcon
 	{
-		color[] = {0.7,0.7,0.7,0.9};
+		color[] = {0.984, 0.831, 0.541,0.9};
 		texture = "\DZ\gear\navigation\data\map_hill_ca.paa";
 		size = 9;
 	};
 	class ViewPoint: NameIcon
 	{
-		color[] = {0.78,0,0.05,0.9};
+		color[] = {0.984, 0.831, 0.541,0.9};
 		texture = "\DZ\gear\navigation\data\map_viewpoint_ca.paa";
 		size = 8;
 	};
 	class RockArea: NameIcon
 	{
-		color[] = {1,1,1,0.9};
+		color[] = {0.541, 0.921, 0.984,0.9};
 		texture = "\DZ\gear\navigation\data\map_rock_ca.paa";
 		size = 8;
 	};
 	class RailroadStation: NameIcon
 	{
-		color[] = {1,1,1,0.9};
+		color[] = {0.541, 0.921, 0.984,0.9};
 		texture = "\DZ\gear\navigation\data\map_station_ca.paa";
 		size = 7;
 	};
 	class IndustrialSite: NameIcon
 	{
-		color[] = {1,1,1,0.9};
+		color[] = {0.541, 0.921, 0.984,0.9};
 		texture = "\DZ\gear\navigation\data\map_factory_ca.paa";
 		size = 7;
 	};
 	class LocalOffice: NameIcon
 	{
-		color[] = {0.22,0.21,0.51,0.9};
+		color[] = {0.541, 0.921, 0.984,0.9};
 		texture = "\DZ\gear\navigation\data\map_govoffice_ca.paa";
 		size = 7;
 	};
 	class BorderCrossing: NameIcon
 	{
-		color[] = {0.78,0,0.05,0.9};
+		color[] = {0.541, 0.921, 0.984,0.9};
 		texture = "\DZ\gear\navigation\data\map_border_cross_ca.paa";
 		size = 7;
 	};
 	class VegetationBroadleaf: NameIcon
 	{
-		color[] = {0.25,0.4,0.2,0.9};
+		color[] = {0.25,0.4,0.2,0.5};
 		texture = "\DZ\gear\navigation\data\map_broadleaf_ca.paa";
 		size = 6;
 	};
@@ -1019,23 +1019,23 @@ class RscMapControl
 	ptsPerSquareExp = 10;
 	ptsPerSquareCost = 10;
 	ptsPerSquareFor = 9;
-	ptsPerSquareForEdge = 15;
+	ptsPerSquareForEdge = 12;
 	ptsPerSquareRoad = 4;
-	ptsPerSquareObj = 15;
-	scaleDefault = 0.75;
-	maxSatelliteAlpha = 0.80;
+	ptsPerSquareObj = 12;
+	scaleDefault = 0.72;
+	maxSatelliteAlpha = 1;
 	alphaFadeStartScale = 2;
 	alphaFadeEndScale = 2;
 	userMapPath = "";
-	maxUserMapAlpha = 0.9;
-	alphaUserMapFadeStartScale = 0.6;
+	maxUserMapAlpha = 0.00;
+	alphaUserMapFadeStartScale = 1;
 	alphaUserMapFadeEndScale = 1;
 	showCountourInterval = 1;
-	colorBackground[] = {0.0,0.0,0.0,0.00};
-	colorSea[] = {0.467,0.631,0.851,0.5};
-	colorForest[] = {0.42,0.51,0.27,0.7};
+	colorBackground[] = {0.0,0.0,0.0,0.0};
+	colorSea[] = {0.466, 0.533, 0.776,0.33};
+	colorForest[] = {0.302, 0.647, 0.208,0.05};
 	colorForestBorder[] = {0.0,0.0,0.0,0.0};
-	colorRocks[] = {0.1,0.1,0.1,0.4};
+	colorRocks[] = {0.541,0.541,0.541,0.4};
 	colorRocksBorder[] = {0.0,0.0,0.0,0.0};
 	colorLevels[] = {0.286,0.177,0.094,0.5};
 	colorMainCountlines[] = {0.572,0.354,0.188,0.5};
@@ -1043,7 +1043,7 @@ class RscMapControl
 	colorMainCountlinesWater[] = {0.491,0.577,0.702,0.6};
 	colorCountlinesWater[] = {0.491,0.577,0.702,0.3};
 	colorPowerLines[] = {0.05,0.05,0.05,0.8};
-	colorRailWay[] = {0.8,0.2,0.0,0.95};
+	colorRailWay[] = {0.6,0.15,0.0,0.95};
 	colorNames[] = {0.1,0.1,0.1,0.9};
 	colorInactive[] = {1.0,1.0,1.0,0.0};
 	colorOutside[] = {0.0,0.0,0.0,1.0};
@@ -1062,7 +1062,7 @@ class RscMapControl
 	fontGrid = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
 	fontUnits = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
 	fontNames = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
-	sizeExNames = 0.055;
+	sizeExNames = 0.052;
 	fontInfo = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
 	fontLevel = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
 	text = "#(argb,8,8,3)color(0.95,0.95,0.95,0.95)";
@@ -1080,7 +1080,7 @@ class RscMapControl
 	class Bush
 	{
 		icon = "\dz\gear\navigation\data\map_bush_ca.paa";
-		color[] = {0.32,0.42,0.20,0.85};
+		color[] = {0.302, 0.647, 0.208,0.25};
 		size = 14;
 		importance = "0.2 * 10 * 0.05";
 		coefMin = 0.2;
@@ -1089,7 +1089,7 @@ class RscMapControl
 	class SmallTree
 	{
 		icon = "\dz\gear\navigation\data\map_smalltree_ca.paa";
-		color[] = {0.33,0.52,0.20,0.85};
+		color[] = {0.302, 0.647, 0.208,0.25};
 		size = 12;
 		importance = "0.6 * 8 * 0.05";
 		coefMin = 0.2;
@@ -1098,8 +1098,8 @@ class RscMapControl
 	class Waterpump
 	{
 		icon = "BasicMap\gui\images\well.paa";
-		color[] = {0.30,0.50,1.0,1.0};
-		size = 15;
+		color[] = {0.208,0.302,0.647,0.8};
+		size = 16;
 		importance = "1 * 20 * 0.05";
 		coefMin = 0.5;
 		coefMax = 4;
@@ -1107,7 +1107,7 @@ class RscMapControl
 	class Hospital
 	{
 		icon = "BasicMap\gui\images\hospital.paa";
-		color[] = {1.0,0.14,0.50,1};
+		color[] = {1.0,0.14,0.50,0.6};
 		size = 18;
 		importance = "2 * 20 * 0.05";
 		coefMin = 0.1;
@@ -1116,7 +1116,7 @@ class RscMapControl
 	class Store
 	{
 		icon = "\dz\gear\navigation\data\map_store_ca.paa";
-		color[] = {1,1,1,1};
+		color[] = {1,1,1,0.6};
 		size = 18;
 		importance = "2 * 20 * 0.05";
 		coefMin = 0.1;
@@ -1125,7 +1125,7 @@ class RscMapControl
 	class Police
 	{
 		icon = "BasicMap\gui\images\police.paa";
-		color[] = {0.09,0.09,0.20,0.8};
+		color[] = {0.09,0.09,0.20,0.6};
 		size = 18;
 		importance = "2 * 20 * 0.05";
 		coefMin = 0.1;
@@ -1134,7 +1134,7 @@ class RscMapControl
 	class FireDep
 	{
 		icon = "\dz\gear\navigation\data\map_firedep_ca.paa";
-		color[] = {0.764,0,0,0.8};
+		color[] = {0.764,0,0,0.6};
 		size = 18;
 		importance = "2 * 20 * 0.05";
 		coefMin = 0.2;
@@ -1143,7 +1143,7 @@ class RscMapControl
 	class Rocks
 	{
 		icon = "\dz\gear\navigation\data\map_rock_ca.paa";
-		color[] = {0.1,0.1,0.1,0.8};
+		color[] = {0.1,0.1,0.1,0.6};
 		size = 12;
 		importance = "0.5 * 12 * 0.05";
 		coefMin = 0.25;
