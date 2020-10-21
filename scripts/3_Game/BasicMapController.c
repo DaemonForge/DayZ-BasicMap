@@ -5,7 +5,7 @@ class BasicMapController{
 	
 	ref array<ref BasicMapMarker> ClientMarkers = new ref array<ref BasicMapMarker>;
 	
-	ref map< string, ref BasicMapMarker > ModMarkers = new ref map< string, ref BasicMapMarker >;
+	ref map< string, ref array<ref BasicMapMarker> > ModMarkers = new ref map< string, ref array<ref BasicMapMarker> >;
 	
 	void Init(){
 		GetRPCManager().AddRPC( "BasicMap", "RPCSyncServerData", this, SingeplayerExecutionType.Both );
@@ -53,7 +53,7 @@ class BasicMapController{
 		if (FileExist(BasicMapPath + ServerMarkersPath)){
 			JsonFileLoader< array<ref BasicMapMarker> >.JsonLoadFile(clientPath, ClientMarkers);
 		} else {
-			SaveClientMarkers(server);
+			SaveClientMarkers();
 		}
 	}
 	
@@ -79,30 +79,63 @@ class BasicMapController{
 			return ClientMarkers.Get(i);
 		} else if ( i < ModMarkersCount){
 			i = i - ModMarkersIndex; 
-			return ModMarkers.GetElement(i);
+			for (int j = 0; j < ModMarkers.Count(); j++){
+				int nextIndex = ModMarkers.GetElement(j).Count();
+				if (i < nextIndex){
+					return ModMarkers.GetElement(i).Get(i);
+				}
+				i = i - nextIndex;
+			}
 		}
 		return NULL;
 	}
 	
 	int Count(){
-		return ServerMarkers.Count() + ClientMarkers.Count() + ModMarkers.Count();
+		int count = ServerMarkers.Count() + ClientMarkers.Count();
+		for (int i = 0; i < ModMarkers.Count(); i++){
+			count = count + ModMarkers.GetElement(i).Count();
+		}
+		
+		return count;
 	}
 	
-	ref BasicMapMarker ModMarker(string key){
+	ref array<ref BasicMapMarker> ModMarkers(string key){
 		return ModMarkers.Get(key);
 	}
 	
 	void AddMarker(string key, ref BasicMapMarker marker){
 		if (ModMarkers.Get(key)){
-			ModMarkers.Set(key, marker);
+			ModMarkers.Get(key).Insert(marker);
 		} else {
-			ModMarkers.Insert(key, marker);
+			ref array<ref BasicMapMarker> markers = new ref array<ref BasicMapMarker>;
+			markers.Insert(marker);
+			ModMarkers.Insert(key, markers);
 		}
 	}
 	
-	void RemoveMarker(string key){
+	void AddMarkers(string key, ref array<ref BasicMapMarker> markers){
+		if (ModMarkers.Get(key)){
+			ModMarkers.Set(key, markers);
+		} else {
+			ModMarkers.Insert(key, markers);
+		}
+	}
+	
+	void RemoveMarkers(string key){
 		if (ModMarkers.Get(key)){
 			ModMarkers.Remove(key);
+		}
+	}
+	
+	void RemoveMarker(string key, ref BasicMapMarker marker){
+		if (ModMarkers.Get(key)){ 
+			ModMarkers.Get(key).RemoveItem(marker);
+		}
+	}
+	
+	void RemoveMarkerByIndex(string key, int index){
+		if (ModMarkers.Get(key)){
+			ModMarkers.Get(key).Remove(index);
 		}
 	}
 	
