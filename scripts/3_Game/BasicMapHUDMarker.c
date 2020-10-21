@@ -52,9 +52,16 @@ class BasicMapHUDMarker {
 				float x;
 				float y;
 				vector screenPosition = GetGame().GetScreenPos(m_MarkerData.GetPosition());
-				float distance = Math.Round(screenPosition[2]);
 				x = Math.Round(screenPosition[0]);
 		        y = Math.Round(screenPosition[1]);
+				
+				
+				float distance = 0;
+				
+				DayZPlayer player = DayZPlayer.Cast(GetGame().GetPlayer());
+				if (player){
+					distance =  Math.Round(vector.Distance(player.GetPosition(), m_MarkerData.GetPosition()));
+				}
 				string distanceText = distance.ToString() + "m";
 				if (distance > 1000){
 					distance = distance / 100;
@@ -62,7 +69,11 @@ class BasicMapHUDMarker {
 					distance = distance / 10;
 					distanceText = distance.ToString() + "km";
 				}
-				m_Distance.SetText(distanceText);
+				if (distance >= 0){
+					m_Distance.SetText(distanceText);
+				} else {
+					m_Distance.SetText("");
+				}
 				m_Marker.Show(true);
 				layoutRoot.Show(true);
 				layoutRoot.SetPos(x, y);

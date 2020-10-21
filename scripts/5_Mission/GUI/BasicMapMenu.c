@@ -50,7 +50,10 @@ class BasicMapMenu extends UIScriptedMenu
 		m_Map.ClearUserMarks();
 		for (int i = 0; i < BasicMap().Count(); i++) {
 			BasicMapMarker marker = BasicMap().Marker(i);
-			m_Map.AddUserMark(marker.GetPosition(), " " + marker.GetName(), marker.GetColour(), marker.Icon);
+			float offset = 5.7;
+			vector pos = marker.GetPosition();
+			float x = pos[0] - offset; // Markers are a little off from the true postion
+			m_Map.AddUserMark(Vector(x, pos[1],pos[2]), " " + marker.GetName(), marker.GetColour(), marker.Icon);
 		}
 		UpdateMe();
 		if (m_PanelIsOpen){
@@ -59,28 +62,27 @@ class BasicMapMenu extends UIScriptedMenu
 	}
 	
 	//Returns world coords of where player clicks on map
-    vector MapClickPosition() {
-		vector pointerPos = GetGame().GetPointerDirection();;
-		vector cameraPos = GetGame().GetCurrentCameraPosition();
-		vector calcPos = cameraPos + ( pointerPos * 1000 );
-		vector pos = m_Map.ScreenToMap( GetGame().GetScreenPos( calcPos ) );
-		Print("Pos: " + pos);
-		float y = GetGame().SurfaceY(pos[0], pos[2]) + 0.3;
-        return Vector(pos[0], y, pos[2]);
+    vector MapClickPosition(int x, int y) {
+		vector pos = m_Map.ScreenToMap(Vector(x, y, 0));
+		float X = pos[0] + 2.1; //Trying to correct marker being off . . . 
+		float Z = pos[2] - 0.32;
+		float Y = GetGame().SurfaceY(X, Z) + 0.4;
+        return Vector(X, Y, Z);
     }
-	
 	void OnMapDoubleClick(Widget w, int x, int y, int button) {
-		vector clickPos = MapClickPosition();
+		vector clickPos = MapClickPosition(x,y);
 		float radius = (m_Map.GetScale() * 95) + 5;
 		Print("Scale: " + m_Map.GetScale() + " Radius: " + radius + " ClickPos: " + clickPos);
         if (button == MouseState.LEFT) {
 			string name = "Mark - " + BasicMap().ClientMarkers.Count();
 			if (!BasicMap().GetClientMarkerByVector(clickPos, radius)){
-	            BasicMap().AddClientMarker( new ref BasicMapMarker(name, "BasicMap\\gui\\images\\marker.paa", MapClickPosition(), {119, 136, 198}, 150, true));
+	            BasicMap().AddClientMarker( new ref BasicMapMarker(name, "BasicMap\\gui\\images\\marker.paa", clickPos, {119, 136, 198}, 190, true));
 	        	BasicMap().SaveClientMarkers();
+			} else {
+				//Open EditDialog
 			}
 		} else if (button == MouseState.RIGHT) {
-			if (BasicMap().RemoveClientMarkerByVector(MapClickPosition(), radius)){
+			if (BasicMap().RemoveClientMarkerByVector(clickPos, radius)){
 				BasicMap().SaveClientMarkers();
 			}
         }

@@ -50,7 +50,7 @@ class BasicMapController{
 		string server;
         GetCLIParam("connect", server);
 		string clientPath = BasicMapPath + "\\" + server + ".json";
-		if (FileExist(BasicMapPath + ServerMarkersPath)){
+		if (FileExist(clientPath)){
 			JsonFileLoader< array<ref BasicMapMarker> >.JsonLoadFile(clientPath, ClientMarkers);
 		} else {
 			MakeDirectory(BasicMapPath);

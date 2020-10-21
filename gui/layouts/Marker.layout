@@ -46,7 +46,7 @@ FrameWidgetClass rootFrame {
       TextWidgetClass Name {
        clipchildren 0
        ignorepointer 1
-       position 0 10
+       position 0 12
        size 1 12
        halign center_ref
        valign bottom_ref
@@ -74,7 +74,7 @@ FrameWidgetClass rootFrame {
        hexactsize 0
        vexactsize 1
        text "100m"
-       font "BasicMap/gui/fonts/Oswald-Regular/Oswald-Regular10"
+       font "BasicMap/gui/fonts/Oswald-Regular/Oswald-Regular12"
        "shadow size" 10
        "exact text" 1
        "size to text h" 1

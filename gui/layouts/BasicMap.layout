@@ -7,6 +7,7 @@ FrameWidgetClass rootFrame {
  vexactpos 0
  hexactsize 0
  vexactsize 0
+ priority 50
  {
   PanelWidgetClass MapPanel {
    visible 1
@@ -19,6 +20,7 @@ FrameWidgetClass rootFrame {
    vexactpos 0
    hexactsize 0
    vexactsize 0
+   priority 55
    {
     WindowWidgetClass MapFrame {
      ignorepointer 1
@@ -30,6 +32,7 @@ FrameWidgetClass rootFrame {
      vexactpos 0
      hexactsize 0
      vexactsize 0
+     priority 56
      {
       MapWidgetClass Map {
        position 0 0
@@ -40,6 +43,7 @@ FrameWidgetClass rootFrame {
        vexactpos 0
        hexactsize 0
        vexactsize 0
+       priority 60
       }
      }
     }
@@ -49,31 +53,34 @@ FrameWidgetClass rootFrame {
    visible 1
    clipchildren 0
    ignorepointer 1
-   color 0.1098 0.1569 0.298 1.0
+   color 0.1098 0.1569 0.298 1
    position 0 0
-   size 0.012 1
+   size 28 1
    hexactpos 0
    vexactpos 0
-   hexactsize 0
+   hexactsize 1
    vexactsize 0
+   priority 80
    style rover_sim_colorable
    {
     ButtonWidgetClass Expand {
      position 0 0
-     size 1 0.02
+     size 28 28
      hexactpos 0
      vexactpos 0
-     hexactsize 0
-     vexactsize 0
+     hexactsize 1
+     vexactsize 1
+     priority 90
      {
       ImageWidgetClass ExpandImage {
        ignorepointer 1
        position 0 0
-       size 1 1
+       size 28 28
        hexactpos 0
        vexactpos 0
-       hexactsize 0
-       vexactsize 0
+       hexactsize 1
+       vexactsize 1
+       priority 90
        image0 "BasicMap/gui/images/expand.paa"
        mode blend
        "src alpha" 1
@@ -87,13 +94,14 @@ FrameWidgetClass rootFrame {
    visible 0
    clipchildren 0
    ignorepointer 1
-   color 0.1098 0.1569 0.298 1.0
+   color 0.1098 0.1569 0.298 1
    position 0 0
    size 0.18 1
    hexactpos 0
    vexactpos 0
    hexactsize 0
    vexactsize 0
+   priority 60
    draggable 1
    style rover_sim_colorable
    {
@@ -106,6 +114,7 @@ FrameWidgetClass rootFrame {
      vexactpos 0
      hexactsize 0
      vexactsize 0
+     priority 60
      {
       TextWidgetClass HeadingText {
        ignorepointer 1
@@ -116,6 +125,7 @@ FrameWidgetClass rootFrame {
        vexactpos 0
        hexactsize 0
        vexactsize 0
+       priority 60
        text "BASIC MAP"
        font "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium"
        "exact text" 1
@@ -126,23 +136,25 @@ FrameWidgetClass rootFrame {
       }
       ButtonWidgetClass Minimize {
        visible 1
-       size 32 32
+       size 28 28
        halign right_ref
        hexactpos 1
        vexactpos 1
        hexactsize 1
        vexactsize 1
+       priority 60
        {
         ImageWidgetClass MinimizeImage {
          visible 1
          ignorepointer 1
-         position 0 0
-         size 1 1
+         size 28 28
+         halign right_ref
          hexactpos 0
          vexactpos 0
-         hexactsize 0
-         vexactsize 0
-		 image0 "BasicMap/gui/images/minimize.paa"
+         hexactsize 1
+         vexactsize 1
+         priority 60
+         image0 "BasicMap/gui/images/minimize.paa"
          mode blend
          "src alpha" 1
          stretch 1
@@ -151,7 +163,7 @@ FrameWidgetClass rootFrame {
       }
      }
     }
-    PanelWidgetClass MarkersList {
+    PanelWidgetClass SidePanel {
      clipchildren 1
      ignorepointer 1
      position 0 0
@@ -161,6 +173,27 @@ FrameWidgetClass rootFrame {
      vexactpos 0
      hexactsize 0
      vexactsize 0
+     priority 65
+     {
+      HtmlWidgetClass InfoText {
+       ignorepointer 1
+       position 0 0
+       size 0.9 0.1
+       halign center_ref
+       valign bottom_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       priority 66
+       text "<p>Double Left-Click to Create Marker</p><p>Double Right-Click to Delete Marker</p>"
+       font "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium14"
+       "exact text" 0
+       "size to text h" 0
+       wrap 1
+       "condense whitespace" 1
+      }
+     }
     }
    }
   }
