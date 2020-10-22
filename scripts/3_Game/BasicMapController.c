@@ -10,7 +10,7 @@ class BasicMapController{
 	void Init(){
 		GetRPCManager().AddRPC( "BasicMap", "RPCSyncServerData", this, SingeplayerExecutionType.Both );
 		if (GetGame().IsMultiplayer() && GetGame().IsClient()){
-			GetRPCManager().SendRPC("BasicMap", "RPCSyncServerData", new Param1< array<ref BasicMapMarker> >( NULL ), true, NULL);
+			GetRPCManager().SendRPC("BasicMap", "RPCSyncServerData", new Param2< array<ref BasicMapMarker>, ref BasicMapConfig >( NULL, NULL ), true, NULL);
 			
 			LoadClientMarkers();
 		} else {
@@ -24,14 +24,15 @@ class BasicMapController{
 	}
 	
 	void RPCSyncServerData( CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target ){
-		Param1< array<ref BasicMapMarker> > data;
+		Param2< array<ref BasicMapMarker>, ref BasicMapConfig> data;
 		if ( !ctx.Read( data ) ) return;
         if ( GetGame().IsMultiplayer() && GetGame().IsClient() ){
 			ServerMarkers = data.param1;
+			m_BasicMapConfig = data.param2;
 			Print("[BASICMAP]Loading " + ServerMarkers.Count() + " Server Markers" );
 		} else if (GetGame().IsMultiplayer() && GetGame().IsServer()){
 			Print("[BASICMAP]Sending " + ServerMarkers.Count() + " Server Markers" );
-			GetRPCManager().SendRPC("BasicMap", "RPCSyncServerData", new Param1< array<ref BasicMapMarker> >( ServerMarkers ), true, sender);
+			GetRPCManager().SendRPC("BasicMap", "RPCSyncServerData", new Param2< array<ref BasicMapMarker>, ref BasicMapConfig>( ServerMarkers, GetBasicMapConfig() ), true, sender);
 		}
 	} 
 	

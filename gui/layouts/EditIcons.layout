@@ -1,0 +1,302 @@
+FrameWidgetClass rootFrame {
+ clipchildren 0
+ ignorepointer 1
+ position 0 0
+ size 0.18 0.89
+ valign bottom_ref
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ priority 998
+ {
+  PanelWidgetClass Editor {
+   ignorepointer 1
+   position 4 0
+   size 0.98 160
+   hexactpos 1
+   vexactpos 1
+   hexactsize 0
+   vexactsize 1
+   priority 999
+   {
+    PanelWidgetClass Colors {
+     ignorepointer 1
+     position 0 0.18
+     size 0.7 0.5
+     valign bottom_ref
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     {
+      SliderWidgetClass Red {
+       color 1 0 0 1
+       position 0 0
+       size 0.98 0.22
+       halign center_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       maximum 255
+       step 5
+       current 150
+      }
+      SliderWidgetClass Green {
+       color 0 1 0 1
+       position 0 0.25
+       size 0.98 0.22
+       halign center_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       maximum 255
+       step 5
+       current 150
+      }
+      SliderWidgetClass Blue {
+       color 0 0 1 1
+       position 0 0.5
+       size 0.98 0.22
+       halign center_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       maximum 255
+       step 5
+       current 150
+      }
+      SliderWidgetClass Alpha {
+       color 0.2784 0.2784 0.2784 0.9373
+       position 0 0.75
+       size 0.98 0.22
+       halign center_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       maximum 255
+       step 5
+       current 220
+      }
+     }
+    }
+    PanelWidgetClass IconPanel {
+     ignorepointer 1
+     position 0 0.18
+     size 0.29 0.5
+     halign right_ref
+     valign bottom_ref
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     {
+      ImageWidgetClass Icon {
+       ignorepointer 1
+       size 48 48
+       halign center_ref
+       valign center_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 1
+       vexactsize 1
+       mode blend
+       "src alpha" 1
+       stretch 1
+      }
+      ButtonWidgetClass Left {
+       position 0 0
+       size 0.2 0.5
+       valign center_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       {
+        ImageWidgetClass Left_Label {
+         ignorepointer 1
+         position 0 0
+         size 0.9 0.9
+         halign center_ref
+         valign center_ref
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         image0 "BasicMap/gui/images/minimize.paa"
+         mode blend
+         "src alpha" 1
+         stretch 1
+        }
+       }
+      }
+      ButtonWidgetClass Right {
+       position 0 0
+       size 0.2 0.5
+       halign right_ref
+       valign center_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       {
+        ImageWidgetClass Right_Label {
+         ignorepointer 1
+         size 0.9 0.9
+         halign center_ref
+         valign center_ref
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         image0 "BasicMap/gui/images/expand.paa"
+         mode blend
+         "src alpha" 1
+         stretch 1
+        }
+       }
+      }
+     }
+    }
+    PanelWidgetClass PartyMarkerPanel {
+     ignorepointer 1
+     position 0 0
+     size 0.48 0.16
+     valign bottom_ref
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     {
+      TextWidgetClass PartyMarker_Label {
+       ignorepointer 1
+       position 0 0
+       size 0.84 0.9
+       valign center_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       text "Party Marker:"
+       font "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium"
+       "exact text" 1
+       "text valign" center
+      }
+      CheckBoxWidgetClass PartyMarker {
+       position 0 0
+       size 0.16 0.9
+       halign right_ref
+       valign center_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+      }
+     }
+    }
+    ButtonWidgetClass Close {
+     position 0.015 0.03
+     size 40 40
+     halign right_ref
+     hexactpos 0
+     vexactpos 0
+     hexactsize 1
+     vexactsize 1
+     {
+      ImageWidgetClass Close_Label {
+       ignorepointer 1
+       size 1 1
+       halign right_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       image0 "BasicMap/gui/images/close.paa"
+       mode blend
+       "src alpha" 1
+       stretch 1
+      }
+     }
+    }
+    PanelWidgetClass NamePanel {
+     ignorepointer 1
+     position 0.02 0.035
+     size 0.83 0.24
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     {
+      TextWidgetClass Name_Label {
+       ignorepointer 1
+       position 0 0
+       size 0.26 0.9
+       valign center_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       text "Name:"
+       font "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium"
+       "exact text" 1
+       "text halign" right
+       "text valign" center
+      }
+      EditBoxWidgetClass Name {
+       position 0 0
+       size 0.73 0.9
+       halign right_ref
+       valign center_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       "exact text" 1
+       font "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium"
+      }
+     }
+    }
+    PanelWidgetClass ThreeDMarkerPanel {
+     ignorepointer 1
+     size 0.48 0.16
+     halign right_ref
+     valign bottom_ref
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     {
+      TextWidgetClass ThreeDMarker_Label {
+       ignorepointer 1
+       position 0 0
+       size 0.84 0.9
+       valign center_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       text "3D Marker"
+       font "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium"
+       "exact text" 1
+       "text valign" center
+      }
+      CheckBoxWidgetClass ThreeDMarker {
+       position 0 0
+       size 0.16 0.9
+       halign right_ref
+       valign center_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+      }
+     }
+    }
+   }
+  }
+ }
+}

@@ -27,14 +27,18 @@ modded class MissionGameplay extends MissionBase
         Input input = GetGame().GetInput();
         if (input.LocalPress("UAUIBack", false)) {
             if (m_BasicMapMenu != NULL && GetGame().GetUIManager().GetMenu() == m_BasicMapMenu) {
-                BasicMapClosePanel();
-				m_BasicMapMenu_Opening = false;
+				if (m_BasicMapMenu.IsEditorOpen()){
+					m_BasicMapMenu.CloseEditor();
+				} else {
+               	 	BasicMapClosePanel();
+					m_BasicMapMenu_Opening = false;
+				}
             }
         }
 
         if (input.LocalPress("UABasicMap", false)) {
             if (m_BasicMapMenu) {
-                if (m_BasicMapMenu.IsOpen()) {
+                if (m_BasicMapMenu.IsOpen() && !m_BasicMapMenu.IsEditorOpen()) {
 					BasicMapClosePanel();
                 } else if (GetGame().GetUIManager().GetMenu() == NULL) {
 					BasicMapOpenPanel();
