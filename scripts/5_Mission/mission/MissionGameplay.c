@@ -2,7 +2,8 @@ modded class MissionGameplay extends MissionBase
 {
 	ref array<ref BasicMapHUDMarker> m_hudMarkers;
 	
-	void OnMissionStart(){
+	override void OnMissionStart(){
+		super.OnMissionStart();
 		BasicMap();
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.UpdateHuDIcons, 3000, true);
 	}

@@ -2,43 +2,48 @@ FrameWidgetClass rootFrame {
  clipchildren 0
  ignorepointer 1
  position 0 0
- size 0.18 0.89
- valign bottom_ref
- hexactpos 0
- vexactpos 0
- hexactsize 0
- vexactsize 0
+ size 0 0
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
  priority 998
  {
   PanelWidgetClass Editor {
+   visible 1
    ignorepointer 1
-   position 4 0
-   size 0.98 160
+   color 0.0941 0.1333 0.2549 0.95
+   position 8 16
+   size 328 108
    hexactpos 1
    vexactpos 1
-   hexactsize 0
+   hexactsize 1
    vexactsize 1
    priority 999
+   scriptclass ""
+   style rover_sim_colorable
    {
     PanelWidgetClass Colors {
      ignorepointer 1
      position 0 0.18
-     size 0.7 0.5
+     size 0.73 0.5
      valign bottom_ref
      hexactpos 0
      vexactpos 0
      hexactsize 0
      vexactsize 0
+     scriptclass ""
      {
       SliderWidgetClass Red {
        color 1 0 0 1
        position 0 0
-       size 0.98 0.22
+       size 1 0.23
        halign center_ref
        hexactpos 0
        vexactpos 0
        hexactsize 0
        vexactsize 0
+       style DayZDefault
        maximum 255
        step 5
        current 150
@@ -46,12 +51,13 @@ FrameWidgetClass rootFrame {
       SliderWidgetClass Green {
        color 0 1 0 1
        position 0 0.25
-       size 0.98 0.22
+       size 1 0.23
        halign center_ref
        hexactpos 0
        vexactpos 0
        hexactsize 0
        vexactsize 0
+       style DayZDefault
        maximum 255
        step 5
        current 150
@@ -59,12 +65,13 @@ FrameWidgetClass rootFrame {
       SliderWidgetClass Blue {
        color 0 0 1 1
        position 0 0.5
-       size 0.98 0.22
+       size 1 0.23
        halign center_ref
        hexactpos 0
        vexactpos 0
        hexactsize 0
        vexactsize 0
+       style DayZDefault
        maximum 255
        step 5
        current 150
@@ -72,12 +79,13 @@ FrameWidgetClass rootFrame {
       SliderWidgetClass Alpha {
        color 0.2784 0.2784 0.2784 0.9373
        position 0 0.75
-       size 0.98 0.22
+       size 1 0.23
        halign center_ref
        hexactpos 0
        vexactpos 0
        hexactsize 0
        vexactsize 0
+       style DayZDefault
        maximum 255
        step 5
        current 220
@@ -87,17 +95,19 @@ FrameWidgetClass rootFrame {
     PanelWidgetClass IconPanel {
      ignorepointer 1
      position 0 0.18
-     size 0.29 0.5
+     size 0.25 0.5
      halign right_ref
      valign bottom_ref
      hexactpos 0
      vexactpos 0
      hexactsize 0
      vexactsize 0
+     scriptclass ""
      {
       ImageWidgetClass Icon {
        ignorepointer 1
-       size 48 48
+       position 0 0
+       size 36 36
        halign center_ref
        valign center_ref
        hexactpos 0
@@ -110,7 +120,7 @@ FrameWidgetClass rootFrame {
       }
       ButtonWidgetClass Left {
        position 0 0
-       size 0.2 0.5
+       size 0.18 0.5
        valign center_ref
        hexactpos 0
        vexactpos 0
@@ -136,7 +146,7 @@ FrameWidgetClass rootFrame {
       }
       ButtonWidgetClass Right {
        position 0 0
-       size 0.2 0.5
+       size 0.18 0.5
        halign right_ref
        valign center_ref
        hexactpos 0
@@ -165,17 +175,18 @@ FrameWidgetClass rootFrame {
     PanelWidgetClass PartyMarkerPanel {
      ignorepointer 1
      position 0 0
-     size 0.48 0.16
+     size 0.4 0.16
      valign bottom_ref
      hexactpos 0
      vexactpos 0
      hexactsize 0
      vexactsize 0
+     scriptclass ""
      {
       TextWidgetClass PartyMarker_Label {
        ignorepointer 1
        position 0 0
-       size 0.84 0.9
+       size 0.88 0.99
        valign center_ref
        hexactpos 0
        vexactpos 0
@@ -188,7 +199,7 @@ FrameWidgetClass rootFrame {
       }
       CheckBoxWidgetClass PartyMarker {
        position 0 0
-       size 0.16 0.9
+       size 0.12 0.95
        halign right_ref
        valign center_ref
        hexactpos 0
@@ -200,12 +211,13 @@ FrameWidgetClass rootFrame {
     }
     ButtonWidgetClass Close {
      position 0.015 0.03
-     size 40 40
+     size 18 18
      halign right_ref
      hexactpos 0
      vexactpos 0
      hexactsize 1
      vexactsize 1
+     scriptclass ""
      {
       ImageWidgetClass Close_Label {
        ignorepointer 1
@@ -224,8 +236,8 @@ FrameWidgetClass rootFrame {
     }
     PanelWidgetClass NamePanel {
      ignorepointer 1
-     position 0.02 0.035
-     size 0.83 0.24
+     position 0.01 0.035
+     size 0.9 0.24
      hexactpos 0
      vexactpos 0
      hexactsize 0
@@ -233,9 +245,8 @@ FrameWidgetClass rootFrame {
      {
       TextWidgetClass Name_Label {
        ignorepointer 1
-       position 0 0
-       size 0.26 0.9
-       valign center_ref
+       size 0.18 0.95
+       valign bottom_ref
        hexactpos 0
        vexactpos 0
        hexactsize 0
@@ -247,10 +258,9 @@ FrameWidgetClass rootFrame {
        "text valign" center
       }
       EditBoxWidgetClass Name {
-       position 0 0
-       size 0.73 0.9
+       size 0.81 0.95
        halign right_ref
-       valign center_ref
+       valign bottom_ref
        hexactpos 0
        vexactpos 0
        hexactsize 0
@@ -262,7 +272,7 @@ FrameWidgetClass rootFrame {
     }
     PanelWidgetClass ThreeDMarkerPanel {
      ignorepointer 1
-     size 0.48 0.16
+     size 0.4 0.16
      halign right_ref
      valign bottom_ref
      hexactpos 0
@@ -272,8 +282,7 @@ FrameWidgetClass rootFrame {
      {
       TextWidgetClass ThreeDMarker_Label {
        ignorepointer 1
-       position 0 0
-       size 0.84 0.9
+       size 0.88 0.95
        valign center_ref
        hexactpos 0
        vexactpos 0
@@ -285,10 +294,9 @@ FrameWidgetClass rootFrame {
        "text valign" center
       }
       CheckBoxWidgetClass ThreeDMarker {
-       position 0 0
-       size 0.16 0.9
+       size 0.12 0.95
        halign right_ref
-       valign center_ref
+       valign bottom_ref
        hexactpos 0
        vexactpos 0
        hexactsize 0

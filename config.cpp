@@ -20,9 +20,16 @@ class CfgMods
         extra=0;
         type="mod";
 		inputs = "BasicMap/data/Inputs.xml";
-	    dependencies[]={ "Game", "World", "Mission"};
+	    dependencies[]={"GameLib", "Game", "World", "Mission"};
 	    class defs
 	    {
+			class gameLibScriptModule
+			{
+				value = "";
+				files[] = {
+					"BasicMap/scripts/Common"
+					};
+			};
 			class gameScriptModule
             {
 				value = "";

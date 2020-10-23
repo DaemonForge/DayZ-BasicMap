@@ -26,8 +26,8 @@ class BasicMapHUDMarker {
 		}
 		
 		m_Name.SetText(m_MarkerData.Name);
-		if (m_MarkerData.Icon != ""){
-			m_Icon.LoadImageFile(0, m_MarkerData.Icon);
+		if (m_MarkerData.GetIcon() != ""){
+			m_Icon.LoadImageFile(0, m_MarkerData.GetIcon());
 		} else {
 			m_Marker.Show(false);
 		}
