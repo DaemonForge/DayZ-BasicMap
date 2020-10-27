@@ -11,7 +11,7 @@ FrameWidgetClass rootFrame {
  {
   PanelWidgetClass Editor {
    visible 1
-   ignorepointer 1
+   ignorepointer 0
    color 0.0588 0.0863 0.1686 1
    position 8 16
    size 328 108
@@ -25,7 +25,7 @@ FrameWidgetClass rootFrame {
    style Outline
    {
     PanelWidgetClass EditorBG {
-     ignorepointer 1
+     ignorepointer 0
      color 0.1098 0.1608 0.3059 0.9216
      position 0 0
      size 1 1

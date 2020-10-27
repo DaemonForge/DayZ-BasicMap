@@ -10,7 +10,7 @@ class BasicMapMarker {
 	protected bool CanEdit = false;
 	
 	[NonSerialized()]
-	protected string Group = "";
+	protected string Group = BasicMap().CLIENT_KEY;
 	
 	void BasicMapMarker(string name, vector pos, string icon = "", array<int> colour = NULL, int alpha = 235, bool onHUD = false) {
 		Name = name;
@@ -23,7 +23,7 @@ class BasicMapMarker {
 		}
 		Alpha = alpha;
 		Is3DMarker = onHUD;
-	}
+	}	
 	
 	
 	void ShowOnHUD(bool onHUD = true){
@@ -95,49 +95,4 @@ class BasicMapMarker {
 	void SetVar(string vars, ParamsReadContext ctx){
   
 	}
-}
-
-class BasicMapPlayerMarker extends BasicMapMarker {
-	
-	DayZPlayer m_player;
-	
-	void BasicMapPlayerMarker(string name, vector pos, string icon = "", array<int> colour = NULL, int alpha = 235, bool onHUD = false) {
-		Name = name;
-		if (icon != ""){
-			Icon = icon;
-		} else {
-			Icon = "BasicMap\\gui\\images\\me.paa";
-		}
-		Pos = pos;
-		if (colour != NULL){
-			Colour = colour;
-		}
-		Alpha = alpha;
-		Is3DMarker = onHUD;
-	}
-	
-	void SetPlayer(DayZPlayer player){
-		m_player = DayZPlayer.Cast(player);
-	}
-	
-	override string GetName(){
-		DayZPlayer player = DayZPlayer.Cast(m_player);
-		if (player && player.GetIdentity()){
-			return player.GetIdentity().GetName();
-		}
-		return Name;
-	}
-	
-	override vector GetPosition(){
-		DayZPlayer player = DayZPlayer.Cast(m_player);
-		if (player && player.GetIdentity()){
-			return player.GetPosition();
-		}
-		return Pos;
-	}
-	
-	override string GetIcon(){
-		return "BasicMap\\gui\\images\\me.paa";
-	}
-	
 }

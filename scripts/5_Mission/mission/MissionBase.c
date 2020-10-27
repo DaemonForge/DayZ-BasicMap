@@ -1,8 +1,8 @@
 modded class MissionBase extends MissionBaseWorld
 {	
-	override UIScriptedMenu CreateScriptedMenu (int id) {
+	override UIScriptedMenu CreateScriptedMenu(int id) {
         UIScriptedMenu menu = NULL;
-        menu = super.CreateScriptedMenu (id);
+        menu = super.CreateScriptedMenu(id);
         if (!menu) {
             switch (id) {
                 case BASICMAP_MENU:
@@ -10,7 +10,7 @@ modded class MissionBase extends MissionBaseWorld
                     break;
             }
             if (menu) {
-                menu.SetID (id);
+                menu.SetID(id);
             }
         }
         return menu;

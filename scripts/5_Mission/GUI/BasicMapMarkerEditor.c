@@ -69,10 +69,6 @@ class BasicMapMarkerEditor  extends ScriptedWidgetEventHandler {
 			CloseEditor();
 			return true;
 		}
-		if (w == m_Editor_3DMakerBox){
-			m_SelectedMarker.ShowOnHUD(m_Editor_3DMakerBox.IsChecked());
-			return true;
-		}
 		if (w == m_Editor_IconRight){
 			StepIcon(1);
 		}
@@ -142,6 +138,9 @@ class BasicMapMarkerEditor  extends ScriptedWidgetEventHandler {
 			m_SelectedMarker.Name = m_Editor_Name.GetText();
 			m_Editor_Name.SetText(m_SelectedMarker.GetName());
 		}
+		if (w == m_Editor_3DMakerBox){
+			m_SelectedMarker.ShowOnHUD(m_Editor_3DMakerBox.IsChecked());
+		}
         return super.OnChange(w,x,y,finished);
 	}
 	
@@ -168,7 +167,7 @@ class BasicMapMarkerEditor  extends ScriptedWidgetEventHandler {
 		m_ScreenY = ScreenHeight;
 		m_Editor.GetSize(m_WidgetWidth, m_WidgetHeight);
 		if (m_SelectedMarker){
-			Print("Editor Panel Called at X: " + x + " Y: " + y);
+			//Print("Editor Panel Called at X: " + x + " Y: " + y);
 			m_EditorIsOpen = true;
 			m_EditorRoot.Show(true);
 			m_WidgetX  = x;
@@ -176,15 +175,15 @@ class BasicMapMarkerEditor  extends ScriptedWidgetEventHandler {
 			float maxX = m_ScreenX - m_WidgetWidth - 3;
 			float maxY = m_ScreenY - m_WidgetHeight;
 			if (m_WidgetX > maxX){
-				m_WidgetX = m_WidgetX - m_WidgetWidth - 3;
+				m_WidgetX = m_WidgetX - m_WidgetWidth - 10;
 			}
 			
 			if (m_WidgetY > maxY){
-				m_WidgetY = m_WidgetY - m_WidgetHeight - 16;
+				m_WidgetY = m_WidgetY - m_WidgetHeight - 24;
 			}
 			
 			m_EditorRoot.SetPos(m_WidgetX, m_WidgetY);
-			Print("Editor Panel Opened at X: " + m_WidgetX + " Y: " + m_WidgetY);
+			//Print("Editor Panel Opened at X: " + m_WidgetX + " Y: " + m_WidgetY);
 			
 			int red = m_SelectedMarker.Colour[0];
 			int blue = m_SelectedMarker.Colour[1];
@@ -204,9 +203,9 @@ class BasicMapMarkerEditor  extends ScriptedWidgetEventHandler {
 			m_Editor_3DMakerBox.SetChecked(m_SelectedMarker.OnHUD());
 			RefreshEditorIcon();
 		} else {
-			m_EditorRoot.Show(false);
+			CloseEditor();
 		}
-	}
+	}	
 	
 	void CloseEditor(){
 		m_EditorIsOpen = false;

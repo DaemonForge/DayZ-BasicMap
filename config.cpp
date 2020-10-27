@@ -606,7 +606,7 @@ class CfgWorlds
 			};
 			class Marine_Mutnyizaliv
 			{
-				name = "Tikhiy Bay";
+				name = "Mutnyi Bay";
 			};
 			class Marine_Chernyzaliv
 			{
@@ -911,7 +911,7 @@ class CfgLocationTypes
 	class City: Name
 	{
 		color[] = {0.541, 0.702, 0.984,0.99};
-		textSize = 0.055;
+		textSize = 0.065;
 		importance = 6;
 	};
 	class Village: Name
@@ -929,13 +929,13 @@ class CfgLocationTypes
 	class Marine: Name
 	{
 		color[] = {0.05,0.4,0.6,0.95};
-		textSize = 0.03;
+		textSize = 0.035;
 		importance = 2;
 	};
 	class Ruin: NameIcon
 	{
 		texture = "\DZ\gear\navigation\data\map_ruin_ca.paa";
-		textSize = 0.03;
+		textSize = 0.035;
 		importance = 2;
 		size = 8;
 	};
@@ -943,19 +943,21 @@ class CfgLocationTypes
 	{
 		color[] = {0.984, 0.831, 0.541,0.9};
 		texture = "\DZ\gear\navigation\data\map_camp_ca.paa";
-		textSize = 0.04;
+		textSize = 0.042;
 		size = 9;
 	};
 	class Hill: NameIcon
 	{
 		color[] = {0.984, 0.831, 0.541,0.9};
 		texture = "\DZ\gear\navigation\data\map_hill_ca.paa";
-		size = 9;
+		textSize = 0.042;
+		size = 8;
 	};
 	class ViewPoint: NameIcon
 	{
 		color[] = {0.984, 0.831, 0.541,0.9};
 		texture = "\DZ\gear\navigation\data\map_viewpoint_ca.paa";
+		textSize = 0.042;
 		size = 8;
 	};
 	class RockArea: NameIcon
@@ -988,30 +990,6 @@ class CfgLocationTypes
 		texture = "\DZ\gear\navigation\data\map_border_cross_ca.paa";
 		size = 7;
 	};
-	class VegetationBroadleaf: NameIcon
-	{
-		color[] = {0.25,0.4,0.2,0.5};
-		texture = "\DZ\gear\navigation\data\map_broadleaf_ca.paa";
-		size = 6;
-	};
-	class VegetationFir: NameIcon
-	{
-		color[] = {0.25,0.4,0.2,0.9};
-		texture = "\DZ\gear\navigation\data\map_fir_ca.paa";
-		size = 6;
-	};
-	class VegetationPalm: NameIcon
-	{
-		color[] = {0.25,0.4,0.2,0.9};
-		texture = "\DZ\gear\navigation\data\map_palm_ca.paa";
-		size = 6;
-	};
-	class VegetationVineyard: NameIcon
-	{
-		color[] = {0.25,0.4,0.2,0.9};
-		texture = "\DZ\gear\navigation\data\map_vineyard_ca.paa";
-		size = 6;
-	};
 };
 
 
@@ -1029,7 +1007,7 @@ class RscMapControl
 	ptsPerSquareForEdge = 12;
 	ptsPerSquareRoad = 4;
 	ptsPerSquareObj = 12;
-	scaleDefault = 0.72;
+	scaleDefault = 0.42;
 	maxSatelliteAlpha = 1;
 	alphaFadeStartScale = 2;
 	alphaFadeEndScale = 2;
@@ -1054,12 +1032,12 @@ class RscMapControl
 	colorNames[] = {0.1,0.1,0.1,0.9};
 	colorInactive[] = {1.0,1.0,1.0,0.0};
 	colorOutside[] = {0.0,0.0,0.0,1.0};
-	colorTracks[] = {0.84,0.76,0.65,0.15};
-	colorTracksFill[] = {0.84,0.76,0.65,1.0};
+	colorTracks[] = {0.84,0.76,0.65,0.80};
+	colorTracksFill[] = {0.84,0.76,0.65,0.5};
 	colorRoads[] = {0.6,0.6,0.6,0.95};
-	colorRoadsFill[] = {1.0,1.0,1.0,0.9};
-	colorMainRoads[] = {0.9,0.5,0.3,0.90};
-	colorMainRoadsFill[] = {1.0,0.6,0.4,0.95};
+	colorRoadsFill[] = {1.0,1.0,1.0,0.85};
+	colorMainRoads[] = {0.9,0.5,0.3,0.95};
+	colorMainRoadsFill[] = {1.0,0.6,0.4,0.90};
 	colorGrid[] = {0.1,0.1,0.1,0.5};
 	colorGridMap[] = {0.1,0.1,0.1,0.5};
 	colorTrails[] = {0.84,0.76,0.65,0.20};
@@ -1096,6 +1074,15 @@ class RscMapControl
 	class SmallTree
 	{
 		icon = "\dz\gear\navigation\data\map_smalltree_ca.paa";
+		color[] = {0.302, 0.647, 0.208,0.25};
+		size = 12;
+		importance = "0.6 * 8 * 0.05";
+		coefMin = 0.2;
+		coefMax = 2;
+	};
+	class Tree
+	{
+		icon = "\dz\gear\navigation\data\map_tree_ca.paa";
 		color[] = {0.302, 0.647, 0.208,0.25};
 		size = 12;
 		importance = "0.6 * 8 * 0.05";

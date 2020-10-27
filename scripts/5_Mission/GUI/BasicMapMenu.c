@@ -5,30 +5,60 @@ ref BasicMapMarker		m_SelectedMarker;
 
 class BasicMapMenu extends UIScriptedMenu
 {	
-	protected ref BasicMapMarker		m_MeMarker;
+	protected int								m_logSkip = 100;
 	
-    protected ref BasicMapMarkerEditor 	m_MarkerEditor;
+	protected int								m_CurrentListOffset = 0;
+	
+	static int 									MarkerListItemFrame_Size = 42;
+	protected ref BasicMapMarker				m_MeMarker;
+	
+    protected ref BasicMapMarkerEditor 			m_MarkerEditor;
+	
+	protected string							m_CurGroup;
+	protected int								m_CurGroupIndex;
+	
+	protected TextWidget						m_SelectedGroup;
+	protected ButtonWidget						m_NextGroup;
+	protected ButtonWidget						m_PreviousGroup;
+	protected ref array<ref Widget>				m_MarkerListWidget;
+	protected ref array<ref BasicMapMarkerListItem>	m_MarkerList;
+	protected Widget 							m_MarkersListPanel;
+	protected CheckBoxWidget 					m_ShowGroup3D;
+	protected CheckBoxWidget 					m_ShowGroupMap;
 	
 	
-	protected bool						m_EditorIsOpen = false;
-	protected bool						m_PanelIsOpen = false; 
-	protected bool						m_sidePanelOpen = false;
-	protected bool						m_IsInitialized = false;
+	protected Widget							m_MarkerListTop;
+	protected ButtonWidget						m_ScrollUp;
+	
+	protected Widget							m_MarkerListBottom;
+	protected ButtonWidget						m_ScrollDown;
 	
 	
-	protected Widget 					m_MapPanel;
-	protected MapWidget					m_Map;
 	
-	protected Widget 					m_Expand;
-	protected Widget					m_Minimize;
+	protected bool								m_PanelIsOpen = false; 
+	protected bool								m_sidePanelOpen = false;
+	protected bool								m_IsInitialized = false;
 	
-	protected Widget					m_ExpandPanel;
 	
-	protected Widget					m_Markers;
+	protected Widget 							m_MapPanel;
+	protected MapWidget							m_Map;
 	
-	protected TextWidget				m_InfoText;
+	protected Widget 							m_Expand;
+	protected Widget							m_Minimize;
 	
-	protected Widget					m_Editor;
+	protected Widget							m_ExpandPanel;
+	
+	protected Widget							m_Markers;
+	
+	protected TextWidget						m_InfoText;
+	
+	protected Widget							m_Editor;
+	
+	protected Widget							m_Show3dMakersPanel;
+	protected CheckBoxWidget					m_Show3dMakers;
+	
+	
+	protected ButtonWidget						m_BackToMe;
 	
 	override Widget Init()
     {
@@ -45,6 +75,32 @@ class BasicMapMenu extends UIScriptedMenu
 		m_Minimize					= Widget.Cast( layoutRoot.FindAnyWidget( "Minimize" ) );
 		
 		
+		m_SelectedGroup				= TextWidget.Cast( layoutRoot.FindAnyWidget( "CurrentGroup" ));
+		m_NextGroup					= ButtonWidget.Cast(layoutRoot.FindAnyWidget("NextGroup"));
+		m_PreviousGroup				= ButtonWidget.Cast(layoutRoot.FindAnyWidget("PreviousGroup"));
+		m_MarkersListPanel			= Widget.Cast( layoutRoot.FindAnyWidget( "MarkersList" ) );
+		m_MarkerListWidget 			= new ref array<ref Widget>;
+		string MarkerFrame;
+		for (int i = 0; i <= 17; i++){
+			MarkerFrame = "MarkerFrame" + i;
+			m_MarkerListWidget.Insert( Widget.Cast( layoutRoot.FindAnyWidget( MarkerFrame ) ) );
+		}
+		m_ShowGroup3D				= CheckBoxWidget.Cast( layoutRoot.FindAnyWidget( "ShowGroup3D" ) );
+		m_ShowGroupMap				= CheckBoxWidget.Cast( layoutRoot.FindAnyWidget( "ShowGroupMap" ) );
+		
+		
+		m_MarkerListTop				= Widget.Cast( layoutRoot.FindAnyWidget( "MarkerListTop" ) );
+		m_ScrollUp					= ButtonWidget.Cast( layoutRoot.FindAnyWidget( "ScrollUp" ) );
+	
+		m_MarkerListBottom			= Widget.Cast( layoutRoot.FindAnyWidget( "MarkerListBottom" ) );
+		m_ScrollDown				= ButtonWidget.Cast( layoutRoot.FindAnyWidget( "ScrollDown" ) );
+		
+		
+		m_BackToMe					= ButtonWidget.Cast(layoutRoot.FindAnyWidget("BackToMe"));
+		m_Show3dMakersPanel			= Widget.Cast( layoutRoot.FindAnyWidget( "Show3dMarkersPanel" ) );
+		
+		
+		m_Show3dMakers				= CheckBoxWidget.Cast( layoutRoot.FindAnyWidget( "Show3dMakers" ) );
 		m_Markers					= Widget.Cast( layoutRoot.FindAnyWidget( "Markers" ) );
 		
 		m_InfoText					= TextWidget.Cast( layoutRoot.FindAnyWidget( "InfoText" ));
@@ -52,46 +108,123 @@ class BasicMapMenu extends UIScriptedMenu
 		
         WidgetEventHandler.GetInstance().RegisterOnDoubleClick( m_Map, this, "OnMapDoubleClick" );
 		
-		m_InfoText.SetText( BasicMap().GetInfoText() );
 		
-		ref BasicMapPlayerMarker meMarker = new ref BasicMapPlayerMarker("", Vector(0,0,0));
-		PlayerBase me = PlayerBase.Cast(GetGame().GetPlayer());
-		if (me){
-			meMarker.SetPlayer(me);
-		}
-		m_MeMarker = meMarker;
-		
-		if (!m_IsInitialized){
-			Initialize();
-		}
+		Initialize();
 		
 		return layoutRoot;
     }
 
 	void Initialize(){
-		m_IsInitialized = true;
+		m_InfoText.SetText( BasicMap().GetInfoText() );
+		
+		m_Show3dMakersPanel.Show(GetBasicMapConfig().Allow3dMarkers);
+		m_Show3dMakers.SetChecked(!BasicMap().ShowMarkersOnHUD());
 		PlayerBase me = PlayerBase.Cast(GetGame().GetPlayer());
+		ref BasicMapPlayerMarker meMarker = new ref BasicMapPlayerMarker("", Vector(0,0,0));
 		if (me){
-			m_Map.SetMapPos(me.GetPosition());
+			meMarker.SetPlayer(me);
+			SetMapPos(me.GetPosition());
+		}
+		m_MeMarker = meMarker;
+		if (BasicMap().ClientMarkers().Count() > 0){
+			m_CurGroup = BasicMap().CLIENT_KEY;
+		} else {
+			m_CurGroup = BasicMap().SERVER_KEY;
+		}
+		m_CurGroupIndex = BasicMap().GetGroups().GetKeyArray().Find(m_CurGroup);
+		m_SelectedGroup.SetText(BasicMap().GetGroupName(m_CurGroup));
+		m_ShowGroup3D.SetChecked(BasicMap().GetGroup(m_CurGroup).OnHUD());
+		m_ShowGroupMap.SetChecked(BasicMap().GetGroup(m_CurGroup).OnMap());
+		array<ref BasicMapMarker> markers = BasicMap().GetMarkers(m_CurGroup);
+		PopulateMarkerList(markers);
+	}
+	
+	void SetMapPos(vector pos){
+		m_Map.SetMapPos(pos);
+	}
+	
+	void StepMarkerList(int i){
+		m_CurGroupIndex = m_CurGroupIndex + i;
+		if (m_CurGroupIndex < 0){
+			m_CurGroupIndex = BasicMap().GetGroups().Count() - 1;
+		}
+		if (m_CurGroupIndex >= BasicMap().GetGroups().Count()){
+			m_CurGroupIndex = 0;
+		}
+		m_CurGroup = BasicMap().GetGroups().GetKey(m_CurGroupIndex);
+		m_SelectedGroup.SetText(BasicMap().GetGroupName(m_CurGroup));
+		m_ShowGroup3D.SetChecked(BasicMap().GetGroup(m_CurGroup).OnHUD());
+		m_ShowGroupMap.SetChecked(BasicMap().GetGroup(m_CurGroup).OnMap());
+		m_CurrentListOffset = 0;
+		PopulateMarkerList(BasicMap().GetMarkers(m_CurGroup));
+		
+	}
+	
+	void PopulateMarkerList(ref array<ref BasicMapMarker> markers){
+		ClearMarkerList();
+		if (markers && markers.Count() > 0){
+			if (!m_MarkerList){
+				m_MarkerList = new ref array<ref BasicMapMarkerListItem>;
+			}
+			int i = 0;
+			int i_M = m_CurrentListOffset;
+			int maxItems = 17;
+			while ( i_M < markers.Count() && i <= maxItems && i < m_MarkerListWidget.Count()){
+				m_MarkerListWidget.Get(i).Show(true);
+				m_MarkerList.Insert(new ref BasicMapMarkerListItem(m_MarkerListWidget.Get(i), this, markers.Get(i_M)));
+				i++;
+				i_M++;
+			}
+			if (m_MarkerList.Count() > 12){
+				m_MarkerListBottom.Show(true);
+			} else {
+				m_MarkerListBottom.Show(false);
+			}
+			if (m_CurrentListOffset > 0){
+				m_MarkerListTop.Show(true);
+			} else {
+				m_MarkerListTop.Show(false);
+			}
+		}
+		
+	}
+	
+	protected void ClearMarkerList(){
+		if (m_MarkerListWidget){
+			for ( int j = 0; j < m_MarkerListWidget.Count(); j++){
+				m_MarkerListWidget.Get(j).Show(false);
+			}
+		}
+		if (m_MarkerList){
+			m_MarkerList.Clear();
 		}
 	}
 	
 	void UpdateMarkers(){
+		m_logSkip--;
+		if (m_logSkip < 0){
+			m_logSkip = 200;
+		}
 		m_Map.ClearUserMarks();
 		for (int i = 0; i < BasicMap().Count(); i++) {
 			BasicMapMarker marker = BasicMap().Marker(i);
-			float offset = 5.7;
-			vector pos = marker.GetPosition();
-			float x = pos[0] - offset; // Markers are a little off from the true postion
-			m_Map.AddUserMark(Vector(x, pos[1],pos[2]), " " + marker.GetName(), marker.GetColour(), marker.GetIcon());
+			if (m_logSkip <= 0){
+				//Print("[BASICMAP] Placing Marker on Map: " +marker.GetName() + " Group: " + marker.GetGroup() +  " Pos: " + marker.GetPosition());
+			}
+			if ( BasicMap().ShouldShowOnMap(marker.GetGroup()) ){		
+				float offset = 5.7;
+				vector pos = marker.GetPosition();
+				float x = pos[0] - offset; // Markers are a little off from the true postion
+				m_Map.AddUserMark(Vector(x, pos[1],pos[2]), " " + marker.GetName(), marker.GetColour(), marker.GetIcon());
+			}
 		}
 		UpdateMe();
 		if (m_PanelIsOpen){
 			GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.UpdateMarkers, 18, false);
 		}
+		RefreshMarkerList();
 	}
 	
-	//Returns world coords of where player clicks on map
     vector MapClickPosition(int x, int y) {
 		vector pos = m_Map.ScreenToMap(Vector(x, y, 0));
 		float X = pos[0] + 2.1; //Trying to correct marker being off . . . 
@@ -100,22 +233,28 @@ class BasicMapMenu extends UIScriptedMenu
         return Vector(X, Y, Z);
     }
 	
+	
+	
 	void OnMapDoubleClick(Widget w, int x, int y, int button) {
 		vector clickPos = MapClickPosition(x,y);
 		float radius = (m_Map.GetScale() * 110) + 5;
-		Print("Scale: " + m_Map.GetScale() + " Radius: " + radius + " ClickPos: " + clickPos);
         if (button == MouseState.LEFT) {
 			int counter = 0;
 			if (BasicMap().ClientMarkers()){
-				counter = BasicMap().ClientMarkers().Count();
+				counter = BasicMap().Count();
 			}
 			string name = "Mark - " + counter;
+			m_SelectedMarker = NULL;
 			m_SelectedMarker = BasicMap().GetMarkerByVector(clickPos, radius);
 			if (!m_SelectedMarker){
 				CloseEditor();
-	            BasicMap().AddClientMarker( new ref BasicMapMarker(name, clickPos, "BasicMap\\gui\\images\\marker.paa", {119, 136, 198}, 190, true));
-	        	BasicMap().SaveClientMarkers();
+				if (GetBasicMapConfig().AllowPlayerMarkers){
+					Print("[BASICMAP] Creating Marker At " + clickPos);
+	           	 	BasicMap().CreateMarker(m_CurGroup, name, clickPos);
+					PopulateMarkerList(BasicMap().GetMarkers(m_CurGroup));
+				}
 			} else {
+				Print("[BASICMAP] OpenEditor " + clickPos);
 				OpenEditor(x, y);
 			}
 		} else if (button == MouseState.RIGHT) {
@@ -128,19 +267,21 @@ class BasicMapMenu extends UIScriptedMenu
 				if (IsDeletedMarkerSelected){
 					CloseEditor();
 				}
-				BasicMap().SaveClientMarkers();
+				StepIconsList(-1);
+				PopulateMarkerList(BasicMap().GetMarkers(m_CurGroup));
 			}
         }
     }
 	
+	
 	void UpdateMe(){
-		m_Map.AddUserMark(m_MeMarker.GetPosition(), " ME", ARGB(230, 33, 233, 255), m_MeMarker.GetIcon());
+		m_Map.AddUserMark(m_MeMarker.GetPosition(), " ME", m_MeMarker.GetColour(), m_MeMarker.GetIcon());
 	}
 	
 	void ~BasicMapMenu()
     {
-		layoutRoot.Show(false);
 		CloseEditor();
+		layoutRoot.Show(false);
     }
 	
 	bool IsOpen() {
@@ -168,6 +309,26 @@ class BasicMapMenu extends UIScriptedMenu
 		m_Markers.Show(false);
 	}
 	
+	//On click doesn't seem to work with map Widgets
+	override bool OnMouseButtonDown(Widget w, int x, int y, int button ){
+		Print("[BASICMAP] OnMouseButtonDown " + w.GetName() + " X: " + x + " Y: " + y + " IsEditorOpen():" + IsEditorOpen() );
+		
+		if (w == m_Map && button == MouseState.LEFT && !IsEditorOpen()){
+			vector clickPos = MapClickPosition(x,y);
+			float radius = (m_Map.GetScale() * 110) + 5;
+			m_SelectedMarker = NULL;
+			m_SelectedMarker = BasicMap().GetMarkerByVector(clickPos, radius);
+			if (m_SelectedMarker){
+				if (!m_SelectedMarker){
+					Print("[BASICMAP] OnMouseButtonDown m_SelectedMarker NULL");
+				}
+				OpenEditor(x, y);
+				return true;
+			}
+		}
+		return super.OnMouseButtonDown(w, x, y, button );
+	}
+	
 	override bool OnClick( Widget w, int x, int y, int button )
 	{
 		if (w == m_Expand){
@@ -178,34 +339,107 @@ class BasicMapMenu extends UIScriptedMenu
 			Minimize();
 			return true;
 		}			
+		if (w == m_BackToMe){
+			SetMapPos(m_MeMarker.GetPosition());
+			return true;
+		}
+		if (w == m_NextGroup){
+			StepMarkerList(1);
+			return true;
+		}
+		if (w == m_PreviousGroup){
+			StepMarkerList(-1);
+			return true;
+		}
+		if (w == m_ScrollDown){
+			StepIconsList(1);
+			return true;
+		}
+		if (w == m_ScrollUp){
+			StepIconsList(-1);
+			return true;
+		}
 		return super.OnClick(w, x, y, button);
 	}
 	
+	void StepIconsList(int i){
+		m_CurrentListOffset = m_CurrentListOffset + i;
+		if (m_CurrentListOffset < 0){
+			m_CurrentListOffset = 0;
+		}
+		int max = BasicMap().GetMarkers(m_CurGroup).Count() - 10;
+		if (m_CurrentListOffset > max){
+			m_CurrentListOffset = max;
+		}
+		PopulateMarkerList(BasicMap().GetMarkers(m_CurGroup));
+	}
+	
+	override bool OnChange(Widget w, int x, int y, bool finished)
+	{
+		if (w == m_Show3dMakers){
+			BasicMap().SetMarkersOnHUD(!m_Show3dMakers.IsChecked());
+		}
+		if (w == m_ShowGroup3D){
+			BasicMap().GetGroup(m_CurGroup).SetOnHUD(m_ShowGroup3D.IsChecked());
+		}
+		if (w == m_ShowGroupMap){
+			BasicMap().GetGroup(m_CurGroup).SetOnMap(m_ShowGroupMap.IsChecked());
+		}
+		
+        return super.OnChange(w,x,y,finished);
+	}
 	
 	void OpenEditor(int x, int y){
+		if ( IsEditorOpen() ){
+			CloseEditor();
+		}
 		if (m_SelectedMarker){
-			m_EditorIsOpen = true;
 			if (!m_MarkerEditor){
 				m_MarkerEditor = new BasicMapMarkerEditor(m_Editor);
 			}
-			m_Editor.Show(true);
 			m_MarkerEditor.OpenEditor(x, y);
 		} else {
-			m_Editor.Show(false);
-			m_MarkerEditor.CloseEditor();
+			CloseEditor();
+		}
+	}
+	
+	void OpenEditorSelected(){
+		if (m_SelectedMarker){
+			vector pos = m_Map.MapToScreen(m_SelectedMarker.GetPosition());
+			float x = pos[0];
+			float y =  pos[1];
+			int X = x; //CAN'T HAVE int X = pos[0]; or throws compiler error
+			int Y = y; 
+			OpenEditor(X,Y);
 		}
 	}
 	
 	void CloseEditor(){
-		m_EditorIsOpen = false;
 		if (m_MarkerEditor){
+			if (m_SelectedMarker){
+				BasicMap().OnMarkerSave(m_SelectedMarker);
+				m_SelectedMarker = NULL;
+			}
 			m_MarkerEditor.CloseEditor();
 		}
 		BasicMap().SaveClientMarkers();
 	}
 	
 	bool IsEditorOpen(){
-		return m_EditorIsOpen;
+		if (m_MarkerEditor){
+			return m_MarkerEditor.IsEditorOpen();
+		}
+		return false;
 	}
+	
+	void RefreshMarkerList(){
+		if (m_MarkerList){
+			for (int i = 0; i < m_MarkerList.Count(); i++){
+				m_MarkerList.Get(i).RefreshIcon();
+			}
+		}
+	}
+	
+	
 	
 }

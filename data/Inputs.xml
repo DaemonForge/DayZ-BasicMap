@@ -3,11 +3,15 @@
     <inputs>
         <actions>
             <input name="UABasicMap" loc="Map" />
+            <input name="UABasicMap3DMarkers" loc="Toggle 3D Map Markers" />
         </actions>
     </inputs>
     <preset>
         <input name="UABasicMap">
             <btn name="kM" />
+        </input>
+		<input name="UABasicMap3DMarkers">
+            <btn name="kK" />
         </input>
     </preset>
 </modded_inputs>

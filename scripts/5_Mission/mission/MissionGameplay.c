@@ -50,6 +50,10 @@ modded class MissionGameplay extends MissionBase
 				m_BasicMapMenu_Opening = true;
             }
         }
+		
+		 if (input.LocalPress("UABasicMap3DMarkers", false) && GetGame().GetUIManager().GetMenu() == NULL) {
+            BasicMap().ToggleMarkersOnHUD();
+        }
     }
 	
 	void BasicMapCreatePanel()
@@ -72,6 +76,7 @@ modded class MissionGameplay extends MissionBase
 	
 	void BasicMapClosePanel()
 	{
+		m_BasicMapMenu.CloseEditor();//Make sure if a marker was open that its closed and saved
 		m_BasicMapMenu.SetOpen(false);
         GetGame().GetUIManager().HideScriptedMenu(m_BasicMapMenu);
 		BasicMapUnLockControls();
@@ -80,7 +85,7 @@ modded class MissionGameplay extends MissionBase
 	
 	private void BasicMapLockControls() {
 		GetGame().GetMission().GetHud().ShowHudUI( false );
-			GetGame().GetMission().GetHud().ShowQuickbarUI( false );
+		GetGame().GetMission().GetHud().ShowQuickbarUI( false );
         GetGame().GetMission().PlayerControlDisable(INPUT_EXCLUDE_MOUSE_ALL);
         GetGame().GetUIManager().ShowUICursor(true);
     }

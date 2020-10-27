@@ -1,5 +1,6 @@
 class BasicMapHUDMarker {
-		
+	
+	protected int 						m_logSkip = 100;
 	protected string 					LayoutPath = "BasicMap/gui/layouts/Marker.layout";
 	
 	protected ref BasicMapMarker 		m_MarkerData;
@@ -14,6 +15,7 @@ class BasicMapHUDMarker {
 	
 	void Init(ref BasicMapMarker markerData){
 		m_MarkerData 	= markerData;
+		
 		layoutRoot	 	= Widget.Cast(GetGame().GetWorkspace().CreateWidgets(LayoutPath));
 		
 		m_Marker 		= Widget.Cast( layoutRoot.FindAnyWidget( "Marker" ) );
@@ -47,7 +49,14 @@ class BasicMapHUDMarker {
 	
 	void Update(){	
 		if (m_MarkerData){
-			if (MarkerVisibleOnScreen() && m_MarkerData.OnHUD()){
+			m_logSkip--;
+			if (m_logSkip < 0){
+				m_logSkip = 200;
+			}
+			if (m_logSkip <= 0){
+				Print("[BASICMAP] Placing Marker on Map: " +m_MarkerData.GetName() + " Group: " + m_MarkerData.GetGroup() +  " Pos: " + m_MarkerData.GetPosition());
+			}
+			if (MarkerVisibleOnScreen() && m_MarkerData.OnHUD() && BasicMap().ShowMarkersOnHUD() && BasicMap().ShouldShowOnHUD(m_MarkerData.GetGroup()) ){
 				
 				float x;
 				float y;
