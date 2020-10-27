@@ -61,6 +61,11 @@ class BasicMapMarkerEditor  extends ScriptedWidgetEventHandler {
 		m_Editor_Colour_Alpha = SliderWidget.Cast(m_EditorRoot.FindAnyWidget( "Alpha" ));
 		
 		m_EditorRoot.SetHandler(this);
+		if (BasicMap().PARTY_KEY != ""){
+			m_Editor_PartyMarker.Show(true);
+		} else {
+			m_Editor_PartyMarker.Show(false);
+		}
 	}
 	
 	override bool OnClick( Widget w, int x, int y, int button )

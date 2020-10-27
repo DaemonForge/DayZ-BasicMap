@@ -18,13 +18,9 @@ class BasicMapController{
 	ref map<string, ref BasicMapMarkerFactory> Factories = new map<string, ref BasicMapMarkerFactory>;
 	
 	void Init(){
-		Print("[BASICMAP] LoadClientMarkers Init");
 		GetRPCManager().AddRPC( "BasicMap", "RPCSyncServerData", this, SingeplayerExecutionType.Both );
-		Print("[BASICMAP] LoadClientMarkers AddRPC");
 		RegisterGroup(SERVER_KEY, new ref BasicMapGroupMetaData(SERVER_KEY, "SERVER MARKERS"), NULL);
-		Print("[BASICMAP] LoadClientMarkers RegisterGroup ");
 		RegisterGroup(CLIENT_KEY, new ref BasicMapGroupMetaData(CLIENT_KEY, "CLIENT MARKERS", true), new ref BasicMapMarkerFactory());
-		Print("[BASICMAP] LoadClientMarkers RegisterGroup");
 		if (GetGame().IsMultiplayer() && GetGame().IsClient()){
 			GetRPCManager().SendRPC("BasicMap", "RPCSyncServerData", new Param2< array<ref BasicMapMarker>, ref BasicMapConfig >( NULL, NULL ), true, NULL);
 			LoadClientMarkers();
@@ -105,26 +101,17 @@ class BasicMapController{
 	
 	void LoadClientMarkers(){
 		string server;
-		Print("[BASICMAP] LoadClientMarkers GetCLIParam");
         GetCLIParam("connect", server);
-		Print("[BASICMAP] LoadClientMarkers GetCLIParam " + server);
 		string clientPath = BasicMapPath + "\\" + server + ".json";
 		if (FileExist(clientPath)){
-			Print("[BASICMAP] LoadClientMarkers ClientMarkers - " + clientPath);
 			ref array<ref BasicMapMarker> ClientMarkers = new ref array<ref BasicMapMarker>;
-			Print("[BASICMAP] LoadClientMarkers JsonLoadFile");
 			JsonFileLoader< array<ref BasicMapMarker> >.JsonLoadFile(clientPath, ClientMarkers);
-			Print("[BASICMAP] LoadClientMarkers for Count " + ClientMarkers.Count());
 			for (int i = 0; i < ClientMarkers.Count(); i++){
-				Print("[BASICMAP] LoadClientMarkers SetCanEdit for i " + i);
 				ClientMarkers.Get(i).SetCanEdit(true);
-				Print("[BASICMAP] LoadClientMarkers SetGroup for i " + i);
 				ClientMarkers.Get(i).SetGroup(CLIENT_KEY);
 			}
-			Print("[BASICMAP] LoadClientMarkers Set " + CLIENT_KEY);
 			Markers.Set(CLIENT_KEY, ClientMarkers);
 		} else {
-			Print("[BASICMAP] LoadClientMarkers FileExist False");
 			MakeDirectory(BasicMapPath);
 			SaveClientMarkers();
 		}

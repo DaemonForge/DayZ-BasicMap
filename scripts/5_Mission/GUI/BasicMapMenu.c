@@ -160,21 +160,27 @@ class BasicMapMenu extends UIScriptedMenu
 	}
 	
 	void PopulateMarkerList(){
+		Print("PopulateMarkerList Pre");
+		m_MarkerList.Debug();
 		ClearMarkerList();
 		if (BasicMap().GetMarkers(m_CurGroup) && BasicMap().GetMarkers(m_CurGroup).Count() > 0){
 			if (!m_MarkerList){
 				m_MarkerList = new ref array<ref BasicMapMarkerListItem>;
 			}
+			Print("PopulateMarkerList Start");
+			m_MarkerList.Debug();
 			int max = BasicMap().GetMarkers(m_CurGroup).Count() - 10;
-			while (m_CurrentListOffset > max && m_CurrentListOffset > 0){
-				m_CurrentListOffset--;
+			if (max > 0){
+				while (m_CurrentListOffset > max && m_CurrentListOffset > 0){
+					m_CurrentListOffset--;
+				}
 			}
 			int i = 0;
 			int i_M = m_CurrentListOffset;
 			int maxItems = 17;
 			while ( i_M < BasicMap().GetMarkers(m_CurGroup).Count() && i <= maxItems && i < m_MarkerListWidget.Count()){
 				m_MarkerListWidget.Get(i).Show(true);
-				m_MarkerList.Insert(new ref BasicMapMarkerListItem(m_MarkerListWidget.Get(i), this, BasicMap().GetMarkers(m_CurGroup).Get(i_M)));
+				m_MarkerList.Insert(new BasicMapMarkerListItem(m_MarkerListWidget.Get(i), this, BasicMap().GetMarkers(m_CurGroup).Get(i_M)));
 				i++;
 				i_M++;
 			}
@@ -188,6 +194,9 @@ class BasicMapMenu extends UIScriptedMenu
 			} else {
 				m_MarkerListTop.Show(false);
 			}
+			
+			Print("PopulateMarkerList End");
+			m_MarkerList.Debug();
 		}
 		
 	}
@@ -207,16 +216,9 @@ class BasicMapMenu extends UIScriptedMenu
 	}
 	
 	void UpdateMarkers(){
-		m_logSkip--;
-		if (m_logSkip < 0){
-			m_logSkip = 200;
-		}
 		m_Map.ClearUserMarks();
 		for (int i = 0; i < BasicMap().Count(); i++) {
 			BasicMapMarker marker = BasicMap().Marker(i);
-			if (m_logSkip <= 0){
-				//Print("[BASICMAP] Placing Marker on Map: " +marker.GetName() + " Group: " + marker.GetGroup() +  " Pos: " + marker.GetPosition());
-			}
 			if ( BasicMap().ShouldShowOnMap(marker.GetGroup()) ){		
 				float offset = 5.7;
 				vector pos = marker.GetPosition();
@@ -257,7 +259,7 @@ class BasicMapMenu extends UIScriptedMenu
 				if (GetBasicMapConfig().AllowPlayerMarkers){
 					Print("[BASICMAP] Creating Marker At " + clickPos);
 	           	 	BasicMap().CreateMarker(m_CurGroup, name, clickPos);
-					PopulateMarkerList();
+					GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.PopulateMarkerList, 5, false);
 				}
 			} else {
 				Print("[BASICMAP] OpenEditor " + clickPos);
@@ -273,7 +275,11 @@ class BasicMapMenu extends UIScriptedMenu
 				if (IsDeletedMarkerSelected){
 					CloseEditor();
 				}
-				StepIconsList(-1);
+				if ( m_CurrentListOffset > 0){
+					GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater( this.StepIconsList, 50, false, -1);
+				} else {
+					GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater( this.PopulateMarkerList, 50, false);
+				}
 			}
         }
     }
@@ -439,10 +445,18 @@ class BasicMapMenu extends UIScriptedMenu
 	
 	void RefreshMarkerList(){
 		if (m_MarkerList){
+			
+			m_logSkip--;
+			if (m_logSkip < 0){
+				m_logSkip = 300;
+			}
+			m_MarkerList.Debug();
 			for (int i = 0; i < m_MarkerList.Count(); i++){
-				if (!m_MarkerList.Get(i).Refresh()){
-					GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(m_MarkerList.RemoveOrdered, 3, false, i);
-					GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.PopulateMarkerList, 5, false);
+				if (m_MarkerList.Get(i)){
+					if (m_MarkerList.Get(i).Refresh()){
+					} else {
+						GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(m_MarkerList.RemoveOrdered, 1, false, i);
+					}
 				}
 			}
 		}

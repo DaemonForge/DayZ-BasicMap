@@ -1,6 +1,6 @@
 FrameWidgetClass rootFrame {
  position 0 0
- size 1 38
+ size 1 36
  halign center_ref
  hexactpos 0
  vexactpos 1
