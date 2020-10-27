@@ -166,7 +166,7 @@ class BasicMapMenu extends UIScriptedMenu
 				m_MarkerList = new ref array<ref BasicMapMarkerListItem>;
 			}
 			int max = BasicMap().GetMarkers(m_CurGroup).Count() - 10;
-			while (m_CurrentListOffset > max && m_CurrentListOffset < 0){
+			while (m_CurrentListOffset > max && m_CurrentListOffset > 0){
 				m_CurrentListOffset--;
 			}
 			int i = 0;
