@@ -21,7 +21,7 @@ class BasicMapMarkerListItem  extends ScriptedWidgetEventHandler {
 		m_name 				= TextWidget.Cast(m_Root.FindAnyWidget( "MarkerName" ));
 		m_Selector 			= ButtonWidget.Cast(m_Root.FindAnyWidget( "Marker" ));
 		
-		RefreshIcon();
+		Refresh();
 		
 		m_Root.SetHandler(this);
 	}
@@ -58,13 +58,16 @@ class BasicMapMarkerListItem  extends ScriptedWidgetEventHandler {
 	
 	}
 	
-	void RefreshIcon(){
+	bool Refresh(){
 		if (m_Marker){
 			m_icon.LoadImageFile(0, m_Marker.GetIcon());
 			m_icon.SetColor(m_Marker.GetColour());
 			
 			m_name.SetText(m_Marker.GetName());
+			return true;
 		}
+		Delete();
+		return false;
 	}
 	
 	void Delete(){

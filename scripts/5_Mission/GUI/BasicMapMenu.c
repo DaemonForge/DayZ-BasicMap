@@ -120,12 +120,12 @@ class BasicMapMenu extends UIScriptedMenu
 		m_Show3dMakersPanel.Show(GetBasicMapConfig().Allow3dMarkers);
 		m_Show3dMakers.SetChecked(!BasicMap().ShowMarkersOnHUD());
 		PlayerBase me = PlayerBase.Cast(GetGame().GetPlayer());
-		ref BasicMapPlayerMarker meMarker = new ref BasicMapPlayerMarker("", Vector(0,0,0));
+		BasicMapPlayerMarker playerMarker = new ref BasicMapPlayerMarker("", Vector(0,0,0));
 		if (me){
-			meMarker.SetPlayer(me);
+			playerMarker.SetPlayer(me);
 			SetMapPos(me.GetPosition());
 		}
-		m_MeMarker = meMarker;
+		m_MeMarker = BasicMapPlayerMarker.Cast(playerMarker);
 		if (BasicMap().ClientMarkers().Count() > 0){
 			m_CurGroup = BasicMap().CLIENT_KEY;
 		} else {
@@ -135,8 +135,7 @@ class BasicMapMenu extends UIScriptedMenu
 		m_SelectedGroup.SetText(BasicMap().GetGroupName(m_CurGroup));
 		m_ShowGroup3D.SetChecked(BasicMap().GetGroup(m_CurGroup).OnHUD());
 		m_ShowGroupMap.SetChecked(BasicMap().GetGroup(m_CurGroup).OnMap());
-		array<ref BasicMapMarker> markers = BasicMap().GetMarkers(m_CurGroup);
-		PopulateMarkerList(markers);
+		PopulateMarkerList();
 	}
 	
 	void SetMapPos(vector pos){
@@ -156,22 +155,26 @@ class BasicMapMenu extends UIScriptedMenu
 		m_ShowGroup3D.SetChecked(BasicMap().GetGroup(m_CurGroup).OnHUD());
 		m_ShowGroupMap.SetChecked(BasicMap().GetGroup(m_CurGroup).OnMap());
 		m_CurrentListOffset = 0;
-		PopulateMarkerList(BasicMap().GetMarkers(m_CurGroup));
+		PopulateMarkerList();
 		
 	}
 	
-	void PopulateMarkerList(ref array<ref BasicMapMarker> markers){
+	void PopulateMarkerList(){
 		ClearMarkerList();
-		if (markers && markers.Count() > 0){
+		if (BasicMap().GetMarkers(m_CurGroup) && BasicMap().GetMarkers(m_CurGroup).Count() > 0){
 			if (!m_MarkerList){
 				m_MarkerList = new ref array<ref BasicMapMarkerListItem>;
+			}
+			int max = BasicMap().GetMarkers(m_CurGroup).Count() - 10;
+			while (m_CurrentListOffset > max && m_CurrentListOffset < 0){
+				m_CurrentListOffset--;
 			}
 			int i = 0;
 			int i_M = m_CurrentListOffset;
 			int maxItems = 17;
-			while ( i_M < markers.Count() && i <= maxItems && i < m_MarkerListWidget.Count()){
+			while ( i_M < BasicMap().GetMarkers(m_CurGroup).Count() && i <= maxItems && i < m_MarkerListWidget.Count()){
 				m_MarkerListWidget.Get(i).Show(true);
-				m_MarkerList.Insert(new ref BasicMapMarkerListItem(m_MarkerListWidget.Get(i), this, markers.Get(i_M)));
+				m_MarkerList.Insert(new ref BasicMapMarkerListItem(m_MarkerListWidget.Get(i), this, BasicMap().GetMarkers(m_CurGroup).Get(i_M)));
 				i++;
 				i_M++;
 			}
@@ -196,6 +199,9 @@ class BasicMapMenu extends UIScriptedMenu
 			}
 		}
 		if (m_MarkerList){
+			for (int k = 0; k < m_MarkerList.Count(); k++){
+				m_MarkerList.Get(k).Delete();
+			}
 			m_MarkerList.Clear();
 		}
 	}
@@ -241,7 +247,7 @@ class BasicMapMenu extends UIScriptedMenu
         if (button == MouseState.LEFT) {
 			int counter = 0;
 			if (BasicMap().ClientMarkers()){
-				counter = BasicMap().Count();
+				counter = BasicMap().ClientMarkers().Count();
 			}
 			string name = "Mark - " + counter;
 			m_SelectedMarker = NULL;
@@ -251,7 +257,7 @@ class BasicMapMenu extends UIScriptedMenu
 				if (GetBasicMapConfig().AllowPlayerMarkers){
 					Print("[BASICMAP] Creating Marker At " + clickPos);
 	           	 	BasicMap().CreateMarker(m_CurGroup, name, clickPos);
-					PopulateMarkerList(BasicMap().GetMarkers(m_CurGroup));
+					PopulateMarkerList();
 				}
 			} else {
 				Print("[BASICMAP] OpenEditor " + clickPos);
@@ -268,7 +274,6 @@ class BasicMapMenu extends UIScriptedMenu
 					CloseEditor();
 				}
 				StepIconsList(-1);
-				PopulateMarkerList(BasicMap().GetMarkers(m_CurGroup));
 			}
         }
     }
@@ -371,7 +376,7 @@ class BasicMapMenu extends UIScriptedMenu
 		if (m_CurrentListOffset > max){
 			m_CurrentListOffset = max;
 		}
-		PopulateMarkerList(BasicMap().GetMarkers(m_CurGroup));
+		PopulateMarkerList();
 	}
 	
 	override bool OnChange(Widget w, int x, int y, bool finished)
@@ -435,11 +440,12 @@ class BasicMapMenu extends UIScriptedMenu
 	void RefreshMarkerList(){
 		if (m_MarkerList){
 			for (int i = 0; i < m_MarkerList.Count(); i++){
-				m_MarkerList.Get(i).RefreshIcon();
+				if (!m_MarkerList.Get(i).Refresh()){
+					GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(m_MarkerList.RemoveOrdered, 3, false, i);
+					GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.PopulateMarkerList, 5, false);
+				}
 			}
 		}
 	}
-	
-	
 	
 }
