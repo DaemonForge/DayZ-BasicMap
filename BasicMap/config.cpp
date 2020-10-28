@@ -3,7 +3,7 @@ class CfgPatches
 	class BasicMap
 	{
 		requiredVersion = 0.1;
-		requiredAddons[] = {"DZ_Worlds_Chernarusplus_World"};
+		requiredAddons[] = {"BasicMapDefine", "DZ_Worlds_Chernarusplus_World", "DZ_Data"};
 	};
 };
 
@@ -20,21 +20,13 @@ class CfgMods
         extra=0;
         type="mod";
 		inputs = "BasicMap/data/Inputs.xml";
-	    dependencies[]={"GameLib", "Game", "World", "Mission"};
+	    dependencies[]={"Game", "World", "Mission"};
 	    class defs
 	    {
-			class gameLibScriptModule
-			{
-				value = "";
-				files[] = {
-					"BasicMap/scripts/Common"
-					};
-			};
 			class gameScriptModule
             {
 				value = "";
                 files[]={
-					"BasicMap/scripts/Common",
 					"BasicMap/scripts/3_Game"
 					};
             };
@@ -43,7 +35,6 @@ class CfgMods
             {
                 value="";
                 files[]={ 
-					"BasicMap/scripts/Common",
 					"BasicMap/scripts/4_World" 
 				};
             };
@@ -52,12 +43,13 @@ class CfgMods
             {
                 value="";
                 files[]={
-					"BasicMap/scripts/Common",
 					"BasicMap/scripts/5_Mission" 
 				};
             };
         };
     };
+	
+	
 };
 
 class CfgWorlds
