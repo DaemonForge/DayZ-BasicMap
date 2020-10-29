@@ -104,7 +104,7 @@ class BasicMapMenu extends UIScriptedMenu
 		m_Markers					= Widget.Cast( layoutRoot.FindAnyWidget( "Markers" ) );
 		
 		m_InfoText					= TextWidget.Cast( layoutRoot.FindAnyWidget( "InfoText" ));
-		m_Editor					= Widget.Cast( layoutRoot.FindAnyWidget( "EditorFrame" ) ); 			
+		m_Editor					= Widget.Cast( layoutRoot.FindAnyWidget( "EditorFrame" ) ); 		
 		
         WidgetEventHandler.GetInstance().RegisterOnDoubleClick( m_Map, this, "OnMapDoubleClick" );
 		
@@ -114,6 +114,11 @@ class BasicMapMenu extends UIScriptedMenu
 		return layoutRoot;
     }
 
+	void ~BasicMapMenu(){
+		m_SelectedMarker = NULL;
+		delete m_MeMarker;
+	}	
+	
 	void Initialize(){
 		m_InfoText.SetText( BasicMap().GetInfoText() );
 		
@@ -252,14 +257,13 @@ class BasicMapMenu extends UIScriptedMenu
 				counter = BasicMap().ClientMarkers().Count();
 			}
 			string name = "Mark - " + counter;
-			m_SelectedMarker = NULL;
 			m_SelectedMarker = BasicMap().GetMarkerByVector(clickPos, radius);
 			if (!m_SelectedMarker){
 				CloseEditor();
 				if (GetBasicMapConfig().AllowPlayerMarkers){
 					Print("[BASICMAP] Creating Marker At " + clickPos);
 	           	 	BasicMap().CreateMarker(m_CurGroup, name, clickPos);
-					GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.PopulateMarkerList, 5, false);
+					GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.PopulateMarkerList, 10, false);
 				}
 			} else {
 				Print("[BASICMAP] OpenEditor " + clickPos);
@@ -327,7 +331,6 @@ class BasicMapMenu extends UIScriptedMenu
 		if (w == m_Map && button == MouseState.LEFT && !IsEditorOpen()){
 			vector clickPos = MapClickPosition(x,y);
 			float radius = (m_Map.GetScale() * 110) + 5;
-			m_SelectedMarker = NULL;
 			m_SelectedMarker = BasicMap().GetMarkerByVector(clickPos, radius);
 			if (m_SelectedMarker){
 				if (!m_SelectedMarker){
@@ -432,6 +435,7 @@ class BasicMapMenu extends UIScriptedMenu
 				m_SelectedMarker = NULL;
 			}
 			m_MarkerEditor.CloseEditor();
+			delete m_MarkerEditor;
 		}
 		BasicMap().SaveClientMarkers();
 	}

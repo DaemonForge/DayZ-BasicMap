@@ -66,7 +66,9 @@ class BasicMapMarkerEditor  extends ScriptedWidgetEventHandler {
 		} else {
 			m_Editor_PartyMarker.Show(false);
 		}
+		m_EditorRoot.Show(false);
 	}
+	
 	
 	override bool OnClick( Widget w, int x, int y, int button )
 	{		
@@ -172,7 +174,6 @@ class BasicMapMarkerEditor  extends ScriptedWidgetEventHandler {
 		m_ScreenY = ScreenHeight;
 		m_Editor.GetSize(m_WidgetWidth, m_WidgetHeight);
 		if (m_SelectedMarker){
-			//Print("Editor Panel Called at X: " + x + " Y: " + y);
 			m_EditorIsOpen = true;
 			m_EditorRoot.Show(true);
 			m_WidgetX  = x;
@@ -223,6 +224,7 @@ class BasicMapMarkerEditor  extends ScriptedWidgetEventHandler {
 	}
 	
 	bool IsEditorOpen(){
-		return m_EditorIsOpen;
+		
+		return m_EditorIsOpen && m_EditorRoot.IsVisible();
 	}
 }

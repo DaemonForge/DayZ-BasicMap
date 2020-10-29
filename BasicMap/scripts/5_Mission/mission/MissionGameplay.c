@@ -79,6 +79,7 @@ modded class MissionGameplay extends MissionBase
 		m_BasicMapMenu.CloseEditor();//Make sure if a marker was open that its closed and saved
 		m_BasicMapMenu.SetOpen(false);
         GetGame().GetUIManager().HideScriptedMenu(m_BasicMapMenu);
+		GetGame().GetUIManager().CloseMenu(BASICMAP_MENU);
 		BasicMapUnLockControls();
 		m_BasicMapMenu_Opening = false;
 	}

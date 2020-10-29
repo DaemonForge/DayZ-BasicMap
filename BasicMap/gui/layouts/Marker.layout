@@ -22,7 +22,7 @@ FrameWidgetClass rootFrame {
      clipchildren 0
      ignorepointer 1
      position 0 0
-     size 284 40
+     size 284 36
      halign center_ref
      hexactpos 1
      vexactpos 1
@@ -33,7 +33,7 @@ FrameWidgetClass rootFrame {
        clipchildren 0
        ignorepointer 1
        position 0 0
-       size 18 18
+       size 18 16
        halign center_ref
        hexactpos 0
        vexactpos 0
@@ -46,7 +46,7 @@ FrameWidgetClass rootFrame {
       TextWidgetClass Name {
        clipchildren 0
        ignorepointer 1
-       position 0 12
+       position 0 10
        size 1 12
        halign center_ref
        valign bottom_ref
@@ -55,7 +55,7 @@ FrameWidgetClass rootFrame {
        hexactsize 0
        vexactsize 1
        text "Marker Name"
-       font "BasicMap/gui/fonts/Oswald-Regular/Oswald-Regular14"
+       font "BasicMap/gui/fonts/Oswald-Regular/Oswald-Regular12"
        "shadow size" 10
        "exact text" 1
        "size to text h" 1
@@ -66,7 +66,7 @@ FrameWidgetClass rootFrame {
        clipchildren 0
        ignorepointer 1
        position 0 0
-       size 1 10
+       size 1 8
        halign center_ref
        valign bottom_ref
        hexactpos 0
@@ -74,7 +74,7 @@ FrameWidgetClass rootFrame {
        hexactsize 0
        vexactsize 1
        text "100m"
-       font "BasicMap/gui/fonts/Oswald-Regular/Oswald-Regular12"
+       font "BasicMap/gui/fonts/Oswald-Regular/Oswald-Regular10"
        "shadow size" 10
        "exact text" 1
        "size to text h" 1

@@ -166,8 +166,8 @@ class BasicMapController{
 		}
 	}
 	
-	void CreateMarker(string group, string name, vector pos){
-		if (Factories.Get(group) && Groups.Get(group) && Groups.Get(group).Creatable()){
+	void CreateMarker(string group, string name, vector pos, bool overrideSettings = false){
+		if (Factories.Get(group) && Groups.Get(group) && (Groups.Get(group).Creatable() || overrideSettings)){
 			AddMarker(group, Factories.Get(group).Create(name, pos));
 		} else {
 			AddMarker(CLIENT_KEY, Factories.Get(CLIENT_KEY).Create(name, pos));
@@ -253,10 +253,10 @@ class BasicMapController{
 		return NULL;
 	}
 	
-	ref BasicMapMarker GetMarkerByVector(vector pos, float distance = 10){
+	ref BasicMapMarker GetMarkerByVector(vector pos, float distance = 10, bool overrideSettings = false){
 		for (int j = 0; j < Markers.Count(); j++){
 			for (int k = 0; k < Markers.GetElement(j).Count(); k++){
-				if (vector.Distance(Markers.GetElement(j).Get(k).GetPosition(), pos) < distance && Markers.GetElement(j).Get(k).Editable()){
+				if (vector.Distance(Markers.GetElement(j).Get(k).GetPosition(), pos) < distance && (Markers.GetElement(j).Get(k).Editable() || overrideSettings)){
 					Markers.GetElement(j).Get(k).SetGroup(Markers.GetKey(j));
 					return Markers.GetElement(j).Get(k);
 				}
@@ -265,10 +265,10 @@ class BasicMapController{
 		return NULL;
 	}
 
-	bool RemoveMarkerByVector(vector pos, float distance = 10){
+	bool RemoveMarkerByVector(vector pos, float distance = 10, bool overrideSettings = false){
 		for (int j = 0; j < Markers.Count(); j++){
 			for (int k = 0; k < Markers.GetElement(j).Count(); k++){
-				if (vector.Distance(Markers.GetElement(j).Get(k).GetPosition(), pos) < distance && Markers.GetElement(j).Get(k).Editable()){
+				if (vector.Distance(Markers.GetElement(j).Get(k).GetPosition(), pos) < distance && (Markers.GetElement(j).Get(k).Editable() || overrideSettings)){
 					OnMarkerDelete(Markers.GetElement(j).Get(k));
 					GetGame().GetCallQueue(CALL_CATEGORY_SYSTEM).Call(Markers.GetElement(j).RemoveOrdered, k); //So that way OnMarkerDelete is called before the delete encase this is the last ref
 					return true;
