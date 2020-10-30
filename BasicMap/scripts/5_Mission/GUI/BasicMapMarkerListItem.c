@@ -46,9 +46,8 @@ class BasicMapMarkerListItem  extends ScriptedWidgetEventHandler {
 	
 		//Print("[BASICMAP] MarkerListItem OnDoubleClick");
 		if (w == m_Selector && button == MouseState.LEFT && m_Marker.Editable()) {
-			m_SelectedMarker = m_Marker;
 			m_MapMenu.SetMapPos( m_Marker.GetPosition() );
-			m_MapMenu.OpenEditorSelected();
+			m_MapMenu.OpenEditorSelected(m_Marker);
 			return true;
 		}
 		if (w == m_Selector && button == MouseState.RIGHT) { //Delete?

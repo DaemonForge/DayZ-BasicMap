@@ -95,4 +95,19 @@ class BasicMapMarker {
 	void SetVar(string vars, ParamsReadContext ctx){
   
 	}
+	
+	void PrintDebug(){
+		Print(" = = = = = = = = = = = = = ");
+		Print("Name: " + Name);
+		Print("Pos: " + Pos);
+		Print("Icon: " + Icon);
+		Print("Is3DMarker: " + Is3DMarker);
+		Print("Colour: ");
+		Colour.Debug();
+		Print("Alpha: " + Alpha);
+		Print("CanEdit: " + CanEdit);
+		Print("Group: " + Group);
+		Print(" = = = = = = = = = = = = = ");
+		Print(" ");
+	}
 }

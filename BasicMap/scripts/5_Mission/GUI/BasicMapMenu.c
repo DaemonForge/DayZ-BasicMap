@@ -1,11 +1,12 @@
 ref BasicMapMenu m_BasicMapMenu;
 bool m_BasicMapMenu_Opening = false;
 
-ref BasicMapMarker		m_SelectedMarker;
 
 class BasicMapMenu extends UIScriptedMenu
 {	
-	protected int								m_logSkip = 100;
+	BasicMapMarker								m_SelectedMarker;
+	
+	protected int								m_logSkip = 200;
 	
 	protected int								m_CurrentListOffset = 0;
 	
@@ -114,11 +115,7 @@ class BasicMapMenu extends UIScriptedMenu
 		return layoutRoot;
     }
 
-	void ~BasicMapMenu(){
-		m_SelectedMarker = NULL;
-		delete m_MeMarker;
-	}	
-	
+
 	void Initialize(){
 		m_InfoText.SetText( BasicMap().GetInfoText() );
 		
@@ -165,15 +162,13 @@ class BasicMapMenu extends UIScriptedMenu
 	}
 	
 	void PopulateMarkerList(){
-		Print("PopulateMarkerList Pre");
-		m_MarkerList.Debug();
+		//Print("PopulateMarkerList Pre");
 		ClearMarkerList();
 		if (BasicMap().GetMarkers(m_CurGroup) && BasicMap().GetMarkers(m_CurGroup).Count() > 0){
 			if (!m_MarkerList){
 				m_MarkerList = new ref array<ref BasicMapMarkerListItem>;
 			}
-			Print("PopulateMarkerList Start");
-			m_MarkerList.Debug();
+			//Print("PopulateMarkerList Start");
 			int max = BasicMap().GetMarkers(m_CurGroup).Count() - 10;
 			if (max > 0){
 				while (m_CurrentListOffset > max && m_CurrentListOffset > 0){
@@ -200,8 +195,7 @@ class BasicMapMenu extends UIScriptedMenu
 				m_MarkerListTop.Show(false);
 			}
 			
-			Print("PopulateMarkerList End");
-			m_MarkerList.Debug();
+			//Print("PopulateMarkerList End");
 		}
 		
 	}
@@ -224,11 +218,13 @@ class BasicMapMenu extends UIScriptedMenu
 		m_Map.ClearUserMarks();
 		for (int i = 0; i < BasicMap().Count(); i++) {
 			BasicMapMarker marker = BasicMap().Marker(i);
-			if ( BasicMap().ShouldShowOnMap(marker.GetGroup()) ){		
-				float offset = 5.7;
-				vector pos = marker.GetPosition();
-				float x = pos[0] - offset; // Markers are a little off from the true postion
-				m_Map.AddUserMark(Vector(x, pos[1],pos[2]), " " + marker.GetName(), marker.GetColour(), marker.GetIcon());
+			if (marker){
+				if ( BasicMap().ShouldShowOnMap( marker.GetGroup() ) ){		
+					float offset = 5.7;
+					vector pos = marker.GetPosition();
+					float x = pos[0] - offset; // Markers are a little off from the true postion
+					m_Map.AddUserMark(Vector(x, pos[1],pos[2]), " " + marker.GetName(), marker.GetColour(), marker.GetIcon());
+				}
 			}
 		}
 		UpdateMe();
@@ -257,22 +253,27 @@ class BasicMapMenu extends UIScriptedMenu
 				counter = BasicMap().ClientMarkers().Count();
 			}
 			string name = "Mark - " + counter;
-			m_SelectedMarker = BasicMap().GetMarkerByVector(clickPos, radius);
-			if (!m_SelectedMarker){
-				CloseEditor();
+			if (!BasicMap().GetMarkerByVector(clickPos, radius)){
+				if ( IsEditorOpen() ){
+					CloseEditor();
+				}
 				if (GetBasicMapConfig().AllowPlayerMarkers){
 					Print("[BASICMAP] Creating Marker At " + clickPos);
-	           	 	BasicMap().CreateMarker(m_CurGroup, name, clickPos);
+		           	BasicMap().CreateMarker(m_CurGroup, name, clickPos);
 					GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.PopulateMarkerList, 10, false);
 				}
 			} else {
+				if ( IsEditorOpen() ){
+					CloseEditor();
+				}
+				m_SelectedMarker = BasicMapMarker.Cast( BasicMap().GetMarkerByVector(clickPos, radius) );
 				Print("[BASICMAP] OpenEditor " + clickPos);
 				OpenEditor(x, y);
 			}
 		} else if (button == MouseState.RIGHT) {
-			BasicMapMarker marker = BasicMap().GetMarkerByVector(clickPos, radius);
+			BasicMapMarker marker = BasicMapMarker.Cast(BasicMap().GetMarkerByVector(clickPos, radius));
 			bool IsDeletedMarkerSelected = false;
-			if (marker == m_SelectedMarker){
+			if (marker && m_SelectedMarker == marker){
 				IsDeletedMarkerSelected = true;
 			}
 			if (BasicMap().RemoveMarkerByVector(clickPos, radius)){
@@ -296,6 +297,7 @@ class BasicMapMenu extends UIScriptedMenu
 	void ~BasicMapMenu()
     {
 		CloseEditor();
+		delete m_MeMarker;
 		layoutRoot.Show(false);
     }
 	
@@ -326,18 +328,23 @@ class BasicMapMenu extends UIScriptedMenu
 	
 	//On click doesn't seem to work with map Widgets
 	override bool OnMouseButtonDown(Widget w, int x, int y, int button ){
-		Print("[BASICMAP] OnMouseButtonDown " + w.GetName() + " X: " + x + " Y: " + y + " IsEditorOpen():" + IsEditorOpen() );
+		//Print("[BASICMAP] OnMouseButtonDown " + w.GetName() + " X: " + x + " Y: " + y + " IsEditorOpen():" + IsEditorOpen() );
 		
 		if (w == m_Map && button == MouseState.LEFT && !IsEditorOpen()){
 			vector clickPos = MapClickPosition(x,y);
 			float radius = (m_Map.GetScale() * 110) + 5;
-			m_SelectedMarker = BasicMap().GetMarkerByVector(clickPos, radius);
-			if (m_SelectedMarker){
-				if (!m_SelectedMarker){
-					Print("[BASICMAP] OnMouseButtonDown m_SelectedMarker NULL");
+			if (BasicMap().GetMarkerByVector(clickPos, radius)){
+				if ( IsEditorOpen() ){
+					CloseEditor();
 				}
-				OpenEditor(x, y);
-				return true;
+				m_SelectedMarker = BasicMapMarker.Cast(BasicMap().GetMarkerByVector(clickPos, radius));
+				if (m_SelectedMarker){
+					//Print("[BASICMAP]" + m_SelectedMarker.GetName() + " Marker Found at " + clickPos);
+					OpenEditor(x, y);
+					return true;
+				}
+			} else {
+				//Print("[BASICMAP] No Marker Found at " + clickPos);
 			}
 		}
 		return super.OnMouseButtonDown(w, x, y, button );
@@ -404,27 +411,25 @@ class BasicMapMenu extends UIScriptedMenu
 	}
 	
 	void OpenEditor(int x, int y){
-		if ( IsEditorOpen() ){
-			CloseEditor();
-		}
 		if (m_SelectedMarker){
 			if (!m_MarkerEditor){
 				m_MarkerEditor = new BasicMapMarkerEditor(m_Editor);
 			}
-			m_MarkerEditor.OpenEditor(x, y);
+			m_MarkerEditor.OpenEditor(x, y, m_SelectedMarker);
 		} else {
 			CloseEditor();
 		}
 	}
 	
-	void OpenEditorSelected(){
-		if (m_SelectedMarker){
-			vector pos = m_Map.MapToScreen(m_SelectedMarker.GetPosition());
+	void OpenEditorSelected(BasicMapMarker selectedMarker){
+		if (selectedMarker){
+			vector pos = m_Map.MapToScreen(selectedMarker.GetPosition());
 			float x = pos[0];
 			float y =  pos[1];
 			int X = x; //CAN'T HAVE int X = pos[0]; or throws compiler error
 			int Y = y; 
-			OpenEditor(X,Y);
+			m_SelectedMarker = BasicMapMarker.Cast(selectedMarker);
+			OpenEditor(X, Y);
 		}
 	}
 	
@@ -449,12 +454,6 @@ class BasicMapMenu extends UIScriptedMenu
 	
 	void RefreshMarkerList(){
 		if (m_MarkerList){
-			
-			m_logSkip--;
-			if (m_logSkip < 0){
-				m_logSkip = 300;
-			}
-			m_MarkerList.Debug();
 			for (int i = 0; i < m_MarkerList.Count(); i++){
 				if (m_MarkerList.Get(i)){
 					if (m_MarkerList.Get(i).Refresh()){

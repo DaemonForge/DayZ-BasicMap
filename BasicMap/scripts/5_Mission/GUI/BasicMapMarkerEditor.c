@@ -1,5 +1,7 @@
 class BasicMapMarkerEditor  extends ScriptedWidgetEventHandler {
 		
+	protected BasicMapMarker		m_SelectedMarker;
+	
 	protected float						m_ScreenX;
 	protected float						m_ScreenY;
 	protected float						m_WidgetX;
@@ -36,7 +38,6 @@ class BasicMapMarkerEditor  extends ScriptedWidgetEventHandler {
 	
 	
 	void BasicMapMarkerEditor(Widget parent){
-		
 		m_EditorRoot				= GetGame().GetWorkspace().CreateWidgets( "BasicMap/gui/layouts/EditIcons.layout", parent);
 				
 		m_Editor 					= Widget.Cast(m_EditorRoot.FindAnyWidget( "Editor" ));
@@ -166,14 +167,15 @@ class BasicMapMarkerEditor  extends ScriptedWidgetEventHandler {
 		m_Editor_Icon.SetColor(m_SelectedMarker.GetColour());
 	}
 	
-	void OpenEditor(int x, int y){
+	void OpenEditor(int x, int y, BasicMapMarker marker){
 		float ScreenWidth = 0;
 		float ScreenHeight = 0;
 		GetGame().GetWorkspace().GetScreenSize(ScreenWidth, ScreenHeight);
 		m_ScreenX = ScreenWidth;
 		m_ScreenY = ScreenHeight;
 		m_Editor.GetSize(m_WidgetWidth, m_WidgetHeight);
-		if (m_SelectedMarker){
+		if (marker){
+			m_SelectedMarker = BasicMapMarker.Cast(marker);
 			m_EditorIsOpen = true;
 			m_EditorRoot.Show(true);
 			m_WidgetX  = x;

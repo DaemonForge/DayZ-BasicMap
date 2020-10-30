@@ -36,6 +36,7 @@ class BasicMapHUDMarker {
 		m_Icon.SetColor(m_MarkerData.GetColour());
 		m_Name.SetColor(m_MarkerData.GetColour());
 		m_Distance.SetColor(m_MarkerData.GetColour());
+		Update();
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.Update, 14, true);
 	}
 	

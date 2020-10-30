@@ -18,7 +18,7 @@ class CfgMods
         authorID="0";
         version="0.1";
         extra=0;
-        type="mod";
+        type = "Mod";
 		inputs = "BasicMap/data/Inputs.xml";
 	    dependencies[]={"Game", "World", "Mission"};
 	    class defs
@@ -835,34 +835,185 @@ class CfgWorlds
 			class Local_MB_VMC
 			{
 				name = "Veresnik Military Camp(VMC)";
+				type = "MilitaryBase"
+			};
+			class Local_MB_VMC_Shadow: Local_MB_VMC
+			{
+				type = "MilitaryBaseShadow";
 			};
 			class Local_MB_Tisy
 			{
 				name = "Tisy Military Base";
+				type = "MilitaryBase"
+			};
+			class Local_MB_Tisy_Shadow: Local_MB_Tisy
+			{
+				name = "Tisy Military Base";
+				type = "MilitaryBaseShadow";
 			};
 			class Local_MB_Kamensk
 			{
 				name = "Kamensk Military Base";
+				type = "MilitaryBase"
+			};
+			class Local_MB_Kamensk_Shadow: Local_MB_Kamensk
+			{
+				type = "MilitaryBaseShadow";
 			};
 			class Local_MB_Zeleno
 			{
-				name = "Zelenogorsk Military Outpost";
+				name = "ZELENOGORSK MILITARY BASE";
+				type = "MilitaryBase"
 			};
 			class Local_MB_Pavlovo
 			{
-				name = "Pavlovo Military Base";
+				name = "PAVLOVO MILITARY BASE";
+				type = "MilitaryBase"
+			};
+			class Local_MB_Pavlovo_Shadow: Local_MB_Pavlovo
+			{
+				type = "MilitaryBaseShadow";
 			};
 			class Local_AF_Balota
 			{
-				name = "Balota Airfield";
+				name = "BALOTA AIRFIELD";
+				type = "MilitaryBase"
 			};
 			class Local_AF_Krasno
 			{
-				name = "Krasno Airfield";
+				name = "KRASNO AIRFIELD";
+				type = "MilitaryBase"
 			};
 			class Local_AF_Vybor
 			{
-				name = "Vybor Airfield";
+				name = "VYBOR AIRFIELD";
+				type = "MilitaryBase"
+			};
+			
+			//Custom added Military Locations
+			class Local_MB_Berezino
+			{
+				name = "Berezino Outpost";
+				position[] = {11963.87,9132.43};
+				type = "MilitaryOutpost";
+			};
+			class Local_MB_NovyLug
+			{
+				name = "Novy Lug Checkpoint";
+				position[] = {9581.39,11796.36};
+				type = "MilitaryOutpost";
+			};
+			class Local_MB_Elektrozavodsk
+			{
+				name = "Elektrozavodsk Outpost";
+				position[] = {10480.1,2354.87};
+				type = "MilitaryOutpost";
+			};
+			class Local_MB_Turovo
+			{
+				name = "Turovo Outpost";
+				position[] = {13623.9,13736.24};
+				type = "MilitaryOutpost";
+			};
+			class Local_MB_StarySobor
+			{
+				name = "Stary Sobor Military Base";
+				position[] = {6353.17, 7793.61};
+				type = "MilitaryOutpost";
+			};
+			class Local_MB_Sosnovy
+			{
+				name = "Sosnovy Checkpoint";
+				position[] = {2719.05, 6756.86};
+				type = "MilitaryOutpost";
+			};
+			class Local_MB_Ostry
+			{
+				name = "Ostry Outpost";
+				position[] = {10955.64,13341.25};
+				type = "MilitaryOutpost";
+			};
+			class Local_MB_Severograd
+			{
+				name = "Severograd Checkpoint";
+				position[] = {7071.42,12735.87};
+				type = "MilitaryOutpost";
+			};
+			class Local_MB_Arsenovo
+			{
+				name = "Arsenovo Checkpoint";
+				position[] = {8562.08, 14000.54};
+				type = "MilitaryOutpost";
+			};
+			class Local_MB_Grozovy
+			{
+				name = "Grozovy Checkpoint";
+				position[] = {3655.72,14921.88};
+				type = "MilitaryOutpost";
+			};
+			class Local_MB_Zaprudnoye
+			{
+				name = "Zaprudnoye Checkpoint";
+				position[] = {4967.62,12910.81};
+				type = "MilitaryOutpost";
+			};
+			class Local_MB_Bashnya
+			{
+				name = "Bashnya Military Base";
+				position[] = {4100.3,11680.26};
+				type = "MilitaryBase";
+			};
+			class Local_MB_TriKresta
+			{
+				name = "Tri-Kresta Checkpoint";
+				position[] = {324.01,9323.51};
+				type = "MilitaryOutpost";
+			};
+			class Local_MB_Tikhiyzaliv
+			{
+				name = "Tikhiyzaliv Checkpoint";
+				position[] = {780.37,1870.99};
+				type = "MilitaryOutpost";
+			};
+			class Local_MB_Chernogorsk
+			{
+				name = "Chernogorsk Military Base";
+				position[] = {7259.27,3023.44};
+				type = "MilitaryOutpost";
+			};
+			class Local_MB_Novoselki
+			{
+				name = "Novoselki Checkpoint";
+				position[] = {5822.97,3079.82};
+				type = "MilitaryOutpost";
+			};
+			class Local_MB_Topolka
+			{
+				name = "Topolka Checkpoint";
+				position[] = {10240.12,4031.73};
+				type = "MilitaryOutpost";
+			};
+			class Local_MB_Staroye
+			{
+				name = "Staroye Outpost";
+				position[] = {10444.62,5969.2};
+				type = "MilitaryOutpost";
+			};
+			class Local_MB_Gorka
+			{
+				name = "Gorka Checkpoint";
+				position[] = {10473.13,9167.24};
+				type = "MilitaryOutpost";
+			};
+			class Local_MB_Myshkino
+			{
+				name = "Myshkino Military Base";
+				position[] = {1192.99,7236.72};
+				type = "MilitaryOutpost";
+			};
+			class Local_MB_Myshkino_Shadow: Local_MB_Myshkino
+			{
+				type = "MilitaryBaseShadow";
 			};
 		};
 	};
@@ -896,60 +1047,81 @@ class CfgLocationTypes
 	};
 	class Capital: Name
 	{
-		color[] = {0.541, 0.702, 0.984,0.95};
-		textSize = 0.08;
+		color[] = {0.839, 0.988, 0.937,1};
 		importance = 7;
+		textSize = 0.08;
+	};
+	class CapitalShadow: Name
+	{
+		color[] = {0.839, 0.839, 0.839,0.7};
+		importance = 6;
+		textSize = 0.083;
 	};
 	class City: Name
 	{
-		color[] = {0.541, 0.702, 0.984,0.99};
+		color[] = {0.839, 0.988, 0.937,1};
 		textSize = 0.065;
 		importance = 6;
 	};
+	class CityShadow: City
+	{
+		color[] = {0.839, 0.839, 0.839,0.7};
+		textSize = 0.068;
+		importance = 5;
+	};
 	class Village: Name
 	{
-		color[] = {0.541, 0.702, 0.984,0.99};
+		color[] = {0.839, 0.988, 0.937,1};
 		textSize = 0.046;
+		importance = 4;
+	};
+	class VillageShadow: Village
+	{
+		color[] = {0.839, 0.839, 0.839,0.7};
+		textSize = 0.049;
 		importance = 4;
 	};
 	class Local: Name
 	{
-		color[] = {0.541, 0.921, 0.984,0.99};
+		color[] = {0.839, 0.988, 0.937,1};
 		textSize = 0.046;
 		importance = 2;
 	};
 	class Marine: Name
 	{
 		color[] = {0.05,0.4,0.6,0.95};
-		textSize = 0.035;
-		importance = 2;
+		textSize = 0.042;
+		importance = 3;
 	};
 	class Ruin: NameIcon
 	{
 		texture = "\DZ\gear\navigation\data\map_ruin_ca.paa";
 		textSize = 0.035;
-		importance = 2;
+		importance = 3;
 		size = 8;
 	};
 	class Camp: NameIcon
 	{
-		color[] = {0.984, 0.831, 0.541,0.9};
+		color[] = {0.698, 0.980, 0.619,1};
 		texture = "\DZ\gear\navigation\data\map_camp_ca.paa";
 		textSize = 0.042;
+		importance = 3;
 		size = 9;
 	};
 	class Hill: NameIcon
 	{
-		color[] = {0.984, 0.831, 0.541,0.9};
+		color[] = {0.698, 0.980, 0.619,1};
 		texture = "\DZ\gear\navigation\data\map_hill_ca.paa";
 		textSize = 0.042;
+		importance = 6;
 		size = 8;
 	};
 	class ViewPoint: NameIcon
 	{
-		color[] = {0.984, 0.831, 0.541,0.9};
+		color[] = {0.698, 0.980, 0.619,1};
 		texture = "\DZ\gear\navigation\data\map_viewpoint_ca.paa";
 		textSize = 0.042;
+		importance = 6;
 		size = 8;
 	};
 	class RockArea: NameIcon
@@ -981,6 +1153,30 @@ class CfgLocationTypes
 		color[] = {0.541, 0.921, 0.984,0.9};
 		texture = "\DZ\gear\navigation\data\map_border_cross_ca.paa";
 		size = 7;
+	};
+	class MilitaryBase: Name
+	{
+		color[] = {0.970,0.239,0.314,1};
+		textSize = 0.054;
+		importance = 5;
+	};
+	class MilitaryBaseShadow: MilitaryBase
+	{
+		color[] = {0.870,0.870,0.870,0.7};
+		textSize = 0.056;
+		importance = 5;
+	};
+	class MilitaryOutpost: Name
+	{
+		color[] = {0.970,0.239,0.314,1};
+		textSize = 0.048;
+		importance = 4;
+	};
+	class MilitaryOutpostShadow: MilitaryOutpost
+	{
+		color[] = {0.870,0.870,0.870,0.7};
+		textSize = 0.051;
+		importance = 4;
 	};
 };
 

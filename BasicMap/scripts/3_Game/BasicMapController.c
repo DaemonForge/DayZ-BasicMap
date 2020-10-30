@@ -20,7 +20,7 @@ class BasicMapController{
 	void Init(){
 		GetRPCManager().AddRPC( "BasicMap", "RPCSyncServerData", this, SingeplayerExecutionType.Both );
 		RegisterGroup(SERVER_KEY, new ref BasicMapGroupMetaData(SERVER_KEY, "SERVER MARKERS"), NULL);
-		RegisterGroup(CLIENT_KEY, new ref BasicMapGroupMetaData(CLIENT_KEY, "CLIENT MARKERS", true), new ref BasicMapMarkerFactory());
+		RegisterGroup(CLIENT_KEY, new ref BasicMapGroupMetaData(CLIENT_KEY, "PERSONAL MARKERS", true), new ref BasicMapMarkerFactory());
 		if (GetGame().IsMultiplayer() && GetGame().IsClient()){
 			GetRPCManager().SendRPC("BasicMap", "RPCSyncServerData", new Param2< array<ref BasicMapMarker>, ref BasicMapConfig >( NULL, NULL ), true, NULL);
 			LoadClientMarkers();
@@ -69,7 +69,7 @@ class BasicMapController{
 			if (Markers.Get(SERVER_KEY)){
 				ServerMarkers = Markers.Get(SERVER_KEY);
 			}
-			Print("[BASICMAP]Sending " + ServerMarkers.Count() + " Server Markers" );
+			//Print("[BASICMAP]Sending " + ServerMarkers.Count() + " Server Markers" );
 			GetRPCManager().SendRPC("BasicMap", "RPCSyncServerData", new Param2< array<ref BasicMapMarker>, ref BasicMapConfig>( ServerMarkers, GetBasicMapConfig() ), true, sender);
 		}
 	} 
@@ -79,6 +79,11 @@ class BasicMapController{
 		JsonFileLoader< array<ref BasicMapMarker> >.JsonLoadFile(BasicMapPath + ServerMarkersPath, ServerMarkers);
 		if (ServerMarkers){
 			for ( int i = 0; i < ServerMarkers.Count(); i++){
+				vector pos = ServerMarkers.Get(i).GetPosition();
+				if ( pos[1] == 0){
+					pos[1] = GetGame().SurfaceY( pos[0], pos[2] );
+					ServerMarkers.Get(i).SetPosition(pos);
+				}
 				ServerMarkers.Get(i).SetCanEdit(false);
 				ServerMarkers.Get(i).SetGroup(SERVER_KEY);
 			}
@@ -93,6 +98,7 @@ class BasicMapController{
 		for (int i = 0; i < ServerMarkers.Count(); i++){
 			ServerMarkers.Get(i).SetCanEdit(false);
 			ServerMarkers.Get(i).SetGroup(SERVER_KEY);
+			//ServerMarkers.Get(i).PrintDebug();
 		}
 		Markers.Set(SERVER_KEY, ServerMarkers);
 		JsonFileLoader< array<ref BasicMapMarker> >.JsonSaveFile(BasicMapPath + ServerMarkersPath, ServerMarkers);
@@ -104,11 +110,15 @@ class BasicMapController{
         GetCLIParam("connect", server);
 		string clientPath = BasicMapPath + "\\" + server + ".json";
 		if (FileExist(clientPath)){
-			ref array<ref BasicMapMarker> ClientMarkers = new ref array<ref BasicMapMarker>;
+			array<ref BasicMapMarker> ClientMarkers;
 			JsonFileLoader< array<ref BasicMapMarker> >.JsonLoadFile(clientPath, ClientMarkers);
 			for (int i = 0; i < ClientMarkers.Count(); i++){
-				ClientMarkers.Get(i).SetCanEdit(true);
 				ClientMarkers.Get(i).SetGroup(CLIENT_KEY);
+				ClientMarkers.Get(i).SetCanEdit(true);
+				//ClientMarkers.Get(i).PrintDebug();
+			}
+			if (!ClientMarkers){
+				ClientMarkers = new array<ref BasicMapMarker>;
 			}
 			Markers.Set(CLIENT_KEY, ClientMarkers);
 		} else {
