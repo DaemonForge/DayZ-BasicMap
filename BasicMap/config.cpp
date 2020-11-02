@@ -834,31 +834,18 @@ class CfgWorlds
 			};
 			class Local_MB_VMC
 			{
-				name = "Veresnik Military Camp(VMC)";
+				name = "VERESNIK MILITARY CAMP(VMC)";
 				type = "MilitaryBase"
-			};
-			class Local_MB_VMC_Shadow: Local_MB_VMC
-			{
-				type = "MilitaryBaseShadow";
 			};
 			class Local_MB_Tisy
 			{
-				name = "Tisy Military Base";
+				name = "TISY MILITARY BASE";
 				type = "MilitaryBase"
-			};
-			class Local_MB_Tisy_Shadow: Local_MB_Tisy
-			{
-				name = "Tisy Military Base";
-				type = "MilitaryBaseShadow";
 			};
 			class Local_MB_Kamensk
 			{
-				name = "Kamensk Military Base";
+				name = "KAMENSK MILITARY BASE";
 				type = "MilitaryBase"
-			};
-			class Local_MB_Kamensk_Shadow: Local_MB_Kamensk
-			{
-				type = "MilitaryBaseShadow";
 			};
 			class Local_MB_Zeleno
 			{
@@ -869,10 +856,6 @@ class CfgWorlds
 			{
 				name = "PAVLOVO MILITARY BASE";
 				type = "MilitaryBase"
-			};
-			class Local_MB_Pavlovo_Shadow: Local_MB_Pavlovo
-			{
-				type = "MilitaryBaseShadow";
 			};
 			class Local_AF_Balota
 			{
@@ -891,129 +874,125 @@ class CfgWorlds
 			};
 			
 			//Custom added Military Locations
-			class Local_MB_Berezino
+			class Local_Custom_MIL_Berezino
 			{
-				name = "Berezino Outpost";
+				name = "BEREZINO OUTPOST";
 				position[] = {11963.87,9132.43};
 				type = "MilitaryOutpost";
 			};
-			class Local_MB_NovyLug
+			class Local_Custom_MIL_NovyLug
 			{
-				name = "Novy Lug Checkpoint";
+				name = "NOVY LUG CHECKPOINT";
 				position[] = {9581.39,11796.36};
 				type = "MilitaryOutpost";
 			};
-			class Local_MB_Elektrozavodsk
+			class Local_Custom_MIL_Elektrozavodsk
 			{
-				name = "Elektrozavodsk Outpost";
+				name = "ELEKTROZAVODSK OUTPOST";
 				position[] = {10480.1,2354.87};
 				type = "MilitaryOutpost";
 			};
-			class Local_MB_Turovo
+			class Local_Custom_MIL_Turovo
 			{
-				name = "Turovo Outpost";
+				name = "TUROVO OUTPOST";
 				position[] = {13623.9,13736.24};
 				type = "MilitaryOutpost";
 			};
-			class Local_MB_StarySobor
+			class Local_Custom_MIL_StarySobor
 			{
-				name = "Stary Sobor Military Base";
+				name = "STARY SOBOR MILITARY BASE";
 				position[] = {6353.17, 7793.61};
 				type = "MilitaryOutpost";
 			};
-			class Local_MB_Sosnovy
+			class Local_Custom_MIL_Sosnovy
 			{
-				name = "Sosnovy Checkpoint";
+				name = "SOSNOVY Checkpoint";
 				position[] = {2719.05, 6756.86};
 				type = "MilitaryOutpost";
 			};
-			class Local_MB_Ostry
+			class Local_Custom_MIL_Ostry
 			{
-				name = "Ostry Outpost";
+				name = "OSTRY OUTPOST";
 				position[] = {10955.64,13341.25};
 				type = "MilitaryOutpost";
 			};
-			class Local_MB_Severograd
+			class Local_Custom_MIL_Severograd
 			{
-				name = "Severograd Checkpoint";
+				name = "SEVEROGRAD CHECKPOINT";
 				position[] = {7071.42,12735.87};
 				type = "MilitaryOutpost";
 			};
-			class Local_MB_Arsenovo
+			class Local_Custom_MIL_Arsenovo
 			{
-				name = "Arsenovo Checkpoint";
+				name = "ARSENOVO CHECKPOINT";
 				position[] = {8562.08, 14000.54};
 				type = "MilitaryOutpost";
 			};
-			class Local_MB_Grozovy
+			class Local_Custom_MIL_Grozovy
 			{
-				name = "Grozovy Checkpoint";
+				name = "GROZOVY CHECKPOINT";
 				position[] = {3655.72,14921.88};
 				type = "MilitaryOutpost";
 			};
-			class Local_MB_Zaprudnoye
+			class Local_Custom_MIL_Zaprudnoye
 			{
-				name = "Zaprudnoye Checkpoint";
+				name = "ZAPRUDNOYE CHECKPOINT";
 				position[] = {4967.62,12910.81};
 				type = "MilitaryOutpost";
 			};
-			class Local_MB_Bashnya
+			class Local_Custom_MIL_Bashnya
 			{
-				name = "Bashnya Military Base";
+				name = "BASHNYA MILITARY BASE";
 				position[] = {4100.3,11680.26};
 				type = "MilitaryBase";
 			};
-			class Local_MB_TriKresta
+			class Local_Custom_MIL_TriKresta
 			{
-				name = "Tri-Kresta Checkpoint";
+				name = "TRI-KRESTA CHECKPOINT";
 				position[] = {324.01,9323.51};
 				type = "MilitaryOutpost";
 			};
-			class Local_MB_Tikhiyzaliv
+			class Local_Custom_MIL_Tikhiyzaliv
 			{
-				name = "Tikhiyzaliv Checkpoint";
+				name = "TIKHIYZALIV CHECKPOINT";
 				position[] = {780.37,1870.99};
 				type = "MilitaryOutpost";
 			};
-			class Local_MB_Chernogorsk
+			class Local_Custom_MIL_Chernogorsk
 			{
-				name = "Chernogorsk Military Base";
+				name = "CHERNOGORSK MILITARY BASE";
 				position[] = {7259.27,3023.44};
 				type = "MilitaryOutpost";
 			};
-			class Local_MB_Novoselki
+			class Local_Custom_MIL_Novoselki
 			{
-				name = "Novoselki Checkpoint";
+				name = "NOVOSELKI CHECKPOINT";
 				position[] = {5822.97,3079.82};
 				type = "MilitaryOutpost";
 			};
-			class Local_MB_Topolka
+			class Local_Custom_MIL_Topolka
 			{
-				name = "Topolka Checkpoint";
+				name = "TOPOLKA CHECKPOINT";
 				position[] = {10240.12,4031.73};
 				type = "MilitaryOutpost";
 			};
-			class Local_MB_Staroye
+			class Local_Custom_MIL_Staroye
 			{
-				name = "Staroye Outpost";
+				name = "STAROYE OUTPOST";
 				position[] = {10444.62,5969.2};
 				type = "MilitaryOutpost";
 			};
-			class Local_MB_Gorka
+			class Local_Custom_MIL_Gorka
 			{
-				name = "Gorka Checkpoint";
+				name = "GORKA CHECKPOINT";
 				position[] = {10473.13,9167.24};
 				type = "MilitaryOutpost";
 			};
-			class Local_MB_Myshkino
+			class Local_Custom_MIL_Myshkino
 			{
-				name = "Myshkino Military Base";
+				name = "MYSHKINO MILITARY BASE";
 				position[] = {1192.99,7236.72};
 				type = "MilitaryOutpost";
-			};
-			class Local_MB_Myshkino_Shadow: Local_MB_Myshkino
-			{
-				type = "MilitaryBaseShadow";
 			};
 		};
 	};
@@ -1047,7 +1026,7 @@ class CfgLocationTypes
 	};
 	class Capital: Name
 	{
-		color[] = {0.839, 0.988, 0.937,1};
+		color[] = {0.262, 0.749, 0.941,1};
 		importance = 7;
 		textSize = 0.08;
 	};
@@ -1059,7 +1038,7 @@ class CfgLocationTypes
 	};
 	class City: Name
 	{
-		color[] = {0.839, 0.988, 0.937,1};
+		color[] = {0.262, 0.749, 0.941,1};
 		textSize = 0.065;
 		importance = 6;
 	};
@@ -1071,7 +1050,7 @@ class CfgLocationTypes
 	};
 	class Village: Name
 	{
-		color[] = {0.839, 0.988, 0.937,1};
+		color[] = {0.262, 0.749, 0.941,1};
 		textSize = 0.046;
 		importance = 4;
 	};
@@ -1083,7 +1062,7 @@ class CfgLocationTypes
 	};
 	class Local: Name
 	{
-		color[] = {0.839, 0.988, 0.937,1};
+		color[] = {0.262, 0.749, 0.941,1};
 		textSize = 0.046;
 		importance = 2;
 	};
@@ -1233,6 +1212,7 @@ class RscMapControl
 	colorMountPoint[] = {0.44,0.38,0.23,0.99};
 	fontLabel = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
 	fontGrid = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
+	sizeExGrid = 0.03;
 	fontUnits = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
 	fontNames = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
 	sizeExNames = 0.052;
