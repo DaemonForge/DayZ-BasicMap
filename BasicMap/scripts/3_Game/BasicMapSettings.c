@@ -1,6 +1,7 @@
 class BasicMapConfig
 {
 	protected static string ConfigPATH = "$profile:BasicMap\\ServerSettings.json";
+	string ConfigVersion = "1";
 	ref TStringArray Icons = { 
 		"BasicMap\\gui\\images\\marker.paa", 
 		"BasicMap\\gui\\images\\location.paa", 
@@ -56,11 +57,25 @@ class BasicMapConfig
 	};
 	bool AllowPlayerMarkers = true;
 	bool Allow3dMarkers = true;
+	bool RequireMapItemInInventory = false;
+	bool OnlyOnOpenAction = false;
+	bool ClearOnDeath = false;
+	bool RequirePenToMark = false;
+	bool SaveMarkersToMapItem = false;
 	
 	void Load(){
 		if (GetGame().IsServer()){
 			if (FileExist(ConfigPATH)){ //If config exist load File
 			    JsonFileLoader<BasicMapConfig>.JsonLoadFile(ConfigPATH, this);
+				if (ConfigVersion != "1"){
+					ConfigVersion = "1";
+					RequireMapItemInInventory = false; 
+					ClearOnDeath = false;
+					OnlyOnOpenAction = false;
+					RequirePenToMark = false;
+					SaveMarkersToMapItem = false;
+					Save();
+				}
 			}else{ //File does not exist create file	
 				Save();
 			}
@@ -70,7 +85,6 @@ class BasicMapConfig
 	void Save(){
 			JsonFileLoader<BasicMapConfig>.JsonSaveFile(ConfigPATH, this);
 	}
-	
 	
 }
 ref BasicMapConfig m_BasicMapConfig;

@@ -34,7 +34,7 @@ class BasicMapMenu extends UIScriptedMenu
 	protected Widget							m_MarkerListBottom;
 	protected ButtonWidget						m_ScrollDown;
 	
-	
+	protected TextWidget						m_PostionText;
 	
 	protected bool								m_PanelIsOpen = false; 
 	protected bool								m_sidePanelOpen = false;
@@ -106,9 +106,8 @@ class BasicMapMenu extends UIScriptedMenu
 		
 		m_InfoText					= TextWidget.Cast( layoutRoot.FindAnyWidget( "InfoText" ));
 		m_Editor					= Widget.Cast( layoutRoot.FindAnyWidget( "EditorFrame" ) ); 		
-		
-        WidgetEventHandler.GetInstance().RegisterOnDoubleClick( m_Map, this, "OnMapDoubleClick" );
-		
+				
+		m_PostionText				= TextWidget.Cast( layoutRoot.FindAnyWidget( "PostionText" ));
 		
 		Initialize();
 		
@@ -121,7 +120,7 @@ class BasicMapMenu extends UIScriptedMenu
 		
 		m_Show3dMakersPanel.Show(GetBasicMapConfig().Allow3dMarkers);
 		m_Show3dMakers.SetChecked(!BasicMap().ShowMarkersOnHUD());
-		PlayerBase me = PlayerBase.Cast(GetGame().GetPlayer());
+		DayZPlayer me = DayZPlayer.Cast(GetGame().GetPlayer());
 		BasicMapPlayerMarker playerMarker = new ref BasicMapPlayerMarker("", Vector(0,0,0));
 		if (me){
 			playerMarker.SetPlayer(me);
@@ -219,6 +218,7 @@ class BasicMapMenu extends UIScriptedMenu
 		for (int i = 0; i < BasicMap().Count(); i++) {
 			BasicMapMarker marker = BasicMap().Marker(i);
 			if (marker){
+				marker.PrintDebug();
 				if ( BasicMap().ShouldShowOnMap( marker.GetGroup() ) ){		
 					float offset = 5.7;
 					vector pos = marker.GetPosition();
@@ -244,10 +244,10 @@ class BasicMapMenu extends UIScriptedMenu
 	
 	
 	
-	void OnMapDoubleClick(Widget w, int x, int y, int button) {
+	override bool OnDoubleClick(Widget w, int x, int y, int button) {
 		vector clickPos = MapClickPosition(x,y);
 		float radius = (m_Map.GetScale() * 110) + 5;
-        if (button == MouseState.LEFT) {
+        if (w == m_Map && button == MouseState.LEFT) {
 			int counter = 0;
 			if (BasicMap().ClientMarkers()){
 				counter = BasicMap().ClientMarkers().Count();
@@ -257,10 +257,11 @@ class BasicMapMenu extends UIScriptedMenu
 				if ( IsEditorOpen() ){
 					CloseEditor();
 				}
-				if (GetBasicMapConfig().AllowPlayerMarkers){
+				if (GetBasicMapConfig().AllowPlayerMarkers && CanMakeMarkers()){
 					Print("[BASICMAP] Creating Marker At " + clickPos);
 		           	BasicMap().CreateMarker(m_CurGroup, name, clickPos);
 					GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.PopulateMarkerList, 10, false);
+					return true;
 				}
 			} else {
 				if ( IsEditorOpen() ){
@@ -269,8 +270,9 @@ class BasicMapMenu extends UIScriptedMenu
 				m_SelectedMarker = BasicMapMarker.Cast( BasicMap().GetMarkerByVector(clickPos, radius) );
 				Print("[BASICMAP] OpenEditor " + clickPos);
 				OpenEditor(x, y);
+				return true;
 			}
-		} else if (button == MouseState.RIGHT) {
+		} else if (w == m_Map && button == MouseState.RIGHT) {
 			BasicMapMarker marker = BasicMapMarker.Cast(BasicMap().GetMarkerByVector(clickPos, radius));
 			bool IsDeletedMarkerSelected = false;
 			if (marker && m_SelectedMarker == marker){
@@ -285,18 +287,22 @@ class BasicMapMenu extends UIScriptedMenu
 				} else {
 					GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater( this.PopulateMarkerList, 50, false);
 				}
+				return true;
 			}
         }
+		return super.OnDoubleClick(w, x, y, button);
     }
 	
 	
 	void UpdateMe(){
 		m_Map.AddUserMark(m_MeMarker.GetPosition(), " ME", m_MeMarker.GetColour(), m_MeMarker.GetIcon());
+		m_PostionText.SetText("Postion: " + m_MeMarker.GetPosition().ToString(true));
 	}
 	
 	void ~BasicMapMenu()
     {
 		CloseEditor();
+		BasicMap().OnMapClose();
 		delete m_MeMarker;
 		layoutRoot.Show(false);
     }
@@ -307,7 +313,14 @@ class BasicMapMenu extends UIScriptedMenu
 
 	void SetOpen(bool open) {
 		if (!m_PanelIsOpen && open){
+			layoutRoot.Show(true);
 			GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.UpdateMarkers, 18, false);
+		}
+		if (m_PanelIsOpen && !open){
+			CloseEditor();
+			BasicMap().OnMapClose();
+			delete m_MeMarker;
+			layoutRoot.Show(false);
 		}
 		m_PanelIsOpen = open;
 	}
@@ -411,7 +424,7 @@ class BasicMapMenu extends UIScriptedMenu
 	}
 	
 	void OpenEditor(int x, int y){
-		if (m_SelectedMarker){
+		if (m_SelectedMarker && CanMakeMarkers()){
 			if (!m_MarkerEditor){
 				m_MarkerEditor = new BasicMapMarkerEditor(m_Editor);
 			}
@@ -465,4 +478,41 @@ class BasicMapMenu extends UIScriptedMenu
 		}
 	}
 	
+	
+	void LockControls() {
+		GetGame().GetMission().GetHud().ShowHudUI( false );
+		GetGame().GetMission().GetHud().ShowQuickbarUI( false );
+        GetGame().GetMission().PlayerControlDisable(INPUT_EXCLUDE_MOUSE_ALL);
+        GetGame().GetUIManager().ShowUICursor(true);
+    }
+
+    void UnLockControls() {
+		GetGame().GetMission().GetHud().ShowHudUI( true );
+		GetGame().GetMission().GetHud().ShowQuickbarUI( true );
+        GetGame().GetMission().PlayerControlEnable(false);
+        GetGame().GetInput().ResetGameFocus();
+        GetGame().GetUIManager().ShowUICursor(false);
+    }
+	
+	bool CanMakeMarkers(){
+		if ( GetBasicMapConfig().RequirePenToMark && GetGame().IsClient() ){
+			DayZPlayer player = DayZPlayer.Cast(GetGame().GetPlayer());
+
+            if (player){
+				array<EntityAI> itemsArray = new array<EntityAI>;
+				player.GetInventory().EnumerateInventory(InventoryTraversalType.PREORDER, itemsArray);    	
+                for (int i = 0; i < itemsArray.Count(); i++){
+                    if (itemsArray.Get(i)){ 
+						string itemType = itemsArray.Get(i).GetType();
+						itemType.ToLower();
+						if (itemType.Contains("pen_")){
+                            return GetBasicMapConfig().AllowPlayerMarkers;
+						}
+                    }
+                }
+            }
+			return false;
+		} 
+		return GetBasicMapConfig().AllowPlayerMarkers;
+	}
 }

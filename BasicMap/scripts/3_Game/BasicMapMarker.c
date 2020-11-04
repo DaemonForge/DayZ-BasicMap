@@ -6,10 +6,8 @@ class BasicMapMarker {
 	ref array<int> Colour = {119, 136, 198};
 	int Alpha = 235;
 	
-	[NonSerialized()]
 	protected bool CanEdit = false;
 	
-	[NonSerialized()]
 	protected string Group = BasicMap().CLIENT_KEY;
 	
 	void BasicMapMarker(string name, vector pos, string icon = "", array<int> colour = NULL, int alpha = 235, bool onHUD = false) {

@@ -21,7 +21,7 @@ modded class MissionGameplay extends MissionBase
 			m_hudMarkers.Get(j).Init(BasicMap().Marker(j));
 		}
 	}
-	
+
 	override void OnUpdate (float timeslice) {
         super.OnUpdate(timeslice);
 
@@ -37,7 +37,7 @@ modded class MissionGameplay extends MissionBase
             }
         }
 
-        if (input.LocalPress("UABasicMap", false)) {
+        if (input.LocalPress("UABasicMap", false) && AllowedToOpenBasicMap()) {
             if (m_BasicMapMenu) {
                 if (m_BasicMapMenu.IsOpen() && !m_BasicMapMenu.IsEditorOpen()) {
 					BasicMapClosePanel();
@@ -58,9 +58,8 @@ modded class MissionGameplay extends MissionBase
 	
 	void BasicMapCreatePanel()
 	{
-		BasicMapLockControls();
 	    m_BasicMapMenu = BasicMapMenu.Cast(GetUIManager().EnterScriptedMenu(BASICMAP_MENU, null));
-	    BasicMapLockControls();
+		m_BasicMapMenu.LockControls();
 	    m_BasicMapMenu.SetOpen(true);
 		m_BasicMapMenu_Opening = false;
 	}
@@ -70,7 +69,7 @@ modded class MissionGameplay extends MissionBase
 		GetGame().GetUIManager().ShowScriptedMenu(m_BasicMapMenu, NULL);
 	    m_BasicMapMenu.SetOpen(true);
 		m_BasicMapMenu.UpdateMarkers();
-	    BasicMapLockControls();
+		m_BasicMapMenu.LockControls();
 		m_BasicMapMenu_Opening = false;
 	}
 	
@@ -78,24 +77,35 @@ modded class MissionGameplay extends MissionBase
 	{
 		m_BasicMapMenu.CloseEditor();//Make sure if a marker was open that its closed and saved
 		m_BasicMapMenu.SetOpen(false);
+		m_BasicMapMenu.UnLockControls()
         GetGame().GetUIManager().HideScriptedMenu(m_BasicMapMenu);
 		GetGame().GetUIManager().CloseMenu(BASICMAP_MENU);
-		BasicMapUnLockControls();
 		m_BasicMapMenu_Opening = false;
 	}
 	
-	private void BasicMapLockControls() {
-		GetGame().GetMission().GetHud().ShowHudUI( false );
-		GetGame().GetMission().GetHud().ShowQuickbarUI( false );
-        GetGame().GetMission().PlayerControlDisable(INPUT_EXCLUDE_MOUSE_ALL);
-        GetGame().GetUIManager().ShowUICursor(true);
-    }
+	bool BasicMapHasPen(){
+		
+	}
+	
+	bool AllowedToOpenBasicMap(){
+        if (GetBasicMapConfig() && GetBasicMapConfig().RequireMapItemInInventory) {
+            DayZPlayer player = DayZPlayer.Cast(GetGame().GetPlayer());
 
-    private void BasicMapUnLockControls() {
-		GetGame().GetMission().GetHud().ShowHudUI( true );
-		GetGame().GetMission().GetHud().ShowQuickbarUI( true );
-        GetGame().GetMission().PlayerControlEnable(false);
-        GetGame().GetInput().ResetGameFocus();
-        GetGame().GetUIManager().ShowUICursor(false);
+            if (player){
+				array<EntityAI> itemsArray = new array<EntityAI>;
+				player.GetInventory().EnumerateInventory(InventoryTraversalType.PREORDER, itemsArray);
+            	    
+                for (int i = 0; i < itemsArray.Count(); i++){
+                    if (itemsArray.Get(i) && itemsArray.Get(i).IsInherited(ItemMap)){
+                            return true;
+                    }
+                }
+            }
+        } else if (GetBasicMapConfig().OnlyOnOpenAction){
+			return false;
+		} else {
+			return true;
+		}
+        return false;
     }
 }

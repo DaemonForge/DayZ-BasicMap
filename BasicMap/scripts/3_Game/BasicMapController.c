@@ -1,4 +1,7 @@
 class BasicMapController{
+	
+	EntityAI MapItem = NULL;
+	
 	static string ServerMarkersPath = "\\ServerMarkers.json";
 	static string BasicMapPath = "$profile:BasicMap";
 	
@@ -31,6 +34,22 @@ class BasicMapController{
 			} else {
 				 LoadServerMarkers();
 			}
+		}
+	}
+	
+	void SetMapItem( EntityAI mapItem){
+		MapItem = EntityAI.Cast(mapItem);
+	}
+	
+	EntityAI GetMapItem(){
+		return MapItem;
+	}
+	
+	void OnMapClose(){
+		SaveClientMarkers();
+		if (MapItem && GetBasicMapConfig().SaveMarkersToMapItem){
+			MapItem = NULL;
+			GetMarkers(CLIENT_KEY) = new array<ref BasicMapMarker>;
 		}
 	}
 	
@@ -106,6 +125,10 @@ class BasicMapController{
 
 	
 	void LoadClientMarkers(){
+		if (GetBasicMapConfig().SaveMarkersToMapItem){
+			Markers.Set(CLIENT_KEY, new array<ref BasicMapMarker>);
+			return;
+		}
 		string server;
         GetCLIParam("connect", server);
 		string clientPath = BasicMapPath + "\\" + server + ".json";
@@ -133,9 +156,13 @@ class BasicMapController{
         GetCLIParam("connect", server);
 		string clientPath = BasicMapPath + "\\" + server + ".json";
 		if (Markers.Get(CLIENT_KEY)){
-			ClientMarkers = Markers.Get(CLIENT_KEY);
+			ClientMarkers = array<ref BasicMapMarker>.Cast(Markers.Get(CLIENT_KEY));
 		}
-		JsonFileLoader< array<ref BasicMapMarker> >.JsonSaveFile(clientPath, ClientMarkers);
+		if (MapItem && GetBasicMapConfig().SaveMarkersToMapItem){
+			GetGame().RPCSingleParam(MapItem, BASICMAPRPCs.SAVE_MARKERS, new ref Param1<array<ref BasicMapMarker>>(ClientMarkers), true, NULL);
+		} else {
+			JsonFileLoader< array<ref BasicMapMarker> >.JsonSaveFile(clientPath, ClientMarkers);
+		}
 	}
 	
 	

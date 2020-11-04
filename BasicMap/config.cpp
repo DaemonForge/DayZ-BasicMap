@@ -835,42 +835,42 @@ class CfgWorlds
 			class Local_MB_VMC
 			{
 				name = "VERESNIK MILITARY CAMP(VMC)";
-				type = "MilitaryBase"
+				type = "MilitaryBase";
 			};
 			class Local_MB_Tisy
 			{
 				name = "TISY MILITARY BASE";
-				type = "MilitaryBase"
+				type = "MilitaryBase";
 			};
 			class Local_MB_Kamensk
 			{
 				name = "KAMENSK MILITARY BASE";
-				type = "MilitaryBase"
+				type = "MilitaryBase";
 			};
 			class Local_MB_Zeleno
 			{
 				name = "ZELENOGORSK MILITARY BASE";
-				type = "MilitaryBase"
+				type = "MilitaryBase";
 			};
 			class Local_MB_Pavlovo
 			{
 				name = "PAVLOVO MILITARY BASE";
-				type = "MilitaryBase"
+				type = "MilitaryBase";
 			};
 			class Local_AF_Balota
 			{
 				name = "BALOTA AIRFIELD";
-				type = "MilitaryBase"
+				type = "MilitaryBase";
 			};
 			class Local_AF_Krasno
 			{
 				name = "KRASNO AIRFIELD";
-				type = "MilitaryBase"
+				type = "MilitaryBase";
 			};
 			class Local_AF_Vybor
 			{
 				name = "VYBOR AIRFIELD";
-				type = "MilitaryBase"
+				type = "MilitaryBase";
 			};
 			
 			//Custom added Military Locations
@@ -1162,6 +1162,159 @@ class CfgLocationTypes
 
 
 class RscMapControl
+{
+	scaleMin = 0.01;
+	scaleMax = 0.95;
+	ptsPerSquareSea = 8;
+	ptsPerSquareTxt = 10;
+	ptsPerSquareCLn = 10;
+	ptsPerSquareExp = 10;
+	ptsPerSquareCost = 10;
+	ptsPerSquareFor = 9;
+	ptsPerSquareForEdge = 12;
+	ptsPerSquareRoad = 4;
+	ptsPerSquareObj = 12;
+	scaleDefault = 0.42;
+	maxSatelliteAlpha = 1;
+	alphaFadeStartScale = 2;
+	alphaFadeEndScale = 2;
+	userMapPath = "";
+	maxUserMapAlpha = 0.00;
+	alphaUserMapFadeStartScale = 1;
+	alphaUserMapFadeEndScale = 1;
+	showCountourInterval = 1;
+	colorBackground[] = {0.0,0.0,0.0,0.0};
+	colorSea[] = {0.466, 0.533, 0.776,0.33};
+	colorForest[] = {0.302, 0.647, 0.208,0.05};
+	colorForestBorder[] = {0.0,0.0,0.0,0.0};
+	colorRocks[] = {0.541,0.541,0.541,0.4};
+	colorRocksBorder[] = {0.0,0.0,0.0,0.0};
+	colorLevels[] = {0.286,0.177,0.094,0.5};
+	colorMainCountlines[] = {0.572,0.354,0.188,0.5};
+	colorCountlines[] = {0.572,0.354,0.188,0.0};
+	colorMainCountlinesWater[] = {0.491,0.577,0.702,0.6};
+	colorCountlinesWater[] = {0.491,0.577,0.702,0.3};
+	colorPowerLines[] = {0.05,0.05,0.05,0.8};
+	colorRailWay[] = {0.6,0.15,0.0,0.95};
+	colorNames[] = {0.1,0.1,0.1,0.9};
+	colorInactive[] = {1.0,1.0,1.0,0.0};
+	colorOutside[] = {0.0,0.0,0.0,1.0};
+	colorTracks[] = {0.84,0.76,0.65,0.80};
+	colorTracksFill[] = {0.84,0.76,0.65,0.5};
+	colorRoads[] = {0.6,0.6,0.6,0.95};
+	colorRoadsFill[] = {1.0,1.0,1.0,0.85};
+	colorMainRoads[] = {0.9,0.5,0.3,0.95};
+	colorMainRoadsFill[] = {1.0,0.6,0.4,0.90};
+	colorGrid[] = {0.1,0.1,0.1,0.5};
+	colorGridMap[] = {0.1,0.1,0.1,0.5};
+	colorTrails[] = {0.84,0.76,0.65,0.20};
+	colorTrailsFill[] = {0.84,0.76,0.65,0.60};
+	colorMountPoint[] = {0.44,0.38,0.23,0.99};
+	fontLabel = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
+	fontGrid = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
+	sizeExGrid = 0.03;
+	fontUnits = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
+	fontNames = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
+	sizeExNames = 0.052;
+	fontInfo = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
+	fontLevel = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
+	text = "#(argb,8,8,3)color(0.95,0.95,0.95,0.95)";
+	class Legend
+	{
+		x = 0.0;
+		y = 0.0;
+		w = 0.0;
+		h = 0.0;
+		font = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
+		sizeEx = 0.02;
+		colorBackground[] = {1,1,1,0.0};
+		color[] = {0.1,0.1,0.1,0.0};
+	};
+	class Bush
+	{
+		icon = "\dz\gear\navigation\data\map_bush_ca.paa";
+		color[] = {0.302, 0.647, 0.208,0.25};
+		size = 14;
+		importance = "0.2 * 10 * 0.05";
+		coefMin = 0.2;
+		coefMax = 2;
+	};
+	class SmallTree
+	{
+		icon = "\dz\gear\navigation\data\map_smalltree_ca.paa";
+		color[] = {0.302, 0.647, 0.208,0.25};
+		size = 12;
+		importance = "0.6 * 8 * 0.05";
+		coefMin = 0.2;
+		coefMax = 2;
+	};
+	class Tree
+	{
+		icon = "\dz\gear\navigation\data\map_tree_ca.paa";
+		color[] = {0.302, 0.647, 0.208,0.25};
+		size = 12;
+		importance = "0.6 * 8 * 0.05";
+		coefMin = 0.2;
+		coefMax = 2;
+	};
+	class Waterpump
+	{
+		icon = "BasicMap\gui\images\well.paa";
+		color[] = {0.208,0.302,0.647,0.8};
+		size = 16;
+		importance = "1 * 20 * 0.05";
+		coefMin = 0.5;
+		coefMax = 4;
+	};
+	class Hospital
+	{
+		icon = "BasicMap\gui\images\hospital.paa";
+		color[] = {1.0,0.14,0.50,0.6};
+		size = 18;
+		importance = "2 * 20 * 0.05";
+		coefMin = 0.1;
+		coefMax = 4;
+	};
+	class Store
+	{
+		icon = "\dz\gear\navigation\data\map_store_ca.paa";
+		color[] = {1,1,1,0.6};
+		size = 18;
+		importance = "2 * 20 * 0.05";
+		coefMin = 0.1;
+		coefMax = 4;
+	};
+	class Police
+	{
+		icon = "BasicMap\gui\images\police.paa";
+		color[] = {0.09,0.09,0.20,0.6};
+		size = 18;
+		importance = "2 * 20 * 0.05";
+		coefMin = 0.1;
+		coefMax = 2;
+	};
+	class FireDep
+	{
+		icon = "\dz\gear\navigation\data\map_firedep_ca.paa";
+		color[] = {0.764,0,0,0.6};
+		size = 18;
+		importance = "2 * 20 * 0.05";
+		coefMin = 0.2;
+		coefMax = 2;
+	};
+	class Rocks
+	{
+		icon = "\dz\gear\navigation\data\map_rock_ca.paa";
+		color[] = {0.1,0.1,0.1,0.6};
+		size = 12;
+		importance = "0.5 * 12 * 0.05";
+		coefMin = 0.25;
+		coefMax = 4;
+	};
+};
+
+
+class MapDefaults
 {
 	scaleMin = 0.01;
 	scaleMax = 0.95;
