@@ -118,13 +118,21 @@ class BasicMapMenu extends UIScriptedMenu
 	void Initialize(){
 		m_InfoText.SetText( BasicMap().GetInfoText() );
 		
+		if (ShowSelfOnMap()){
+			m_BackToMe.Show(true);
+		} else {
+			m_BackToMe.Show(false);
+		}
+		
 		m_Show3dMakersPanel.Show(GetBasicMapConfig().Allow3dMarkers);
 		m_Show3dMakers.SetChecked(!BasicMap().ShowMarkersOnHUD());
 		DayZPlayer me = DayZPlayer.Cast(GetGame().GetPlayer());
 		BasicMapPlayerMarker playerMarker = new ref BasicMapPlayerMarker("", Vector(0,0,0));
 		if (me){
 			playerMarker.SetPlayer(me);
-			SetMapPos(me.GetPosition());
+			if (ShowSelfOnMap()){
+				SetMapPos(me.GetPosition());
+			}
 		}
 		m_MeMarker = BasicMapPlayerMarker.Cast(playerMarker);
 		if (BasicMap().ClientMarkers().Count() > 0){
@@ -295,8 +303,10 @@ class BasicMapMenu extends UIScriptedMenu
 	
 	
 	void UpdateMe(){
-		m_Map.AddUserMark(m_MeMarker.GetPosition(), " ME", m_MeMarker.GetColour(), m_MeMarker.GetIcon());
-		m_PostionText.SetText("Postion: " + m_MeMarker.GetPosition().ToString(true));
+		if (ShowSelfOnMap()){
+			m_Map.AddUserMark(m_MeMarker.GetPosition(), " ME", m_MeMarker.GetColour(), m_MeMarker.GetIcon());
+			m_PostionText.SetText("Postion: " + m_MeMarker.GetPosition().ToString(true));
+		}
 	}
 	
 	void ~BasicMapMenu()
@@ -514,5 +524,27 @@ class BasicMapMenu extends UIScriptedMenu
 			return false;
 		} 
 		return GetBasicMapConfig().AllowPlayerMarkers;
+	}
+	
+	bool ShowSelfOnMap(){
+		if ( GetBasicMapConfig().RequireCompassToSeeSelf && GetGame().IsClient() ){
+			DayZPlayer player = DayZPlayer.Cast(GetGame().GetPlayer());
+
+            if (player){
+				array<EntityAI> itemsArray = new array<EntityAI>;
+				player.GetInventory().EnumerateInventory(InventoryTraversalType.PREORDER, itemsArray);    	
+                for (int i = 0; i < itemsArray.Count(); i++){
+                    if (itemsArray.Get(i)){ 
+						string itemType = itemsArray.Get(i).GetType();
+						itemType.ToLower();
+						if (itemType.Contains("compass")){
+                            return GetBasicMapConfig().ShowSelfOnMap;
+						}
+                    }
+                }
+            }
+			return false;
+		} 
+		return GetBasicMapConfig().ShowSelfOnMap;
 	}
 }

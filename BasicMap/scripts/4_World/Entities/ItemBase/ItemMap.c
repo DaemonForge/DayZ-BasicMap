@@ -11,25 +11,28 @@ modded class ChernarusMap  extends ItemMap
 	
 	override bool OnStoreLoad(ParamsReadContext ctx, int version)
 	{
+		if ( !super.OnStoreLoad( ctx, version ) )
+			return false;
+	
 		if (!ctx.Read(m_BasicMapMarkerArray))
 		{
 			return false;
 		}
 		return true;
 	}
-	
+
 	override void OnStoreSave(ParamsWriteContext ctx)
 	{
 		super.OnStoreSave(ctx);
 		
-		ctx.Write(m_BasicMapMarkerArray);		
+		ctx.Write(m_BasicMapMarkerArray);
 	}
 	
 	ref array<ref BasicMapMarker> GetBasicMapMarkers()
 	{
 		return m_BasicMapMarkerArray;
+		
 	}
-	
 	
 	override void SyncMapMarkers()
 	{

@@ -57,11 +57,13 @@ class BasicMapConfig
 	};
 	bool AllowPlayerMarkers = true;
 	bool Allow3dMarkers = true;
+	bool ShowSelfOnMap = true;
 	bool RequireMapItemInInventory = false;
 	bool OnlyOnOpenAction = false;
-	bool ClearOnDeath = false;
 	bool RequirePenToMark = false;
-	bool SaveMarkersToMapItem = false;
+	bool SaveMarkersToMapItem = false; // Requires   `OnlyOnOpenAction`
+	bool RequireCompassToSeeSelf = false;
+	bool RequireCompassToSee3d = false;
 	
 	void Load(){
 		if (GetGame().IsServer()){
@@ -69,11 +71,13 @@ class BasicMapConfig
 			    JsonFileLoader<BasicMapConfig>.JsonLoadFile(ConfigPATH, this);
 				if (ConfigVersion != "1"){
 					ConfigVersion = "1";
+					ShowSelfOnMap = true;
 					RequireMapItemInInventory = false; 
-					ClearOnDeath = false;
 					OnlyOnOpenAction = false;
 					RequirePenToMark = false;
 					SaveMarkersToMapItem = false;
+					RequireCompassToSeeSelf = false;
+					RequireCompassToSee3d = false;
 					Save();
 				}
 			}else{ //File does not exist create file	

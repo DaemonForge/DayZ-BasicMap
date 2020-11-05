@@ -48,9 +48,12 @@ class BasicMapController{
 	void OnMapClose(){
 		SaveClientMarkers();
 		if (MapItem && GetBasicMapConfig().SaveMarkersToMapItem){
-			MapItem = NULL;
-			GetMarkers(CLIENT_KEY) = new array<ref BasicMapMarker>;
+			GetGame().GetCallQueue(CALL_CATEGORY_SYSTEM).CallLater(this.ClearMapItem, 150,false);
 		}
+	}
+	
+	void ClearMapItem(){
+			MapItem = NULL;
 	}
 	
 	ref map< string, ref BasicMapGroupMetaData> GetGroups(){
@@ -152,15 +155,15 @@ class BasicMapController{
 	
 	void SaveClientMarkers(){
 		ref array<ref BasicMapMarker> ClientMarkers = new ref array<ref BasicMapMarker>;
-		string server;
-        GetCLIParam("connect", server);
-		string clientPath = BasicMapPath + "\\" + server + ".json";
 		if (Markers.Get(CLIENT_KEY)){
 			ClientMarkers = array<ref BasicMapMarker>.Cast(Markers.Get(CLIENT_KEY));
 		}
 		if (MapItem && GetBasicMapConfig().SaveMarkersToMapItem){
 			GetGame().RPCSingleParam(MapItem, BASICMAPRPCs.SAVE_MARKERS, new ref Param1<array<ref BasicMapMarker>>(ClientMarkers), true, NULL);
 		} else {
+			string server;
+       	 	GetCLIParam("connect", server);
+			string clientPath = BasicMapPath + "\\" + server + ".json";
 			JsonFileLoader< array<ref BasicMapMarker> >.JsonSaveFile(clientPath, ClientMarkers);
 		}
 	}
@@ -341,6 +344,24 @@ class BasicMapController{
 	}
 	
 	bool ShowMarkersOnHUD(){
+		if ( GetBasicMapConfig().RequireCompassToSee3d && GetGame().IsClient() ){
+			DayZPlayer player = DayZPlayer.Cast(GetGame().GetPlayer());
+
+            if (player){
+				array<EntityAI> itemsArray = new array<EntityAI>;
+				player.GetInventory().EnumerateInventory(InventoryTraversalType.PREORDER, itemsArray);    	
+                for (int i = 0; i < itemsArray.Count(); i++){
+                    if (itemsArray.Get(i)){ 
+						string itemType = itemsArray.Get(i).GetType();
+						itemType.ToLower();
+						if (itemType.Contains("compass")){
+							return MarkersOnHUD && GetBasicMapConfig().Allow3dMarkers;
+						}
+                    }
+                }
+            }
+			return false;
+		}
 		return MarkersOnHUD && GetBasicMapConfig().Allow3dMarkers;
 	}
 	

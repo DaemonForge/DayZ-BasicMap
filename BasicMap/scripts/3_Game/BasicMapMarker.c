@@ -6,7 +6,7 @@ class BasicMapMarker {
 	ref array<int> Colour = {119, 136, 198};
 	int Alpha = 235;
 	
-	protected bool CanEdit = false;
+	protected bool CanEdit = true;
 	
 	protected string Group = BasicMap().CLIENT_KEY;
 	
