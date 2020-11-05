@@ -188,8 +188,7 @@ FrameWidgetClass rootFrame {
        vexactsize 0
        priority 66
        text "<p>Double Left-Click to Create Marker</p><p>Double Right-Click to Delete Marker</p>"
-       font "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium22"
-       "exact text" 1
+       font "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium20"
        "condense whitespace" 1
       }
       PanelWidgetClass Settings {
