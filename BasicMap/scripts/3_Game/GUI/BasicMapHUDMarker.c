@@ -91,13 +91,16 @@ class BasicMapHUDMarker {
 				layoutRoot.Show(false);
 			}
 		} else {
-			GetGame().GetCallQueue(CALL_CATEGORY_GUI).Remove(this.Update);
 			Show(false);
 		}
 	}
 	
 	void Show(bool state = true){
 		m_Marker.Show(state);
+		if (!state){
+			GetGame().GetCallQueue(CALL_CATEGORY_GUI).Remove(this.Update);
+		}
+		
 	}
 	
 	private bool MarkerVisibleOnScreen()

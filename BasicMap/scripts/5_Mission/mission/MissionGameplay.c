@@ -5,7 +5,7 @@ modded class MissionGameplay extends MissionBase
 	override void OnMissionStart(){
 		super.OnMissionStart();
 		BasicMap();
-		GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.UpdateHuDIcons, 4000, true);
+		GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.UpdateHuDIcons, 5000, true);
 	}
 	
 	void UpdateHuDIcons(){
