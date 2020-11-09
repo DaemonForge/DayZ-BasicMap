@@ -222,24 +222,24 @@ class BasicMapMenu extends UIScriptedMenu
 	}
 	
 	void UpdateMarkers(){
-		m_Map.ClearUserMarks();
-		for (int i = 0; i < BasicMap().Count(); i++) {
-			BasicMapMarker marker = BasicMap().Marker(i);
-			if (marker){
-				marker.PrintDebug();
-				if ( BasicMap().ShouldShowOnMap( marker.GetGroup() ) ){		
-					float offset = 5.7;
-					vector pos = marker.GetPosition();
-					float x = pos[0] - offset; // Markers are a little off from the true postion
-					m_Map.AddUserMark(Vector(x, pos[1],pos[2]), " " + marker.GetName(), marker.GetColour(), marker.GetIcon());
+		if (m_PanelIsOpen){
+			m_Map.ClearUserMarks();
+			for (int i = 0; i < BasicMap().Count(); i++) {
+				BasicMapMarker marker = BasicMap().Marker(i);
+				if (marker){
+					//marker.PrintDebug();
+					if ( BasicMap().ShouldShowOnMap( marker.GetGroup() ) ){		
+						float offset = 5.7;
+						vector pos = marker.GetPosition();
+						float x = pos[0] - offset; // Markers are a little off from the true postion
+						m_Map.AddUserMark(Vector(x, pos[1],pos[2]), " " + marker.GetName(), marker.GetColour(), marker.GetIcon());
+					}
 				}
 			}
-		}
-		UpdateMe();
-		if (m_PanelIsOpen){
+			UpdateMe();
+			RefreshMarkerList();
 			GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.UpdateMarkers, 18, false);
 		}
-		RefreshMarkerList();
 	}
 	
     vector MapClickPosition(int x, int y) {

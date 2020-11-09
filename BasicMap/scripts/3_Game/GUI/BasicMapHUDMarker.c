@@ -1,9 +1,11 @@
 class BasicMapHUDMarker {
 	
+	protected bool						m_deleted = false;
+	
 	protected int 						m_logSkip = 100;
 	protected string 					LayoutPath = "BasicMap/gui/layouts/Marker.layout";
 	
-	protected ref BasicMapMarker 		m_MarkerData;
+	protected BasicMapMarker 			m_MarkerData;
 	
 	protected Widget 					layoutRoot;
 	
@@ -14,7 +16,7 @@ class BasicMapHUDMarker {
 	protected TextWidget				m_Distance;
 	
 	void Init(ref BasicMapMarker markerData){
-		m_MarkerData 	= markerData;
+		m_MarkerData 	= BasicMapMarker.Cast(markerData);
 		
 		layoutRoot	 	= Widget.Cast(GetGame().GetWorkspace().CreateWidgets(LayoutPath));
 		
@@ -37,25 +39,23 @@ class BasicMapHUDMarker {
 		m_Name.SetColor(m_MarkerData.GetColour());
 		m_Distance.SetColor(m_MarkerData.GetColour());
 		Update();
-		GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.Update, 14, true);
+		if (layoutRoot && m_Marker && m_MarkerData){
+			GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.Update, 14, true);
+		}
 	}
 	
 	void ~BasicMapHUDMarker(){
-		m_Marker.Show(false);
-		m_Icon.Show(false);
-		m_Name.Show(false);
-		m_Distance.Show(false);
-		GetGame().GetCallQueue(CALL_CATEGORY_GUI).Remove(this.Update);
+		OnDelete();
 	}
 	
 	void Update(){	
-		if (m_MarkerData){
+		if (m_MarkerData && layoutRoot){
 			m_logSkip--;
 			if (m_logSkip < 0){
 				m_logSkip = 200;
 			}
 			if (m_logSkip <= 0){
-				Print("[BASICMAP] Placing Marker on Map: " +m_MarkerData.GetName() + " Group: " + m_MarkerData.GetGroup() +  " Pos: " + m_MarkerData.GetPosition());
+				//Print("[BASICMAP] Placing Marker on Map: " +m_MarkerData.GetName() + " Group: " + m_MarkerData.GetGroup() +  " Pos: " + m_MarkerData.GetPosition());
 			}
 			if (MarkerVisibleOnScreen() && m_MarkerData.OnHUD() && BasicMap().ShowMarkersOnHUD() && BasicMap().ShouldShowOnHUD(m_MarkerData.GetGroup()) ){
 				
@@ -84,23 +84,27 @@ class BasicMapHUDMarker {
 				} else {
 					m_Distance.SetText("");
 				}
-				m_Marker.Show(true);
-				layoutRoot.Show(true);
+				Show();
 				layoutRoot.SetPos(x, y);
 			} else{
-				layoutRoot.Show(false);
+				Show(false);
 			}
 		} else {
-			Show(false);
+			OnDelete();
 		}
 	}
 	
 	void Show(bool state = true){
+		layoutRoot.Show(state);
 		m_Marker.Show(state);
-		if (!state){
+	}
+	
+	void OnDelete(){
+		if (!m_deleted){
+			m_deleted = true;
+			Show(false);
 			GetGame().GetCallQueue(CALL_CATEGORY_GUI).Remove(this.Update);
 		}
-		
 	}
 	
 	private bool MarkerVisibleOnScreen()
