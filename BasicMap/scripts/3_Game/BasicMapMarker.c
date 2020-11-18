@@ -6,6 +6,8 @@ class BasicMapMarker {
 	ref array<int> Colour = {119, 136, 198};
 	int Alpha = 235;
 	
+	bool HideOnPanel = false;
+	
 	protected bool CanEdit = true;
 	
 	protected string Group = BasicMap().CLIENT_KEY;
@@ -94,8 +96,16 @@ class BasicMapMarker {
   
 	}
 	
+	void SetHideOnPanel(float state){
+		HideOnPanel = state;
+	}
+	
+	bool GetHideOnPanel(){
+		return HideOnPanel;
+	}
+	
 	void PrintDebug(){
-		Print(" = = = = = = = = = = = = = ");
+		Print(" = = = = = = = = = = = = = = ");
 		Print("Name: " + Name);
 		Print("Pos: " + Pos);
 		Print("Icon: " + Icon);
@@ -105,7 +115,12 @@ class BasicMapMarker {
 		Print("Alpha: " + Alpha);
 		Print("CanEdit: " + CanEdit);
 		Print("Group: " + Group);
-		Print(" = = = = = = = = = = = = = ");
+		Print("Type: " + GetType());
+		Print(" = = = = = = = = = = = = = = ");
 		Print(" ");
+	}
+	
+	string GetType(){
+		return "BasicMarker";
 	}
 }

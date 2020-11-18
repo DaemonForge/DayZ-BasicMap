@@ -50,13 +50,6 @@ class BasicMapHUDMarker {
 	
 	void Update(){	
 		if (m_MarkerData && layoutRoot){
-			m_logSkip--;
-			if (m_logSkip < 0){
-				m_logSkip = 200;
-			}
-			if (m_logSkip <= 0){
-				//Print("[BASICMAP] Placing Marker on Map: " +m_MarkerData.GetName() + " Group: " + m_MarkerData.GetGroup() +  " Pos: " + m_MarkerData.GetPosition());
-			}
 			if (MarkerVisibleOnScreen() && m_MarkerData.OnHUD() && BasicMap().ShowMarkersOnHUD() && BasicMap().ShouldShowOnHUD(m_MarkerData.GetGroup()) ){
 				
 				float x;

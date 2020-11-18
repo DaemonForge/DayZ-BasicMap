@@ -50,16 +50,16 @@ class BasicMapMarkerEditor  extends ScriptedWidgetEventHandler {
 		m_Editor_IconRight 			= ButtonWidget.Cast(m_EditorRoot.FindAnyWidget( "Right" ));
 		m_Editor_IconLeft 			= ButtonWidget.Cast(m_EditorRoot.FindAnyWidget( "Left" ));
 		
-		m_Editor_3DMaker = Widget.Cast(m_EditorRoot.FindAnyWidget( "ThreeDMarkerPanel" ));
-		m_Editor_3DMakerBox = CheckBoxWidget.Cast(m_EditorRoot.FindAnyWidget( "ThreeDMarker" ));
+		m_Editor_3DMaker 			= Widget.Cast(m_EditorRoot.FindAnyWidget( "ThreeDMarkerPanel" ));
+		m_Editor_3DMakerBox 		= CheckBoxWidget.Cast(m_EditorRoot.FindAnyWidget( "ThreeDMarker" ));
 	
-		m_Editor_PartyMarker = Widget.Cast(m_EditorRoot.FindAnyWidget( "PartyMarkerPanel" ));
-		m_Editor_PartyMarkerBox = CheckBoxWidget.Cast(m_EditorRoot.FindAnyWidget( "PartyMarker" ));
+		m_Editor_PartyMarker 		= Widget.Cast(m_EditorRoot.FindAnyWidget( "PartyMarkerPanel" ));
+		m_Editor_PartyMarkerBox 	= CheckBoxWidget.Cast(m_EditorRoot.FindAnyWidget( "PartyMarker" ));
 		
-		m_Editor_Colour_Red = SliderWidget.Cast(m_EditorRoot.FindAnyWidget( "Red" ));
-		m_Editor_Colour_Green = SliderWidget.Cast(m_EditorRoot.FindAnyWidget( "Green" ));
-		m_Editor_Colour_Blue = SliderWidget.Cast(m_EditorRoot.FindAnyWidget( "Blue" ));
-		m_Editor_Colour_Alpha = SliderWidget.Cast(m_EditorRoot.FindAnyWidget( "Alpha" ));
+		m_Editor_Colour_Red 		= SliderWidget.Cast(m_EditorRoot.FindAnyWidget( "Red" ));
+		m_Editor_Colour_Green 		= SliderWidget.Cast(m_EditorRoot.FindAnyWidget( "Green" ));
+		m_Editor_Colour_Blue 		= SliderWidget.Cast(m_EditorRoot.FindAnyWidget( "Blue" ));
+		m_Editor_Colour_Alpha 		= SliderWidget.Cast(m_EditorRoot.FindAnyWidget( "Alpha" ));
 		
 		m_EditorRoot.SetHandler(this);
 		if (BasicMap().PARTY_KEY != ""){

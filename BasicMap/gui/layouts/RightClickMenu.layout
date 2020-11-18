@@ -9,9 +9,9 @@ FrameWidgetClass rootFrame {
  {
   PanelWidgetClass RightClickMenu {
    clipchildren 0
-   ignorepointer 1
+   ignorepointer 0
    color 0 0 0 1
-   position 0 0
+   position -16 -8
    size 128 52
    hexactpos 1
    vexactpos 1
@@ -53,7 +53,6 @@ FrameWidgetClass rootFrame {
          hexactsize 0
          vexactsize 0
          text "DELETE"
-         font "BasicMap/gui/fonts/Oswald-Regular/Oswald-Regular"
          "exact text" 1
          "size to text h" 0
          "text halign" center
@@ -81,7 +80,6 @@ FrameWidgetClass rootFrame {
          hexactsize 0
          vexactsize 0
          text "CHANGE GROUP"
-         font "BasicMap/gui/fonts/Oswald-Regular/Oswald-Regular"
          "exact text" 1
          "text halign" center
          "text valign" center
@@ -91,7 +89,8 @@ FrameWidgetClass rootFrame {
      }
     }
     PanelWidgetClass GroupSelector {
-     ignorepointer 1
+     visible 0
+     ignorepointer 0
      color 0 0 0 1
      position 129 26
      size 164 32
@@ -165,7 +164,7 @@ FrameWidgetClass rootFrame {
           }
          }
         }
-        TextWidgetClass TextWidget0 {
+        TextWidgetClass GroupName {
          ignorepointer 1
          position 0 0
          size 0.8 1
@@ -176,7 +175,6 @@ FrameWidgetClass rootFrame {
          hexactsize 0
          vexactsize 0
          text "PARTY MARKER"
-         font "BasicMap/gui/fonts/Oswald-Regular/Oswald-Regular"
          "exact text" 1
          "text halign" center
          "text valign" center

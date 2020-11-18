@@ -56,7 +56,7 @@ class BasicMapMarkerListItem  extends ScriptedWidgetEventHandler {
 		return super.OnDoubleClick(w, x, y, button);
 	
 	}
-	
+
 	bool Refresh(){
 		if (m_Marker){
 			m_icon.LoadImageFile(0, m_Marker.GetIcon());

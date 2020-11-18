@@ -3,6 +3,7 @@ class BasicMapController{
 	EntityAI MapItem = NULL;
 	
 	static string ServerMarkersPath = "\\ServerMarkers.json";
+	static string CircleMarkersPath = "\\ServerCircleMarkers.json";
 	static string BasicMapPath = "$profile:BasicMap";
 	
 	protected bool MarkersOnHUD = true;
@@ -25,7 +26,7 @@ class BasicMapController{
 		RegisterGroup(SERVER_KEY, new ref BasicMapGroupMetaData(SERVER_KEY, "SERVER MARKERS"), NULL);
 		RegisterGroup(CLIENT_KEY, new ref BasicMapGroupMetaData(CLIENT_KEY, "PERSONAL MARKERS", true), new ref BasicMapMarkerFactory());
 		if (GetGame().IsMultiplayer() && GetGame().IsClient()){
-			GetRPCManager().SendRPC("BasicMap", "RPCSyncServerData", new Param2< array<ref BasicMapMarker>, ref BasicMapConfig >( NULL, NULL ), true, NULL);
+			GetRPCManager().SendRPC("BasicMap", "RPCSyncServerData", new Param3< array<ref BasicMapMarker>, array<ref BasicMapCircleMarker>, ref BasicMapConfig >( NULL, NULL, NULL ), true, NULL);
 			LoadClientMarkers();
 		} else {
 			if (!FileExist(BasicMapPath + ServerMarkersPath)){
@@ -33,6 +34,10 @@ class BasicMapController{
 				ServerFirstRun();
 			} else {
 				 LoadServerMarkers();
+			}
+			if (FileExist(BasicMapPath + CircleMarkersPath)){
+				Print("[BASICMAP] Loading Circle Markers");
+				LoadServerCircleMarkers();
 			}
 		}
 	}
@@ -74,25 +79,38 @@ class BasicMapController{
 	}
 	
 	
-	
 	void RPCSyncServerData( CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target ){
-		Param2< array<ref BasicMapMarker>, ref BasicMapConfig> data;
+		Param3< array<ref BasicMapMarker>, array<ref BasicMapCircleMarker>, ref BasicMapConfig> data;
 		array<ref BasicMapMarker> ServerMarkers = new array<ref BasicMapMarker>;
+		array<ref BasicMapCircleMarker> ServerCircleMarkers = new array<ref BasicMapCircleMarker>;
 		if ( !ctx.Read( data ) ) return;
         if ( GetGame().IsMultiplayer() && GetGame().IsClient() ){
 			ServerMarkers =  data.param1;
+			ServerCircleMarkers =  data.param2;
 			for ( int i = 0; i < ServerMarkers.Count(); i++){
 				ServerMarkers.Get(i).SetCanEdit(false);
 				ServerMarkers.Get(i).SetGroup(SERVER_KEY);
 			}
-			Markers.Set(SERVER_KEY, data.param1);
-			m_BasicMapConfig = data.param2;
+			for ( i = 0; i < ServerCircleMarkers.Count(); i++){
+				ServerCircleMarkers.Get(i).SetCanEdit(false);
+				ServerCircleMarkers.Get(i).SetGroup(SERVER_KEY);
+				ServerMarkers.Insert(ServerCircleMarkers.Get(i));
+			}
+			Markers.Set(SERVER_KEY, ServerMarkers);
+			m_BasicMapConfig = data.param3;
 		} else if (GetGame().IsMultiplayer() && GetGame().IsServer()){
 			if (Markers.Get(SERVER_KEY)){
-				ServerMarkers = Markers.Get(SERVER_KEY);
+				BasicMapCircleMarker cMarker;
+				for ( int j = 0; j < Markers.Get(SERVER_KEY).Count(); j++){
+					if (Markers.Get(SERVER_KEY).Get(j).IsInherited(BasicMapCircleMarker) && Class.CastTo(cMarker, Markers.Get(SERVER_KEY).Get(j)) && cMarker.GetRadius() > 0){
+						ServerCircleMarkers.Insert(cMarker);
+					} else {
+						ServerMarkers.Insert(Markers.Get(SERVER_KEY).Get(j));
+					}
+				}
 			}
 			//Print("[BASICMAP]Sending " + ServerMarkers.Count() + " Server Markers" );
-			GetRPCManager().SendRPC("BasicMap", "RPCSyncServerData", new Param2< array<ref BasicMapMarker>, ref BasicMapConfig>( ServerMarkers, GetBasicMapConfig() ), true, sender);
+			GetRPCManager().SendRPC("BasicMap", "RPCSyncServerData", new Param3< array<ref BasicMapMarker>,  array<ref BasicMapCircleMarker>, ref BasicMapConfig>( ServerMarkers, ServerCircleMarkers, GetBasicMapConfig() ), true, sender);
 		}
 	} 
 	
@@ -168,6 +186,24 @@ class BasicMapController{
 		}
 	}
 	
+	void LoadServerCircleMarkers(){
+		ref array<ref BasicMapCircleMarker> CircleMarkers;
+		JsonFileLoader< array<ref BasicMapCircleMarker> >.JsonLoadFile(BasicMapPath + CircleMarkersPath, CircleMarkers);
+		if (CircleMarkers){
+			for ( int i = 0; i < CircleMarkers.Count(); i++){
+				vector pos = CircleMarkers.Get(i).GetPosition();
+				if ( pos[1] == 0){
+					pos[1] = GetGame().SurfaceY( pos[0], pos[2] );
+					CircleMarkers.Get(i).SetPosition(pos);
+				}
+				CircleMarkers.Get(i).SetCanEdit(false);
+				CircleMarkers.Get(i).SetGroup(SERVER_KEY);
+				CircleMarkers.Get(i).PrintDebug();
+				AddMarker(SERVER_KEY, CircleMarkers.Get(i));
+			}
+		}
+		
+	}
 	
 	ref BasicMapMarker Marker(int i){
 		for (int j = 0; j < Markers.Count(); j++){
@@ -372,9 +408,9 @@ class BasicMapController{
 		return false;
 	}
 	
-	bool ShouldShowOnMap(string group){
-		if (Groups.Get(group)){
-			return Groups.Get(group).OnMap();
+	bool ShouldShowOnMap(string group) {
+		if (Groups.Get(group) && Groups.Get(group).OnMap()){
+			return true;
 		} 
 		return false;
 	}

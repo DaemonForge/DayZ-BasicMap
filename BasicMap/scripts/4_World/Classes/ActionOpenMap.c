@@ -31,10 +31,10 @@ class ActionOpenBasicMap: ActionSingleUseBase
 	{
 		super.OnStartClient( action_data );
 		ChernarusMap mapItem = ChernarusMap.Cast(action_data.m_MainItem);
-		if( mapItem )
+		if ( mapItem )
 		{
 			if (GetBasicMapConfig().OnlyOnOpenAction && GetBasicMapConfig().SaveMarkersToMapItem){
-				BasicMap().SetMapItem(EntityAI.Cast(mapItem));
+				BasicMap().SetMapItem(mapItem);
 			}
 			if (m_BasicMapMenu) {
 				if (GetGame().GetUIManager().GetMenu() == NULL) {
