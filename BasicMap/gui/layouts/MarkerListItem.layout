@@ -52,6 +52,8 @@ FrameWidgetClass rootFrame {
        hexactsize 0
        vexactsize 0
        text "MarkerName"
+       font "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium"
+       "exact text" 1
       }
      }
     }

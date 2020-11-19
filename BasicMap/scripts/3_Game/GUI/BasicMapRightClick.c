@@ -68,7 +68,7 @@ class BasicMapRightClick  extends ScriptedWidgetEventHandler {
 	override bool OnClick( Widget w, int x, int y, int button )
 	{
 		if (w == m_Delete){
-			Print("[BASICMAP] BasicMapRightClick OnClick() Delete");
+			//Print("[BASICMAP] BasicMapRightClick OnClick() Delete");
 			if (m_SelectedMarker){
 				BasicMap().RemoveMarker(m_SelectedMarker);
 			}

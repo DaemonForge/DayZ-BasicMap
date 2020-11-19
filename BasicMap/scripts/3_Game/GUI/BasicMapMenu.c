@@ -234,14 +234,9 @@ class BasicMapMenu extends UIScriptedMenu
 	void UpdateMarkers(){
 		if (m_PanelIsOpen && m_Map && BasicMap()){
 			m_Map.ClearUserMarks();
-			m_logSkip--;
 			for (int i = 0; i < BasicMap().Count(); i++) {
 				BasicMapMarker marker = BasicMapMarker.Cast(BasicMap().Marker(i));
 				if (marker){
-					if (m_logSkip < 0 || m_logSkip == 1000){
-						marker.PrintDebug();
-						m_logSkip = 1000;
-					}
 					if ( BasicMap().GetGroups().Get( marker.GetGroup() ) ) {
 						if ( BasicMap().GetGroups().Get( marker.GetGroup() ).OnMap() ) {		
 							float offset = 5.7;
@@ -295,7 +290,7 @@ class BasicMapMenu extends UIScriptedMenu
 					CloseEditor();
 				}
 				if (GetBasicMapConfig().AllowPlayerMarkers && CanMakeMarkers()){
-					Print("[BASICMAP] Creating Marker At " + clickPos);
+					//Print("[BASICMAP] Creating Marker At " + clickPos);
 		           	BasicMap().CreateMarker(m_CurGroup, name, clickPos);
 					GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.PopulateMarkerList, 10, false);
 					return true;
@@ -387,6 +382,9 @@ class BasicMapMenu extends UIScriptedMenu
 		//Print("[BASICMAP] OnMouseButtonDown " + w.GetName() + " X: " + x + " Y: " + y + " IsEditorOpen():" + IsEditorOpen() );
 		vector clickPos;
 		float radius;
+		if (w){
+			Print("[BASICMAP] OnMouseButtonDown Parent " + w.GetParent().GetName());
+		}
 		if (w == m_Map && button == MouseState.LEFT && !IsEditorOpen() && !IsRightClickMenuOpen()){
 			clickPos = MapClickPosition(x,y);
 			radius = (m_Map.GetScale() * 110) + 5;
@@ -397,8 +395,6 @@ class BasicMapMenu extends UIScriptedMenu
 					OpenEditor(x, y);
 					return true;
 				}
-			} else {
-				//Print("[BASICMAP] No Marker Found at " + clickPos);
 			}
 		}
 		if ( w == m_Map &&  button == MouseState.RIGHT && !IsEditorOpen() && !IsRightClickMenuOpen()){
@@ -413,9 +409,11 @@ class BasicMapMenu extends UIScriptedMenu
 				}
 			}
 		}
-		if ( w && button == MouseState.LEFT && IsRightClickMenuOpen()){
-			Print("[BASICMAP] On LEFT MouseButtonDown: " + w.GetName());
-			CloseRightClick();
+		if ( w && w.GetParent() && button == MouseState.LEFT && IsRightClickMenuOpen()){
+			if (w.GetParent().GetName() != "RightClickPanel"){
+				CloseRightClick();
+			}
+			return true;
 		}
 		return super.OnMouseButtonDown(w, x, y, button );
 	}
