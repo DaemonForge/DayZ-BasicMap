@@ -34,7 +34,7 @@ class BasicMapCircleMarker extends BasicMapMarker{
 	
 	array<vector> GetEdge(array<ref BasicMapMarker> Conflicting = NULL) {
 		array<vector> edge = new array<vector>;
-		float circleLength = Math.PI * GetRadius();
+		float circleLength = 1.5 * Math.PI * GetRadius();
 		int i = 0;
 		float slice = 2 * Math.PI / circleLength;
 		while (i < circleLength) {

@@ -198,7 +198,7 @@ class BasicMapController{
 				}
 				CircleMarkers.Get(i).SetCanEdit(false);
 				CircleMarkers.Get(i).SetGroup(SERVER_KEY);
-				CircleMarkers.Get(i).PrintDebug();
+				//CircleMarkers.Get(i).PrintDebug();
 				AddMarker(SERVER_KEY, CircleMarkers.Get(i));
 			}
 		}

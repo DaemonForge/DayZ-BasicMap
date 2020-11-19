@@ -603,14 +603,14 @@ class BasicMapMenu extends UIScriptedMenu
 	
 	
 	void CloseRightClick(){
-		Print("[BASICMAP] CloseRightClick()");
+		//Print("[BASICMAP] CloseRightClick()");
 		if (m_RightClickMenu){
 			m_RightClickMenu.Close();
 		}
 	}
 	
 	void OpenRightClick(int x, int y){
-		Print("[BASICMAP] OpenRightClick(int " + x + ", int " + y +")");
+		//Print("[BASICMAP] OpenRightClick(int " + x + ", int " + y +")");
 		if (!m_RightClickMenu){
 			m_RightClickMenu = new BasicMapRightClick(m_Editor);
 		}
