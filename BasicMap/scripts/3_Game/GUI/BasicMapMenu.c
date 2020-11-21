@@ -262,7 +262,7 @@ class BasicMapMenu extends UIScriptedMenu
 			}
 			UpdateMe();
 			RefreshMarkerList();
-			GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.UpdateMarkers, 18, false);
+			GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.UpdateMarkers, 24, false);
 		}
 	}
 	
@@ -300,7 +300,7 @@ class BasicMapMenu extends UIScriptedMenu
 					CloseEditor();
 				}
 				m_SelectedMarker = BasicMapMarker.Cast( BasicMap().GetMarkerByVector(clickPos, radius) );
-				Print("[BASICMAP] OpenEditor " + clickPos);
+				//Print("[BASICMAP] OpenEditor " + clickPos);
 				OpenEditor(x, y);
 				return true;
 			}
@@ -352,7 +352,7 @@ class BasicMapMenu extends UIScriptedMenu
 	void SetOpen(bool open) {
 		if (!m_PanelIsOpen && open){
 			layoutRoot.Show(true);
-			GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.UpdateMarkers, 18, false);
+			GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.UpdateMarkers, 24, false);
 		}
 		if (m_PanelIsOpen && !open){
 			CloseEditor();
@@ -382,9 +382,6 @@ class BasicMapMenu extends UIScriptedMenu
 		//Print("[BASICMAP] OnMouseButtonDown " + w.GetName() + " X: " + x + " Y: " + y + " IsEditorOpen():" + IsEditorOpen() );
 		vector clickPos;
 		float radius;
-		if (w){
-			Print("[BASICMAP] OnMouseButtonDown Parent " + w.GetParent().GetName());
-		}
 		if (w == m_Map && button == MouseState.LEFT && !IsEditorOpen() && !IsRightClickMenuOpen()){
 			clickPos = MapClickPosition(x,y);
 			radius = (m_Map.GetScale() * 110) + 5;
@@ -402,7 +399,7 @@ class BasicMapMenu extends UIScriptedMenu
 			radius = (m_Map.GetScale() * 110) + 5;
 			if (BasicMap().GetMarkerByVector(clickPos, radius)){
 				m_SelectedMarker = BasicMapMarker.Cast(BasicMap().GetMarkerByVector(clickPos, radius));
-				Print("[BASICMAP]" + m_SelectedMarker.GetName() + " Marker Found at " + clickPos);
+				//Print("[BASICMAP]" + m_SelectedMarker.GetName() + " Marker Found at " + clickPos);
 				if (m_SelectedMarker){
 					OpenRightClick(x, y);
 					return true;

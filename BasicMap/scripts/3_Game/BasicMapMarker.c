@@ -12,6 +12,7 @@ class BasicMapMarker {
 	
 	protected string Group = BasicMap().CLIENT_KEY;
 	
+	
 	void BasicMapMarker(string name, vector pos, string icon = "", array<int> colour = NULL, int alpha = 235, bool onHUD = false) {
 		Name = name;
 		if (icon != ""){
@@ -50,6 +51,10 @@ class BasicMapMarker {
 		return Pos;
 	}
 	
+	void SetARGB(int A, int R, int G, int B){
+		Alpha = A;
+		Colour = {R, G, B};
+	}
 	
 	int GetColour(){
 		int a = Alpha;

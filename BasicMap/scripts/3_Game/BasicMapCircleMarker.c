@@ -5,8 +5,36 @@ class BasicMapCircleMarker extends BasicMapMarker{
 	float Radius = 0;
 	
 	bool HideIntersects = true;
+		
+	[NonSerialized()]
+	ref array<vector> Edge;
+	
+	[NonSerialized()]
+	bool Updated = true;
 	
 	
+	void SetUpdated(bool state){
+		Updated = state;
+	}
+	
+	bool GetUpdated(){
+		return Updated;
+	}
+	
+	override void SetPosition(vector pos){
+		super.SetPosition(pos);
+		Updated = true;
+	}
+	
+	override void SetIcon(string icon){
+		super.SetIcon(icon);
+		Updated = true;
+	}
+	
+	override void SetARGB(int A, int R, int G, int B){
+		super.SetARGB(A, R, G, B);
+		Updated = true;
+	}
 	
 	void SetShowCenterMarker(bool state){
 		ShowCenterMarker = state;
@@ -18,6 +46,7 @@ class BasicMapCircleMarker extends BasicMapMarker{
 	
 	void SetRadius(float radius){
 		Radius = radius;
+		Updated = true;
 	}
 	
 	float GetRadius(){
@@ -26,6 +55,7 @@ class BasicMapCircleMarker extends BasicMapMarker{
 	
 	void SetHideIntersects(float state){
 		HideIntersects = state;
+		Updated = true;
 	}
 	
 	bool GetHideIntersects(){
@@ -33,7 +63,11 @@ class BasicMapCircleMarker extends BasicMapMarker{
 	}
 	
 	array<vector> GetEdge(array<ref BasicMapMarker> Conflicting = NULL) {
-		array<vector> edge = new array<vector>;
+		if ( !GetUpdated() && Edge && Edge.Count() > 0){
+			return Edge;
+		}
+		Updated = false;
+		Edge = new array<vector>;
 		float circleLength = 1.5 * Math.PI * GetRadius();
 		int i = 0;
 		float slice = 2 * Math.PI / circleLength;
@@ -42,11 +76,11 @@ class BasicMapCircleMarker extends BasicMapMarker{
 			float x = Pos[0] + GetRadius() * Math.Cos(angle);
 			float y = Pos[2] + GetRadius() * Math.Sin(angle);
 			if (!GetHideIntersects() || !Intersects(Vector(x, Pos[1], y), Conflicting)){
-				edge.Insert(Vector(x, Pos[1], y));
+				Edge.Insert(Vector(x, Pos[1], y));
 			}
 			i++;
 		}
-		return edge;
+		return Edge;
 	}
 	
 	
