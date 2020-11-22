@@ -16,5 +16,5 @@ For anyone interested in repacking please read all this
 - 5th Also note that the Source Code is the activly developing version so it may not work as it sits here right now so just be warnned.
 - 6th Must include the NOTICE file in side the mod with out modification to my text
 
-###3rd Party Credits
+### 3rd Party Credits
 Icons made by DinosoftLabs, Darius Dan, Kiranshastry, Vectors Market, Those Icons, Eucalyp, Smashicons, surang, smalllikeart, mavadee, Pixel perfect, and Freepik sourced through www.flaticon.com
