@@ -68,7 +68,8 @@ class BasicMapCircleMarker extends BasicMapMarker{
 		}
 		Updated = false;
 		Edge = new array<vector>;
-		float circleLength = 1.5 * Math.PI * GetRadius();
+		float circleLength = Math.PI * GetRadius();
+		circleLength = circleLength * 0.8;
 		int i = 0;
 		float slice = 2 * Math.PI / circleLength;
 		while (i < circleLength) {

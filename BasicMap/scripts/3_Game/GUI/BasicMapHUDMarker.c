@@ -88,8 +88,12 @@ class BasicMapHUDMarker {
 	}
 	
 	void Show(bool state = true){
-		layoutRoot.Show(state);
-		m_Marker.Show(state);
+		if (layoutRoot){
+			layoutRoot.Show(state);
+		}
+		if (m_Marker){
+			m_Marker.Show(state);
+		}
 	}
 	
 	void OnDelete(){
