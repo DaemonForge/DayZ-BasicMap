@@ -166,14 +166,17 @@ class CfgWorlds
 			class Area_RF1
 			{
 				name = "Refugee camp";
+				type = "MilitaryOutpost";
 			};
 			class Area_RF2
 			{
 				name = "Refugee camp";
+				type = "MilitaryOutpost";
 			};
 			class Area_Mohawk
 			{
 				name = "C-130J Mohawk";
+				type = "MilitaryOutpost";
 			};
 			class Area_Airfield
 			{
@@ -183,12 +186,12 @@ class CfgWorlds
 			class Area_ChemFac
 			{
 				name = "Factory";
-				type = "Local";
+				type = "IndustrialSite";
 			};
 			class Area_SebFac
 			{
 				name = "Factory";
-				type = "Local";
+				type = "IndustrialSite";
 			};
 			class Area_NemskFac
 			{
@@ -198,7 +201,7 @@ class CfgWorlds
 			class Area_TaraSaw
 			{
 				name = "Sawmill";
-				type = "Local";
+				type = "IndustrialSite";
 			};
 			class Area_Hospital
 			{
