@@ -4,6 +4,6 @@ modded class ActionConstructor
 	{
 		super.RegisterActions( actions );	
 		actions.Insert( ActionOpenBasicMap );
-
+		actions.RemoveItem(ActionUnfoldMap);
 	}
 };

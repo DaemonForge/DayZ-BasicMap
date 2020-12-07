@@ -3,7 +3,12 @@ class CfgPatches
 	class BasicMap
 	{
 		requiredVersion = 0.1;
-		requiredAddons[] = {"BasicMapDefine", "DZ_Worlds_Chernarusplus_World", "DZ_Data"};
+		requiredAddons[] = {
+			"BasicMapDefine", 
+			"DZ_Worlds_Chernarusplus_World",
+			"DZ_Gear_Navigation",
+			"DZ_Data"
+		};
 	};
 };
 
@@ -1465,3 +1470,4 @@ class MapDefaults
 		coefMax = 4;
 	};
 };
+
