@@ -365,7 +365,7 @@ class CfgLocationTypes
 	};
 	class Camp: NameIcon
 	{
-		color[] = {0.698, 0.980, 0.619,1};
+		color[] = {0.670, 0.282, 0.737,1};
 		texture = "\DZ\gear\navigation\data\map_camp_ca.paa";
 		textSize = 0.042;
 		importance = 3;
@@ -373,7 +373,7 @@ class CfgLocationTypes
 	};
 	class Hill: NameIcon
 	{
-		color[] = {0.698, 0.980, 0.619,1};
+		color[] = {0.670, 0.282, 0.737,1};
 		texture = "\DZ\gear\navigation\data\map_hill_ca.paa";
 		textSize = 0.042;
 		importance = 6;
@@ -381,7 +381,7 @@ class CfgLocationTypes
 	};
 	class ViewPoint: NameIcon
 	{
-		color[] = {0.698, 0.980, 0.619,1};
+		color[] = {0.670, 0.282, 0.737,1};
 		texture = "\DZ\gear\navigation\data\map_viewpoint_ca.paa";
 		textSize = 0.042;
 		importance = 6;
