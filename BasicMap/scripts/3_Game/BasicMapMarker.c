@@ -8,6 +8,11 @@ class BasicMapMarker {
 	
 	bool HideOnPanel = false;
 	
+	bool HideOnMap = false;
+	
+	float MaxRenderDistance = -1;
+	float MinRenderDistance = -1;
+	
 	protected bool CanEdit = true;
 	
 	protected string Group = BasicMap().CLIENT_KEY;
@@ -33,6 +38,16 @@ class BasicMapMarker {
 	
 	
 	bool OnHUD(){
+		PlayerBase thePlayer = PlayerBase.Cast(GetGame().GetPlayer());
+		if (MinRenderDistance != -1 && thePlayer){
+			if (vector.Distance( thePlayer.GetPosition(), GetPosition()) <= MinRenderDistance){
+				return false;
+			}
+		} else if (MaxRenderDistance != -1 && thePlayer){
+			if (vector.Distance( thePlayer.GetPosition(), GetPosition()) >= MaxRenderDistance){
+				return false;
+			}
+		}
 		return Is3DMarker;
 	}
 	
@@ -107,6 +122,24 @@ class BasicMapMarker {
 	
 	bool GetHideOnPanel(){
 		return HideOnPanel;
+	}
+	
+	void SetHideOnMap(bool state){
+		HideOnMap = state;
+	}
+	
+	bool GetHideOnMap(){
+		PlayerBase thePlayer = PlayerBase.Cast(GetGame().GetPlayer());
+		if (MinRenderDistance != -1 && thePlayer){
+			if (vector.Distance( thePlayer.GetPosition(), GetPosition()) <= MinRenderDistance){
+				return false;
+			}
+		} else if (MaxRenderDistance != -1 && thePlayer){
+			if (vector.Distance( thePlayer.GetPosition(), GetPosition()) >= MaxRenderDistance){
+				return false;
+			}
+		}
+		return HideOnMap;
 	}
 	
 	void PrintDebug(){
