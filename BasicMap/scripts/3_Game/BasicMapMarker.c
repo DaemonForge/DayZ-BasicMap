@@ -38,7 +38,7 @@ class BasicMapMarker {
 	
 	
 	bool OnHUD(){
-		PlayerBase thePlayer = PlayerBase.Cast(GetGame().GetPlayer());
+		DayZPlayer thePlayer = DayZPlayer.Cast(GetGame().GetPlayer());
 		if (MinRenderDistance != -1 && thePlayer){
 			if (vector.Distance( thePlayer.GetPosition(), GetPosition()) <= MinRenderDistance){
 				return false;
@@ -129,7 +129,7 @@ class BasicMapMarker {
 	}
 	
 	bool GetHideOnMap(){
-		PlayerBase thePlayer = PlayerBase.Cast(GetGame().GetPlayer());
+		DayZPlayer thePlayer = DayZPlayer.Cast(GetGame().GetPlayer());
 		if (MinRenderDistance != -1 && thePlayer){
 			if (vector.Distance( thePlayer.GetPosition(), GetPosition()) <= MinRenderDistance){
 				return false;
