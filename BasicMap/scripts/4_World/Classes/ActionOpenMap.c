@@ -51,9 +51,9 @@ class ActionOpenBasicMap: ActionSingleUseBase
 	{
 		super.OnStartServer(action_data );
 		ItemMap mapItem = ItemMap.Cast(action_data.m_MainItem);
-		if( mapItem )
+		if ( mapItem )
 		{
-			if (GetBasicMapConfig().OnlyOnOpenAction && GetBasicMapConfig().SaveMarkersToMapItem){
+			if (GetBasicMapConfig().SaveMarkersToMapItem){
 				mapItem.SyncMapMarkers();
 			}
 		}

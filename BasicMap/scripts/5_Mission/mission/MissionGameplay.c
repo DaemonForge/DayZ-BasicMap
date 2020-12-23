@@ -41,18 +41,20 @@ modded class MissionGameplay extends MissionBase
             }
         }
 
-        if (input.LocalPress("UABasicMap", false) && AllowedToOpenBasicMap()) {
-            if (m_BasicMapMenu) {
-                if (m_BasicMapMenu.IsOpen() && !m_BasicMapMenu.IsEditorOpen()) {
-					BasicMapClosePanel();
-                } else if (GetGame().GetUIManager().GetMenu() == NULL) {
-					BasicMapOpenPanel();
+        if (input.LocalPress("UABasicMap", false)) {
+			if (AllowedToOpenBasicMap()){
+	            if (m_BasicMapMenu) {
+	                if (m_BasicMapMenu.IsOpen() && !m_BasicMapMenu.IsEditorOpen() ) {
+						BasicMapClosePanel();
+	                } else if (GetGame().GetUIManager().GetMenu() == NULL) {
+						GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.BasicMapOpenPanel, 330, false);
+						m_BasicMapMenu_Opening = true;
+	                }
+	            } else if (GetGame().GetUIManager().GetMenu() == NULL && m_BasicMapMenu == null) {
+					GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.BasicMapCreatePanel, 330, false);
 					m_BasicMapMenu_Opening = true;
-                }
-            } else if (GetGame().GetUIManager().GetMenu() == NULL && m_BasicMapMenu == null) {
-				BasicMapCreatePanel();
-				m_BasicMapMenu_Opening = true;
-            }
+	            }
+			}
         }
 		
 		 if (input.LocalPress("UABasicMap3DMarkers", false) && GetGame().GetUIManager().GetMenu() == NULL) {
@@ -81,7 +83,7 @@ modded class MissionGameplay extends MissionBase
 	{
 		m_BasicMapMenu.CloseEditor();//Make sure if a marker was open that its closed and saved
 		m_BasicMapMenu.SetOpen(false);
-		m_BasicMapMenu.UnLockControls()
+		m_BasicMapMenu.UnLockControls();
         GetGame().GetUIManager().HideScriptedMenu(m_BasicMapMenu);
 		GetGame().GetUIManager().CloseMenu(BASICMAP_MENU);
 		m_BasicMapMenu_Opening = false;
@@ -92,6 +94,9 @@ modded class MissionGameplay extends MissionBase
 	}
 	
 	bool AllowedToOpenBasicMap(){
+		if (m_BasicMapMenu_Opening){
+			return false;
+		}
         if (GetBasicMapConfig() && GetBasicMapConfig().RequireMapItemInInventory) {
             DayZPlayer player = DayZPlayer.Cast(GetGame().GetPlayer());
 
@@ -101,7 +106,12 @@ modded class MissionGameplay extends MissionBase
             	    
                 for (int i = 0; i < itemsArray.Count(); i++){
                     if (itemsArray.Get(i) && itemsArray.Get(i).IsInherited(ItemMap)){
-                            return true;
+						ItemMap mapItem = ItemMap.Cast(itemsArray.Get(i));
+						if (GetBasicMapConfig().SaveMarkersToMapItem && mapItem ) {
+							mapItem.SyncMapMarkers();
+							BasicMap().SetMapItem(mapItem);
+						}
+						return true;
                     }
                 }
             }

@@ -43,6 +43,7 @@ class BasicMapController{
 	}
 	
 	void SetMapItem( EntityAI mapItem){
+		Print("[BASICMAP] DEBUG - Setting Map Item for the controller");
 		MapItem = EntityAI.Cast(mapItem);
 	}
 	
@@ -58,6 +59,7 @@ class BasicMapController{
 	}
 	
 	void ClearMapItem(){
+		Print("[BASICMAP] DEBUG - Clearing Map Item for the controller");
 			MapItem = NULL;
 	}
 	
@@ -364,10 +366,15 @@ class BasicMapController{
 	
 	//Markers are updated live this is more just on marker editor close or marker created
 	void OnMarkerSave(ref BasicMapMarker marker){
-		
+		if (marker.GetGroup() == this.CLIENT_KEY){
+			SaveClientMarkers();
+		}
 	}
 	
 	void OnMarkerDelete(ref BasicMapMarker marker){
+		if (marker.GetGroup() == this.CLIENT_KEY){
+			SaveClientMarkers();
+		}
 	
 	}
 	
