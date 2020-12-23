@@ -36,14 +36,12 @@ class BasicMapController{
 				 LoadServerMarkers();
 			}
 			if (FileExist(BasicMapPath + CircleMarkersPath)){
-				Print("[BASICMAP] Loading Circle Markers");
 				LoadServerCircleMarkers();
 			}
 		}
 	}
 	
 	void SetMapItem( EntityAI mapItem){
-		Print("[BASICMAP] DEBUG - Setting Map Item for the controller");
 		MapItem = EntityAI.Cast(mapItem);
 	}
 	
@@ -59,7 +57,6 @@ class BasicMapController{
 	}
 	
 	void ClearMapItem(){
-		Print("[BASICMAP] DEBUG - Clearing Map Item for the controller");
 			MapItem = NULL;
 	}
 	

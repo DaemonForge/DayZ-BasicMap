@@ -61,7 +61,7 @@ class BasicMapConfig
 	bool RequireMapItemInInventory = false;
 	bool OnlyOnOpenAction = false;
 	bool RequirePenToMark = false;
-	bool SaveMarkersToMapItem = false; // Requires   `OnlyOnOpenAction`
+	bool SaveMarkersToMapItem = false; // Requires `OnlyOnOpenAction` or `RequireMapItemInInventory`
 	bool RequireCompassToSeeSelf = false;
 	bool RequireCompassToSee3d = false;
 	
