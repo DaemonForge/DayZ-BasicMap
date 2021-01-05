@@ -87,7 +87,7 @@ class BasicMapHUDMarker {
 		}
 	}
 	
-	void Show(bool state = true){
+	void Show(bool state = true) {
 		if (layoutRoot){
 			layoutRoot.Show(state);
 		}
@@ -96,7 +96,7 @@ class BasicMapHUDMarker {
 		}
 	}
 	
-	void OnDelete(){
+	void OnDelete() {
 		if (!m_deleted){
 			m_deleted = true;
 			Show(false);
@@ -104,8 +104,7 @@ class BasicMapHUDMarker {
 		}
 	}
 	
-	private bool MarkerVisibleOnScreen()
-    {
+	protected bool MarkerVisibleOnScreen() {
 		if (m_MarkerData){
 	        vector position = m_MarkerData.GetPosition();
 	        vector screenPositionRelative = GetGame().GetScreenPosRelative(position);

@@ -121,7 +121,7 @@ class BasicMapMenu extends UIScriptedMenu
 	void Initialize(){
 		m_InfoText.SetText( BasicMap().GetInfoText() );
 		
-		if (ShowSelfOnMap()){
+		if (BasicMap().ShowSelfOnMap()){
 			m_BackToMe.Show(true);
 		} else {
 			m_BackToMe.Show(false);
@@ -133,7 +133,7 @@ class BasicMapMenu extends UIScriptedMenu
 		BasicMapPlayerMarker playerMarker = new ref BasicMapPlayerMarker("", Vector(0,0,0));
 		if (me){
 			playerMarker.SetPlayer(me);
-			if (ShowSelfOnMap()){
+			if (BasicMap().ShowSelfOnMap()){
 				SetMapPos(me.GetPosition());
 			}
 		}
@@ -247,7 +247,7 @@ class BasicMapMenu extends UIScriptedMenu
 								array<vector> edge = cMarker.GetEdge( BasicMap().GetMarkers( marker.GetGroup() ) );
 								if (edge){
 									for ( int j = 0; j < edge.Count(); j++){
-									m_Map.AddUserMark(edge.Get(j), "" , cMarker.GetEdgeColour(), cMarker.GetEdgeIcon());
+									m_Map.AddUserMark(edge.Get(j), "" , cMarker.GetEdgeColour(), cMarker.GetEdgeIcon(m_Map.GetScale()));
 								}
 								}
 								if (cMarker.GetShowCenterMarker()){
@@ -331,7 +331,7 @@ class BasicMapMenu extends UIScriptedMenu
 	}
 	
 	void UpdateMe(){
-		if (ShowSelfOnMap()){
+		if (BasicMap().ShowSelfOnMap()){
 			m_Map.AddUserMark(m_MeMarker.GetPosition(), " ME", m_MeMarker.GetColour(), m_MeMarker.GetIcon());
 			m_PostionText.SetText("Postion: " + m_MeMarker.GetPosition().ToString(true));
 		}
@@ -575,27 +575,7 @@ class BasicMapMenu extends UIScriptedMenu
 		return GetBasicMapConfig().AllowPlayerMarkers;
 	}
 	
-	bool ShowSelfOnMap(){
-		if ( GetBasicMapConfig().RequireCompassToSeeSelf && GetGame().IsClient() ){
-			DayZPlayer player = DayZPlayer.Cast(GetGame().GetPlayer());
-
-            if (player){
-				array<EntityAI> itemsArray = new array<EntityAI>;
-				player.GetInventory().EnumerateInventory(InventoryTraversalType.PREORDER, itemsArray);    	
-                for (int i = 0; i < itemsArray.Count(); i++){
-                    if (itemsArray.Get(i)){ 
-						string itemType = itemsArray.Get(i).GetType();
-						itemType.ToLower();
-						if (itemType.Contains("compass")){
-                            return GetBasicMapConfig().ShowSelfOnMap;
-						}
-                    }
-                }
-            }
-			return false;
-		} 
-		return GetBasicMapConfig().ShowSelfOnMap;
-	}
+	
 	
 	
 	
