@@ -72,7 +72,7 @@ class BasicMapCircleMarker extends BasicMapMarker{
 		circleLength = circleLength * 0.70;
 		int i = 0;
 		float slice = 2 * Math.PI / circleLength;
-		while (i < circleLength) {
+		while (i <= circleLength) {
 			float angle = slice * i;
 			float x = Pos[0] + GetRadius() * Math.Cos(angle);
 			float y = Pos[2] + GetRadius() * Math.Sin(angle);
@@ -100,7 +100,13 @@ class BasicMapCircleMarker extends BasicMapMarker{
 	}
 	
 	
-	string GetEdgeIcon(){
+	string GetEdgeIcon(float scale = 1){
+		if (scale < 0.013){
+			return "BasicMap\\gui\\images\\dot3.paa";
+		}
+		if (scale < 0.072){
+			return "BasicMap\\gui\\images\\dot2.paa";
+		}
 		return "BasicMap\\gui\\images\\dot.paa";
 	}
 	
