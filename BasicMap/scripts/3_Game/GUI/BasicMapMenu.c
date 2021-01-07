@@ -194,7 +194,7 @@ class BasicMapMenu extends UIScriptedMenu
 			int i_M = m_CurrentListOffset;
 			int maxItems = 17;
 			while ( i_M < BasicMap().GetMarkers(m_CurGroup).Count() && i <= maxItems && i < m_MarkerListWidget.Count()){
-				if (!BasicMap().GetMarkers(m_CurGroup).Get(i_M).GetHideOnPanel()){
+				if (BasicMap().GetMarkers(m_CurGroup).Get(i_M).OnPanel() && BasicMap().GetMarkers(m_CurGroup).Get(i_M).OnMap()){
 					m_MarkerListWidget.Get(i).Show(true);
 					m_MarkerList.Insert(new BasicMapMarkerListItem(m_MarkerListWidget.Get(i), this, BasicMap().GetMarkers(m_CurGroup).Get(i_M)));
 					i++;
@@ -236,7 +236,7 @@ class BasicMapMenu extends UIScriptedMenu
 			m_Map.ClearUserMarks();
 			for (int i = 0; i < BasicMap().Count(); i++) {
 				BasicMapMarker marker = BasicMapMarker.Cast(BasicMap().Marker(i));
-				if (marker){
+				if (marker && marker.OnMap()){
 					if ( BasicMap().GetGroups().Get( marker.GetGroup() ) ) {
 						if ( BasicMap().GetGroups().Get( marker.GetGroup() ).OnMap() ) {		
 							float offset = 5.7;

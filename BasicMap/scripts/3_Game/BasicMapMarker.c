@@ -120,15 +120,15 @@ class BasicMapMarker {
 		HideOnPanel = state;
 	}
 	
-	bool GetHideOnPanel(){
-		return HideOnPanel;
+	bool OnPanel(){
+		return !HideOnPanel;
 	}
 	
 	void SetHideOnMap(bool state){
 		HideOnMap = state;
 	}
 	
-	bool GetHideOnMap(){
+	bool OnMap(){
 		DayZPlayer thePlayer = DayZPlayer.Cast(GetGame().GetPlayer());
 		if (MinRenderDistance != -1 && thePlayer){
 			if (vector.Distance( thePlayer.GetPosition(), GetPosition()) <= MinRenderDistance){
@@ -139,7 +139,7 @@ class BasicMapMarker {
 				return false;
 			}
 		}
-		return HideOnMap;
+		return !HideOnMap;
 	}
 	
 	void PrintDebug(){
