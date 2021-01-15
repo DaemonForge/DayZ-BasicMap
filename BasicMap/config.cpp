@@ -7,7 +7,8 @@ class CfgPatches
 			"BasicMapDefine", 
 			"DZ_Worlds_Chernarusplus_World",
 			"DZ_Gear_Navigation",
-			"DZ_Data"
+			"DZ_Data",
+			"DZ_Scripts"
 		};
 	};
 };

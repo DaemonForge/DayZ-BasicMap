@@ -29,9 +29,11 @@ class BasicMapController{
 		RegisterGroup(SERVER_KEY, new ref BasicMapGroupMetaData(SERVER_KEY, "SERVER MARKERS"), NULL);
 		RegisterGroup(CLIENT_KEY, new ref BasicMapGroupMetaData(CLIENT_KEY, "PERSONAL MARKERS", true), new ref BasicMapMarkerFactory());
 		if (GetGame().IsMultiplayer() && GetGame().IsClient()){
+			Print("[BasicMap] Init Client");
 			GetRPCManager().SendRPC("BasicMap", "RPCSyncServerData", new Param3< array<ref BasicMapMarker>, array<ref BasicMapCircleMarker>, ref BasicMapConfig >( NULL, NULL, NULL ), true, NULL);
 			LoadClientMarkers();
 		} else {
+			Print("[BasicMap] Init Server");
 			if (!FileExist(BasicMapPath + ServerMarkersPath)){
 				MakeDirectory(BasicMapPath);
 				ServerFirstRun();
