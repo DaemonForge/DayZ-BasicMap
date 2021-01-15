@@ -23,6 +23,9 @@ class BasicMapController{
 	
 	void Init(){
 		GetRPCManager().AddRPC( "BasicMap", "RPCSyncServerData", this, SingeplayerExecutionType.Both );
+		GetRPCManager().AddRPC( "BasicMap", "RPCSyncGroupData", this, SingeplayerExecutionType.Both );
+		
+		
 		RegisterGroup(SERVER_KEY, new ref BasicMapGroupMetaData(SERVER_KEY, "SERVER MARKERS"), NULL);
 		RegisterGroup(CLIENT_KEY, new ref BasicMapGroupMetaData(CLIENT_KEY, "PERSONAL MARKERS", true), new ref BasicMapMarkerFactory());
 		if (GetGame().IsMultiplayer() && GetGame().IsClient()){
@@ -77,6 +80,34 @@ class BasicMapController{
 		Factories.Insert(id, factory);
 	}
 	
+
+	void RPCSyncGroupData( CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target ){
+		Param3<string, array<BasicMapMarker>, array<BasicMapCircleMarker>> data;
+		int i;
+		if ( !ctx.Read( data ) ) return;
+        if ( !data.param2 && !data.param3){
+			array<BasicMapMarker> inMarkers = new array<BasicMapMarker>;
+			inMarkers.Copy(data.param2);
+			
+			array<BasicMapCircleMarker> inCMarkers = new array<BasicMapCircleMarker>;
+			inCMarkers.Copy(data.param3);
+			
+			ref array<ref BasicMapMarker> markers = new array<ref BasicMapMarker>;
+			for ( i = 0; i < inMarkers.Count(); i++){
+				if (inMarkers.Get(i)){
+					inMarkers.Get(i).SetGroup(data.param1);
+					markers.Insert(inMarkers.Get(i));
+				}
+			}
+			for ( i = 0; i < inCMarkers.Count(); i++){
+				inCMarkers.Get(i).SetGroup(data.param1);
+				markers.Insert(inCMarkers.Get(i));
+			}
+			SetMarkers(data.param1, markers);
+		} else if (!data.param2 && GetGame().IsServer() && sender){//Is requesting
+			UpdateGroupRemote(data.param1, sender);
+		}
+	}
 	
 	void RPCSyncServerData( CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target ){
 		Param3< array<ref BasicMapMarker>, array<ref BasicMapCircleMarker>, ref BasicMapConfig> data;
@@ -353,6 +384,26 @@ class BasicMapController{
 		return false;
 	}
 	
+	
+	void SetMarkersRemote(string group, array<ref BasicMapMarker> markers, ref PlayerIdentity toPlayer = NULL ){
+		array<ref BasicMapMarker>  basicMarkers = new array<ref BasicMapMarker>;
+		array<ref BasicMapCircleMarker> circleMarkers = new array<ref BasicMapCircleMarker>;
+		BasicMapCircleMarker cMarker;
+		for ( int j = 0; j < markers.Count(); j++){
+			if (markers.Get(j).IsInherited(BasicMapCircleMarker) && Class.CastTo(cMarker, markers.Get(j)) && cMarker.GetRadius() > 0){
+				circleMarkers.Insert(cMarker);
+			} else {
+				basicMarkers.Insert(markers.Get(j));
+			}
+		}
+		RPCManager().SendRPC("BasicMap", "RPCSyncGroupData", new Param3<string, array<ref BasicMapMarker>, array<ref BasicMapCircleMarker> >( group, basicMarkers, circleMarkers ), true, toPlayer);
+	}
+	
+	void UpdateGroupRemote(string group, ref PlayerIdentity toPlayer = NULL ){
+		SetMarkersRemote("BasicMap", GetMarkers(group), toPlayer);
+	}
+	
+	
 	static string GetInfoText(){
 		if (GetBasicMapConfig().AllowPlayerMarkers){
 			return InfoText;
@@ -409,14 +460,14 @@ class BasicMapController{
 		if (Groups.Get(group)){
 			return Groups.Get(group).OnHUD();
 		} 
-		return false;
+		return true;
 	}
 	
 	bool ShouldShowOnMap(string group) {
-		if (Groups.Get(group) && Groups.Get(group).OnMap()){
-			return true;
+		if (Groups.Get(group)){
+			return Groups.Get(group).OnMap();
 		} 
-		return false;
+		return true;
 	}
 	
 	bool ShowSelfOnMap(){
@@ -431,7 +482,7 @@ class BasicMapController{
 						string itemType = itemsArray.Get(i).GetType();
 						itemType.ToLower();
 						if (itemType.Contains("compass")){
-                            return GetBasicMapConfig().ShowSelfOnMap;
+                            return true;
 						}
                     }
                 }

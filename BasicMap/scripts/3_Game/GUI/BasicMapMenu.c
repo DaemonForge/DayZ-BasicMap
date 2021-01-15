@@ -194,7 +194,7 @@ class BasicMapMenu extends UIScriptedMenu
 			int i_M = m_CurrentListOffset;
 			int maxItems = 17;
 			while ( i_M < BasicMap().GetMarkers(m_CurGroup).Count() && i <= maxItems && i < m_MarkerListWidget.Count()){
-				if (BasicMap().GetMarkers(m_CurGroup).Get(i_M).OnPanel() && BasicMap().GetMarkers(m_CurGroup).Get(i_M).OnMap()){
+				if (BasicMap().GetMarkers(m_CurGroup).Get(i_M) && BasicMap().GetMarkers(m_CurGroup).Get(i_M).OnPanel() && BasicMap().GetMarkers(m_CurGroup).Get(i_M).OnMap()){
 					m_MarkerListWidget.Get(i).Show(true);
 					m_MarkerList.Insert(new BasicMapMarkerListItem(m_MarkerListWidget.Get(i), this, BasicMap().GetMarkers(m_CurGroup).Get(i_M)));
 					i++;
@@ -237,25 +237,23 @@ class BasicMapMenu extends UIScriptedMenu
 			for (int i = 0; i < BasicMap().Count(); i++) {
 				BasicMapMarker marker = BasicMapMarker.Cast(BasicMap().Marker(i));
 				if (marker && marker.OnMap()){
-					if ( BasicMap().GetGroups().Get( marker.GetGroup() ) ) {
-						if ( BasicMap().GetGroups().Get( marker.GetGroup() ).OnMap() ) {		
-							float offset = 5.7;
-							vector pos = marker.GetPosition();
-							float x = pos[0] - offset; // Markers are a little off from the true postion
-							BasicMapCircleMarker cMarker;
-							if (Class.CastTo(cMarker, marker) && cMarker.GetRadius() > 0){
-								array<vector> edge = cMarker.GetEdge( BasicMap().GetMarkers( marker.GetGroup() ) );
-								if (edge){
-									for ( int j = 0; j < edge.Count(); j++){
-									m_Map.AddUserMark(edge.Get(j), "" , cMarker.GetEdgeColour(), cMarker.GetEdgeIcon(m_Map.GetScale()));
-								}
-								}
-								if (cMarker.GetShowCenterMarker()){
-									m_Map.AddUserMark(Vector(x, pos[1],pos[2]), " " + marker.GetName(), marker.GetColour(), marker.GetIcon());	
-								}
-							} else {
-								m_Map.AddUserMark(Vector(x, pos[1],pos[2]), " " + marker.GetName(), marker.GetColour(), marker.GetIcon());
+					if ( marker.GetGroup() && (!BasicMap().GetGroups().Get( marker.GetGroup() ) || BasicMap().GetGroups().Get( marker.GetGroup() ).OnMap() ) ) {		
+						float offset = 5.7;
+						vector pos = marker.GetPosition();
+						float x = pos[0] - offset; // Markers are a little off from the true postion
+						BasicMapCircleMarker cMarker;
+						if (Class.CastTo(cMarker, marker) && cMarker.GetRadius() > 0){
+							array<vector> edge = cMarker.GetEdge( BasicMap().GetMarkers( marker.GetGroup() ) );
+							if (edge){
+								for ( int j = 0; j < edge.Count(); j++){
+								m_Map.AddUserMark(edge.Get(j), "" , cMarker.GetEdgeColour(), cMarker.GetEdgeIcon(m_Map.GetScale()));
 							}
+							}
+							if (cMarker.GetShowCenterMarker()){
+								m_Map.AddUserMark(Vector(x, pos[1],pos[2]), " " + marker.GetName(), marker.GetColour(), marker.GetIcon());	
+							}
+						} else {
+							m_Map.AddUserMark(Vector(x, pos[1],pos[2]), " " + marker.GetName(), marker.GetColour(), marker.GetIcon());
 						}
 					}
 				}
