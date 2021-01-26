@@ -29,8 +29,8 @@ modded class MissionGameplay extends MissionBase
         super.OnUpdate(timeslice);
 		
         Input input = GetGame().GetInput();
-		Man player = GetGame ().GetPlayer ();
-        if (input.LocalPress("UAUIBack", false)) && player && !player.IsUnconscious{
+		PlayerBase player = PlayerBase.Cast(GetGame().GetPlayer());
+        if (input.LocalPress("UAUIBack", false) && player && !player.IsUnconscious()){
             if (m_BasicMapMenu != NULL && GetGame().GetUIManager().GetMenu() == m_BasicMapMenu) {
 				if (m_BasicMapMenu.IsEditorOpen()){
 					m_BasicMapMenu.CloseEditor();
@@ -40,8 +40,7 @@ modded class MissionGameplay extends MissionBase
 				}
             }
         }
-
-		if(player && player.IsUnconscious){
+		if (player && player.IsUnconscious()){
 			if (m_BasicMapMenu != NULL && GetGame().GetUIManager().GetMenu() == m_BasicMapMenu) {
 				if (m_BasicMapMenu.IsEditorOpen()){
 					m_BasicMapMenu.CloseEditor();
@@ -51,7 +50,7 @@ modded class MissionGameplay extends MissionBase
             }
 		}
 
-        if (input.LocalPress("UABasicMap", false) && player && !player.IsUnconscious) {
+        if (input.LocalPress("UABasicMap", false) && player && !player.IsUnconscious()) {
 			if (AllowedToOpenBasicMap()){
 	            if (m_BasicMapMenu) {
 	                if (m_BasicMapMenu.IsOpen() && !m_BasicMapMenu.IsEditorOpen() ) {
@@ -67,7 +66,7 @@ modded class MissionGameplay extends MissionBase
 			}
         }
 		
-		if (input.LocalPress("UABasicMap3DMarkers", false) && GetGame().GetUIManager().GetMenu() == NULL && player && !player.IsUnconscious) {
+		if (input.LocalPress("UABasicMap3DMarkers", false) && GetGame().GetUIManager().GetMenu() == NULL && player && !player.IsUnconscious()) {
             BasicMap().ToggleMarkersOnHUD();
         }
     }
