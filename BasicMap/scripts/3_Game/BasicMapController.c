@@ -87,7 +87,7 @@ class BasicMapController{
 		Param3<string, array<BasicMapMarker>, array<BasicMapCircleMarker>> data;
 		int i;
 		if ( !ctx.Read( data ) ) return;
-        if ( !data.param2 && !data.param3){
+        if ( data.param2 && data.param3){
 			array<BasicMapMarker> inMarkers = new array<BasicMapMarker>;
 			inMarkers.Copy(data.param2);
 			

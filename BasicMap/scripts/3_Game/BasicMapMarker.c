@@ -38,16 +38,22 @@ class BasicMapMarker {
 	
 	
 	bool OnHUD(){
+		if (!MinRenderDistance){
+			MinRenderDistance = -1;
+		}
+		if (!MaxRenderDistance){
+			MaxRenderDistance = -1;
+		}
 		DayZPlayer thePlayer = DayZPlayer.Cast(GetGame().GetPlayer());
-		if (MinRenderDistance != -1 && thePlayer){
+		if ( MinRenderDistance != -1 && thePlayer){
 			if (vector.Distance( thePlayer.GetPosition(), GetPosition()) <= MinRenderDistance){
 				return false;
 			}
-		} else if (MaxRenderDistance != -1 && thePlayer){
+		} else if ( MaxRenderDistance != -1 && thePlayer){
 			if (vector.Distance( thePlayer.GetPosition(), GetPosition()) >= MaxRenderDistance){
 				return false;
 			}
-		}
+		} 
 		return Is3DMarker;
 	}
 	
@@ -129,6 +135,13 @@ class BasicMapMarker {
 	}
 	
 	bool OnMap(){
+		if (!MinRenderDistance){
+			MinRenderDistance = -1;
+		}
+		if (!MaxRenderDistance){
+			MaxRenderDistance = -1;
+		}
+		
 		DayZPlayer thePlayer = DayZPlayer.Cast(GetGame().GetPlayer());
 		if (MinRenderDistance != -1 && thePlayer){
 			if (vector.Distance( thePlayer.GetPosition(), GetPosition()) <= MinRenderDistance){
