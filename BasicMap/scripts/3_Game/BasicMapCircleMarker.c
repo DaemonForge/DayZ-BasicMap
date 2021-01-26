@@ -89,7 +89,7 @@ class BasicMapCircleMarker extends BasicMapMarker{
 		if (Conflicting){
 			for (int i = 0; i < Conflicting.Count(); i++) {
 				BasicMapCircleMarker MarkToCheck = BasicMapCircleMarker.Cast(Conflicting.Get(i));
-				if (MarkToCheck && !MarkToCheck.GetHideIntersects() && MarkToCheck.GetRadius() > 0 && MarkToCheck.GetPosition() != this.GetPosition()){ //Make sure to not check against self
+				if (MarkToCheck && MarkToCheck.GetHideIntersects() && MarkToCheck.GetRadius() > 0 && MarkToCheck.GetPosition() != this.GetPosition()){ //Make sure to not check against self
 					if (vector.Distance(MarkToCheck.GetPosition(), posToCheck) <= MarkToCheck.GetRadius()) {
 						return true;
 					}

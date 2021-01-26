@@ -246,8 +246,8 @@ class BasicMapMenu extends UIScriptedMenu
 							array<vector> edge = cMarker.GetEdge( BasicMap().GetMarkers( marker.GetGroup() ) );
 							if (edge){
 								for ( int j = 0; j < edge.Count(); j++){
-								m_Map.AddUserMark(edge.Get(j), "" , cMarker.GetEdgeColour(), cMarker.GetEdgeIcon(m_Map.GetScale()));
-							}
+									m_Map.AddUserMark(edge.Get(j), "" , cMarker.GetEdgeColour(), cMarker.GetEdgeIcon(m_Map.GetScale()));
+								}
 							}
 							if (cMarker.GetShowCenterMarker()){
 								m_Map.AddUserMark(Vector(x, pos[1],pos[2]), " " + marker.GetName(), marker.GetColour(), marker.GetIcon());	
