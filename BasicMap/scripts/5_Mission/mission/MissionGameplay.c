@@ -56,11 +56,11 @@ modded class MissionGameplay extends MissionBase
 	                if (m_BasicMapMenu.IsOpen() && !m_BasicMapMenu.IsEditorOpen() ) {
 						BasicMapClosePanel();
 	                } else if (GetGame().GetUIManager().GetMenu() == NULL) {
-						GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.BasicMapOpenPanel, 330, false);
+						GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.BasicMapOpenPanel, 10, false);
 						m_BasicMapMenu_Opening = true;
 	                }
 	            } else if (GetGame().GetUIManager().GetMenu() == NULL && m_BasicMapMenu == null) {
-					GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.BasicMapCreatePanel, 330, false);
+					GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.BasicMapCreatePanel, 10, false);
 					m_BasicMapMenu_Opening = true;
 	            }
 			}
