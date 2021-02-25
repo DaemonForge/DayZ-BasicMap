@@ -141,7 +141,6 @@ class BasicMapController{
 					}
 				}
 			}
-			//Print("[BASICMAP]Sending " + ServerMarkers.Count() + " Server Markers" );
 			GetRPCManager().SendRPC("BasicMap", "RPCSyncServerData", new Param3< array<ref BasicMapMarker>,  array<ref BasicMapCircleMarker>, ref BasicMapConfig>( ServerMarkers, ServerCircleMarkers, GetBasicMapConfig() ), true, sender);
 		}
 	} 
@@ -237,11 +236,11 @@ class BasicMapController{
 		
 	}
 	
-	ref BasicMapMarker Marker(int i){
+	BasicMapMarker Marker(int i){
 		for (int j = 0; j < Markers.Count(); j++){
 			int nextIndex = Markers.GetElement(j).Count();
 			if (i < nextIndex){
-				return Markers.GetElement(j).Get(i);
+				return BasicMapMarker.Cast(Markers.GetElement(j).Get(i));
 			}
 			i = i - nextIndex;
 		}
@@ -354,19 +353,19 @@ class BasicMapController{
 		return -1;
 	}
 	
-	ref BasicMapMarker ClientMarker(int i){
+	BasicMapMarker ClientMarker(int i){
 		if ( Markers.Get(CLIENT_KEY)){
-			return Markers.Get(CLIENT_KEY).Get(i);
+			return BasicMapMarker.Cast(Markers.Get(CLIENT_KEY).Get(i));
 		}
 		return NULL;
 	}
 	
-	ref BasicMapMarker GetMarkerByVector(vector pos, float distance = 10, bool overrideSettings = false){
+	BasicMapMarker GetMarkerByVector(vector pos, float distance = 10, bool overrideSettings = false){
 		for (int j = 0; j < Markers.Count(); j++){
 			for (int k = 0; k < Markers.GetElement(j).Count(); k++){
 				if (vector.Distance(Markers.GetElement(j).Get(k).GetPosition(), pos) < distance && (Markers.GetElement(j).Get(k).Editable() || overrideSettings)){
 					Markers.GetElement(j).Get(k).SetGroup(Markers.GetKey(j));
-					return Markers.GetElement(j).Get(k);
+					return BasicMapMarker.Cast(Markers.GetElement(j).Get(k));
 				}
 			}
 		}
