@@ -46,6 +46,7 @@ class BasicMapHUDMarker {
 	
 	void ~BasicMapHUDMarker(){
 		OnDelete();
+		delete layoutRoot;
 	}
 	
 	void Update(){	
