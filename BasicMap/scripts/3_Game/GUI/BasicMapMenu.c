@@ -11,6 +11,8 @@ class BasicMapMenu extends UIScriptedMenu
 	
 	protected int								m_CurrentListOffset = 0;
 	
+	static int									m_MarkerRefreshRate = 30;
+	
 	static int 									MarkerListItemFrame_Size = 42;
 	protected ref BasicMapMarker				m_MeMarker;
 	
@@ -231,7 +233,9 @@ class BasicMapMenu extends UIScriptedMenu
 		}
 	}
 	
+	
 	void UpdateMarkers(){
+		int markerCount = 0;
 		if (m_PanelIsOpen && m_Map && BasicMap()){
 			m_Map.ClearUserMarks();
 			for (int i = 0; i < BasicMap().Count(); i++) {
@@ -246,13 +250,16 @@ class BasicMapMenu extends UIScriptedMenu
 							array<vector> edge = cMarker.GetEdge( BasicMap().GetMarkers( marker.GetGroup() ) );
 							if (edge){
 								for ( int j = 0; j < edge.Count(); j++){
+									markerCount++;
 									m_Map.AddUserMark(edge.Get(j), "" , cMarker.GetEdgeColour(), cMarker.GetEdgeIcon(m_Map.GetScale()));
 								}
 							}
 							if (cMarker.GetShowCenterMarker()){
+								markerCount++;
 								m_Map.AddUserMark(Vector(x, pos[1],pos[2]), " " + marker.GetName(), marker.GetColour(), marker.GetIcon());	
 							}
 						} else {
+							markerCount++;
 							m_Map.AddUserMark(Vector(x, pos[1],pos[2]), " " + marker.GetName(), marker.GetColour(), marker.GetIcon());
 						}
 					}
@@ -260,7 +267,12 @@ class BasicMapMenu extends UIScriptedMenu
 			}
 			UpdateMe();
 			RefreshMarkerList();
-			GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.UpdateMarkers, 24, false);
+			int RefreshRate = m_MarkerRefreshRate;
+			if (markerCount > 500){
+				int bonusRate = Math.Floor(markerCount / 500);
+				RefreshRate = RefreshRate + ( bonusRate * 5 );
+			}
+			GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.UpdateMarkers, RefreshRate, false);
 		}
 	}
 	
@@ -350,7 +362,7 @@ class BasicMapMenu extends UIScriptedMenu
 	void SetOpen(bool open) {
 		if (!m_PanelIsOpen && open){
 			layoutRoot.Show(true);
-			GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.UpdateMarkers, 24, false);
+			GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.UpdateMarkers, 45, false);
 		}
 		if (m_PanelIsOpen && !open){
 			CloseEditor();

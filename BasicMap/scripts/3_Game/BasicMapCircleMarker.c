@@ -69,7 +69,7 @@ class BasicMapCircleMarker extends BasicMapMarker{
 		Updated = false;
 		Edge = new array<vector>;
 		float circleLength = Math.PI * GetRadius();
-		circleLength = circleLength * 0.70;
+		circleLength = circleLength * 0.65;
 		int i = 0;
 		float slice = 2 * Math.PI / circleLength;
 		while (i <= circleLength) {
@@ -77,7 +77,9 @@ class BasicMapCircleMarker extends BasicMapMarker{
 			float x = Pos[0] + GetRadius() * Math.Cos(angle);
 			float y = Pos[2] + GetRadius() * Math.Sin(angle);
 			if (!GetHideIntersects() || !Intersects(Vector(x, Pos[1], y), Conflicting)){
-				Edge.Insert(Vector(x, Pos[1], y));
+				if ( x >= 0 && y >= 0 && x <= 15360 && y <= 15360){//Prevent markers out of bounds
+					Edge.Insert(Vector(x, Pos[1], y));
+				}
 			}
 			i++;
 		}
