@@ -69,6 +69,9 @@ class BasicMapMarker {
 	
 	
 	vector GetPosition(){
+		if (!Pos){
+			return Vector(0,0,0,);
+		}
 		return Pos;
 	}
 	
@@ -153,6 +156,10 @@ class BasicMapMarker {
 			}
 		}
 		return !HideOnMap;
+	}
+	
+	bool ShowDistance(){
+		return true;
 	}
 	
 	void PrintDebug(){
