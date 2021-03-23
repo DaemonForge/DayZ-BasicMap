@@ -109,7 +109,7 @@ class BasicMapController{
 				for ( i = 0; i < inCMarkers.Count(); i++){
 					if (inCMarkers.Get(i)){
 						inCMarkers.Get(i).SetGroup(group);
-						markers.Insert(BasicMapMarker.Cast(inCMarkers.Get(i)));
+						markers.Insert(inCMarkers.Get(i));
 					}
 				}
 			}
@@ -154,7 +154,7 @@ class BasicMapController{
 			}
 			GetRPCManager().SendRPC("BasicMap", "RPCSyncServerData", new Param3< array<ref BasicMapMarker>,  array<ref BasicMapCircleMarker>, ref BasicMapConfig>( ServerMarkers, ServerCircleMarkers, GetBasicMapConfig() ), true, sender);
 		}
-	} 
+	}
 	
 	void LoadServerMarkers(){
 		array<ref BasicMapMarker> ServerMarkers;
