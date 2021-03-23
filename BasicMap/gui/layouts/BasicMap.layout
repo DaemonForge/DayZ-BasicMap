@@ -253,8 +253,11 @@ FrameWidgetClass rootFrame {
            vexactpos 0
            hexactsize 0
            vexactsize 0
-           "exact text" 1
+           text "<0.000000 0.0000000 0.00000>"
            font "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium"
+           "exact text" 0
+           "text halign" center
+           "text valign" center
           }
          }
         }

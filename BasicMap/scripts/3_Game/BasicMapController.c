@@ -84,30 +84,41 @@ class BasicMapController{
 	
 
 	void RPCSyncGroupData( CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target ){
-		Param3<string, array<BasicMapMarker>, array<BasicMapCircleMarker>> data;
+		Param3<string, array<ref BasicMapMarker>, array<ref BasicMapCircleMarker>> data;
 		int i;
 		if ( !ctx.Read( data ) ) return;
-        if ( data.param2 && data.param3){
-			array<BasicMapMarker> inMarkers = new array<BasicMapMarker>;
-			inMarkers.Copy(data.param2);
+		string group = data.param1;
+		Print("[BasicMap] RPCSyncGroupData " + group );
+        if ( data.param2 || data.param3){
+			array<ref BasicMapMarker> inMarkers = data.param2;
+			inMarkers.Debug();
 			
-			array<BasicMapCircleMarker> inCMarkers = new array<BasicMapCircleMarker>;
-			inCMarkers.Copy(data.param3);
+			array<ref BasicMapCircleMarker> inCMarkers = data.param3;
+			inCMarkers.Debug();
 			
-			ref array<ref BasicMapMarker> markers = new array<ref BasicMapMarker>;
-			for ( i = 0; i < inMarkers.Count(); i++){
-				if (inMarkers.Get(i)){
-					inMarkers.Get(i).SetGroup(data.param1);
-					markers.Insert(inMarkers.Get(i));
+			array<ref BasicMapMarker> markers = new array<ref BasicMapMarker>;
+			if (inMarkers){
+				for ( i = 0; i < inMarkers.Count(); i++){
+					if (inMarkers.Get(i)){
+						inMarkers.Get(i).SetGroup(group);
+						markers.Insert(inMarkers.Get(i));
+					}
 				}
 			}
-			for ( i = 0; i < inCMarkers.Count(); i++){
-				inCMarkers.Get(i).SetGroup(data.param1);
-				markers.Insert(inCMarkers.Get(i));
+			if (inCMarkers){
+				for ( i = 0; i < inCMarkers.Count(); i++){
+					if (inCMarkers.Get(i)){
+						inCMarkers.Get(i).SetGroup(group);
+						markers.Insert(BasicMapMarker.Cast(inCMarkers.Get(i)));
+					}
+				}
 			}
-			SetMarkers(data.param1, markers);
-		} else if (!data.param2 && GetGame().IsServer() && sender){//Is requesting
-			UpdateGroupRemote(data.param1, sender);
+			Print("Markers: " + group);
+			markers.Debug();
+			SetMarkers(group, markers);
+		} else if (!data.param2 && !data.param3 && GetGame().IsServer() && sender){//Is requesting
+			Print("Player Requested Update: " + group);
+			UpdateGroupRemote(group, sender);
 		}
 	}
 	
@@ -203,7 +214,7 @@ class BasicMapController{
 	}
 	
 	void SaveClientMarkers(){
-		ref array<ref BasicMapMarker> ClientMarkers = new ref array<ref BasicMapMarker>;
+		array<ref BasicMapMarker> ClientMarkers = new ref array<ref BasicMapMarker>;
 		if (Markers.Get(CLIENT_KEY)){
 			ClientMarkers = array<ref BasicMapMarker>.Cast(Markers.Get(CLIENT_KEY));
 		}
@@ -340,7 +351,7 @@ class BasicMapController{
 		}
 	}
 	
-	ref array<ref BasicMapMarker> ClientMarkers(){
+	array<ref BasicMapMarker> ClientMarkers(){
 		return Markers.Get(CLIENT_KEY);
 	}
 	
@@ -387,6 +398,7 @@ class BasicMapController{
 	
 	
 	void SetMarkersRemote(string group, array<ref BasicMapMarker> markers, ref PlayerIdentity toPlayer = NULL ){
+		Print("[BasicMap] SetMarkersRemote " + group );
 		array<ref BasicMapMarker>  basicMarkers = new array<ref BasicMapMarker>;
 		array<ref BasicMapCircleMarker> circleMarkers = new array<ref BasicMapCircleMarker>;
 		BasicMapCircleMarker cMarker;
@@ -397,13 +409,21 @@ class BasicMapController{
 				basicMarkers.Insert(markers.Get(j));
 			}
 		}
-		RPCManager().SendRPC("BasicMap", "RPCSyncGroupData", new Param3<string, array<ref BasicMapMarker>, array<ref BasicMapCircleMarker> >( group, basicMarkers, circleMarkers ), true, toPlayer);
+		GetRPCManager().SendRPC("BasicMap", "RPCSyncGroupData", new Param3<string, array<ref BasicMapMarker>, array<ref BasicMapCircleMarker> >( group, basicMarkers, circleMarkers ), true, toPlayer);
 	}
 	
 	void UpdateGroupRemote(string group, ref PlayerIdentity toPlayer = NULL ){
+		Print("[BasicMap] UpdateGroupRemote " + group );
 		SetMarkersRemote("BasicMap", GetMarkers(group), toPlayer);
 	}
 	
+	void RequestGroupUpdate(string group){
+		if (GetGame().IsServer()){
+			Print("[BasicMap] !!!!!! BAD USSAGE !!!!!! --  Trying to request Group Update from server shouldn't do this as it will essentially get every player to update the server causing no consistancy");
+			return;
+		}
+		GetRPCManager().SendRPC("BasicMap", "RPCSyncGroupData", new Param3<string, array<ref BasicMapMarker>, array<ref BasicMapCircleMarker> >( group, NULL, NULL ), true);
+	}
 	
 	static string GetInfoText(){
 		if (GetBasicMapConfig().AllowPlayerMarkers){

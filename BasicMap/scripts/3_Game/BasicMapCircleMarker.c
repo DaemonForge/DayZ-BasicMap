@@ -12,6 +12,19 @@ class BasicMapCircleMarker extends BasicMapMarker{
 	[NonSerialized()]
 	bool Updated = true;
 	
+	void BasicMapCircleMarker(string name, vector pos, string icon = "", array<int> colour = NULL, int alpha = 235, bool onHUD = false) {
+		Name = name;
+		if (icon != ""){
+			Icon = icon;
+		}
+		Pos = pos;
+		if (colour != NULL){
+			Colour = colour;
+		}
+		Alpha = alpha;
+		Is3DMarker = onHUD;
+	}	
+	
 	
 	void SetUpdated(bool state){
 		Updated = state;

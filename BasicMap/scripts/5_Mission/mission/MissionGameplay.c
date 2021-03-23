@@ -4,12 +4,13 @@ modded class MissionGameplay extends MissionBase
 	override void OnMissionStart(){
 		super.OnMissionStart();
 		BasicMap();
+		GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.UpdateHuDIcons, 2000, false);
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.UpdateHuDIcons, 9000, true);
 	}
 	
 	void UpdateHuDIcons(){
 		if (!m_hudMarkers){
-			m_hudMarkers = new ref array<ref BasicMapHUDMarker>;
+			m_hudMarkers = new array<ref BasicMapHUDMarker>;
 		}
 		int preventRunAway = 500; //Sure if you have more than 500 Makers this might become an issue but lets hope that this is so unlikely its not an issue
 		while (m_hudMarkers.Count() > 0 && preventRunAway > 0){
@@ -20,7 +21,7 @@ modded class MissionGameplay extends MissionBase
 		}
 		m_hudMarkers.Clear(); //Just to make sure :)
 		for (int j = 0; j < BasicMap().Count(); j++){
-			m_hudMarkers.Insert(new ref BasicMapHUDMarker());
+			m_hudMarkers.Insert(new BasicMapHUDMarker());
 			m_hudMarkers.Get(j).Init(BasicMap().Marker(j));
 		}
 	}
@@ -56,11 +57,11 @@ modded class MissionGameplay extends MissionBase
 	                if (m_BasicMapMenu.IsOpen() && !m_BasicMapMenu.IsEditorOpen() ) {
 						BasicMapClosePanel();
 	                } else if (GetGame().GetUIManager().GetMenu() == NULL) {
-						GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.BasicMapOpenPanel, 10, false);
+						GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.BasicMapOpenPanel, 2, false);
 						m_BasicMapMenu_Opening = true;
 	                }
 	            } else if (GetGame().GetUIManager().GetMenu() == NULL && m_BasicMapMenu == null) {
-					GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.BasicMapCreatePanel, 10, false);
+					GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.BasicMapCreatePanel, 2, false);
 					m_BasicMapMenu_Opening = true;
 	            }
 			}

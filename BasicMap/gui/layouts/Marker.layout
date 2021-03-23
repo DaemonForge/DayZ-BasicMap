@@ -22,7 +22,7 @@ FrameWidgetClass rootFrame {
      clipchildren 0
      ignorepointer 1
      position 0 0
-     size 284 34
+     size 284 33
      halign center_ref
      hexactpos 1
      vexactpos 1
@@ -33,7 +33,7 @@ FrameWidgetClass rootFrame {
        clipchildren 0
        ignorepointer 1
        position 0 0
-       size 14 14
+       size 13 13
        halign center_ref
        hexactpos 0
        vexactpos 0
@@ -66,7 +66,7 @@ FrameWidgetClass rootFrame {
        clipchildren 0
        ignorepointer 1
        position 0 0
-       size 1 10
+       size 1 9
        halign center_ref
        valign bottom_ref
        hexactpos 0

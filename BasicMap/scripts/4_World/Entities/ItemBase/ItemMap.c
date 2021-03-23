@@ -1,6 +1,6 @@
 modded class ChernarusMap  extends ItemMap
 {
-	protected ref array<ref BasicMapMarker> 	m_BasicMapMarkerArray = new ref array<ref BasicMapMarker>;
+	protected ref array<ref BasicMapMarker> 	m_BasicMapMarkerArray = new array<ref BasicMapMarker>;
 	
 	override void SetActions()
 	{
@@ -28,7 +28,7 @@ modded class ChernarusMap  extends ItemMap
 		ctx.Write(m_BasicMapMarkerArray);
 	}
 	
-	ref array<ref BasicMapMarker> GetBasicMapMarkers()
+	array<ref BasicMapMarker> GetBasicMapMarkers()
 	{
 		return m_BasicMapMarkerArray;
 		
@@ -40,7 +40,7 @@ modded class ChernarusMap  extends ItemMap
 		if (GetGame().IsServer() && GetHierarchyRootPlayer()) {
 			PlayerIdentity  pid = PlayerIdentity.Cast(GetHierarchyRootPlayer().GetIdentity());
 			if (pid) {
-				RPCSingleParam(BASICMAPRPCs.SEND_MARKERS, new Param1<ref array<ref BasicMapMarker>>( m_BasicMapMarkerArray ), true, pid);
+				RPCSingleParam(BASICMAPRPCs.SEND_MARKERS, new Param1<array<ref BasicMapMarker>>( m_BasicMapMarkerArray ), true, pid);
 			}
 		} else if (GetGame().IsClient() && GetHierarchyRootPlayer()){
 			RPCSingleParam(BASICMAPRPCs.REQUEST_MARKERS, new Param1<bool>( true ), true, NULL);
@@ -78,7 +78,7 @@ modded class ChernarusMap  extends ItemMap
 			if (ctx.Read(data)){
 				Markers = array<ref BasicMapMarker>.Cast(data.param1);
 				if (Markers){
-					m_BasicMapMarkerArray = new ref array<ref BasicMapMarker>; //Weird issues doing if I just set the array
+					m_BasicMapMarkerArray = new array<ref BasicMapMarker>; //Weird issues doing if I just set the array
 					for (i = 0; i < data.param1.Count(); i++){
 						m_BasicMapMarkerArray.Insert(data.param1.Get(i));
 					}
