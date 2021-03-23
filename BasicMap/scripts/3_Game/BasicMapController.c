@@ -65,17 +65,21 @@ class BasicMapController{
 			MapItem = NULL;
 	}
 	
+	
 	ref map< string, ref BasicMapGroupMetaData> GetGroups(){
 		return Groups;
 	}
+	
 	
 	ref BasicMapGroupMetaData GetGroup(string id){
 		return Groups.Get(id);
 	}
 	
+	
 	string GetGroupName(string id){
 		return Groups.Get(id).GetDisplayName();
 	}
+	
 	
 	void RegisterGroup(string id, ref BasicMapGroupMetaData metaData, ref BasicMapMarkerFactory factory){
 		Groups.Insert(id, metaData);
@@ -88,7 +92,7 @@ class BasicMapController{
 		int i;
 		if ( !ctx.Read( data ) ) return;
 		string group = data.param1;
-		Print("[BasicMap] RPCSyncGroupData " + group );
+		//Print("[BasicMap] RPCSyncGroupData " + group );
         if ( data.param2 || data.param3){
 			array<ref BasicMapMarker> inMarkers = data.param2;
 			inMarkers.Debug();
@@ -113,11 +117,11 @@ class BasicMapController{
 					}
 				}
 			}
-			Print("Markers: " + group);
+			//Print("Markers: " + group);
 			markers.Debug();
 			SetMarkers(group, markers);
 		} else if (!data.param2 && !data.param3 && GetGame().IsServer() && sender){//Is requesting
-			Print("Player Requested Update: " + group);
+			//Print("Player Requested Update: " + group);
 			UpdateGroupRemote(group, sender);
 		}
 	}
@@ -398,7 +402,7 @@ class BasicMapController{
 	
 	
 	void SetMarkersRemote(string group, array<ref BasicMapMarker> markers, ref PlayerIdentity toPlayer = NULL ){
-		Print("[BasicMap] SetMarkersRemote " + group );
+		//Print("[BasicMap] SetMarkersRemote " + group );
 		array<ref BasicMapMarker>  basicMarkers = new array<ref BasicMapMarker>;
 		array<ref BasicMapCircleMarker> circleMarkers = new array<ref BasicMapCircleMarker>;
 		BasicMapCircleMarker cMarker;
@@ -413,7 +417,7 @@ class BasicMapController{
 	}
 	
 	void UpdateGroupRemote(string group, ref PlayerIdentity toPlayer = NULL ){
-		Print("[BasicMap] UpdateGroupRemote " + group );
+		//Print("[BasicMap] UpdateGroupRemote " + group );
 		SetMarkersRemote("BasicMap", GetMarkers(group), toPlayer);
 	}
 	
