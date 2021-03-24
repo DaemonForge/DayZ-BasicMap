@@ -1,3 +1,19 @@
+modded class BasicMapController{
+
+	override void LoadClientMarkers(){
+		super.LoadClientMarkers();
+		RequestGroupUpdate("AirDrops");
+	}
+	
+}
+
+
+
+
+
+
+
+
 class AirdropBasicMapConfig
 {
 	protected static string ConfigPATH = "$profile:BasicMap\\AirDrop.json";

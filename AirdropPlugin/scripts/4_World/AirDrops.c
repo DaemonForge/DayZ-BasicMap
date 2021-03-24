@@ -1,25 +1,10 @@
 modded class AirdropBase
-{
-	//A place to remember the last known drop point
-	protected vector m_BMLastDropPoint;
-	
+{	
 	
 	void AirdropBase(){
 		//Making sure its the server
 		if (GetGame().IsServer()){
 			GetAirdropBasicMapConfig();
-			// Registering the RPC call for getting the last airdrop location
-			GetRPCManager().AddRPC( "BasicMap", "RPCGetLastAirdrop", this, SingeplayerExecutionType.Both );
-			Print("[BasicMap] [Airdrop] Server Init");
-		}
-	}
-	
-	//Rpc call for when a client request the last know location
-	void RPCGetLastAirdrop( CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target ){
-		//If sender is valid and the last airdrop location is set send the last known airdrop location
-		if (sender && m_BMLastDropPoint){
-			Print("[BasicMap] [Airdrop] Sending Last Airdrop Location");
-			GetRPCManager().SendRPC("BasicMap", "RPCOnCallAirdrop", new Param3< vector, float, vector >( m_BMLastDropPoint, GetAirdropBasicMapConfig().CircleDrawRadius, GetAirdropBasicMapConfig().CircleColor), true, sender);
 		}
 	}
 	
@@ -43,13 +28,43 @@ modded class AirdropBase
 			float NewY = m_DropPoint[2] + rndR * Math.Sin(rndT);
 			
 			//Setting the last known to be this new location
-			m_BMLastDropPoint = Vector(NewX, GetGame().SurfaceY(NewX,NewY), NewY);
+			vector m_BMLastDropPoint = Vector(NewX, GetGame().SurfaceY(NewX,NewY), NewY);
 			
 			float Distance = vector.Distance(Vector(m_DropPoint[0],0,m_DropPoint[2]),Vector(m_BMLastDropPoint[0],0,m_BMLastDropPoint[2]));
 			Print("[BasicMap] [Airdrop] Airdrop location: " + m_DropPoint + " Circle Center: " + m_BMLastDropPoint + " Distance: " + Distance + " rndR:" + rndR + " rndT: " + rndT);
+			 
+			//Cause Enfusion Sucks
+			float red = GetAirdropBasicMapConfig().CircleColor[0];
+			float green = GetAirdropBasicMapConfig().CircleColor[1];
+			float blue = GetAirdropBasicMapConfig().CircleColor[2]; 
+			int ired = red;
+			int igreen = green;
+			int iblue = blue;
 			
-			//Sending the center of the markers to all the clients
-			GetRPCManager().SendRPC("BasicMap", "RPCOnCallAirdrop", new Param3< vector, float, vector >( m_BMLastDropPoint, GetAirdropBasicMapConfig().CircleDrawRadius, GetAirdropBasicMapConfig().CircleColor ), true, NULL);
+			
+			
+			//Create Marker
+			BasicMapCircleMarker marker = new BasicMapCircleMarker( "", m_BMLastDropPoint, AIRDROP_ICON_AIRDROP, {ired,igreen,iblue}, 248, false);
+			
+			//Prevent Editing of the marker
+			marker.SetCanEdit(false);
+			//Making it so the icon shows in the center
+			marker.SetShowCenterMarker(true);
+			//Setting hide Intersects to true this way if you have other circle markers this will show in full
+			marker.SetHideIntersects(false);
+			//Set Radius
+			marker.SetRadius(GetAirdropBasicMapConfig().CircleDrawRadius);
+			
+			
+			//Add Marker
+			array<ref BasicMapMarker> markers = new array<ref BasicMapMarker>;
+			markers.Insert(marker);
+			
+			//Set the Marker
+			BasicMap().SetMarkers("AirDrops", markers);
+			
+			//Update all the clients
+			BasicMap().UpdateGroupRemote("AirDrops");
 		}
 	}
 
