@@ -98,7 +98,7 @@ static ref BasicMapConfig GetBasicMapConfig()
 {
 	if (!m_BasicMapConfig)
 	{
-		m_BasicMapConfig = new ref BasicMapConfig;
+		m_BasicMapConfig = new BasicMapConfig;
 			
 		if ( GetGame().IsServer()){
 			m_BasicMapConfig.Load();

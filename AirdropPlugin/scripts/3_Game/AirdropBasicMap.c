@@ -47,11 +47,11 @@ class AirdropBasicMapConfig
 ref AirdropBasicMapConfig m_AirdropBasicMapConfig;
 
 //Helper function to return Config
-static ref AirdropBasicMapConfig GetAirdropBasicMapConfig()
+static AirdropBasicMapConfig GetAirdropBasicMapConfig()
 {
 	if (!m_AirdropBasicMapConfig)
 	{
-		m_AirdropBasicMapConfig = new ref AirdropBasicMapConfig;
+		m_AirdropBasicMapConfig = new AirdropBasicMapConfig;
 			
 		if ( GetGame().IsServer() ){
 			m_AirdropBasicMapConfig.Load();

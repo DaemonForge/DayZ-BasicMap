@@ -1,4 +1,4 @@
-class BasicMapMarker {
+class BasicMapMarker extends Managed{
 	string Name = "";
 	vector Pos = Vector(0,0,0);
 	string Icon = "BasicMap\\gui\\images\\marker.paa";

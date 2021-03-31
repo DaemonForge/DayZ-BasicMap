@@ -1,7 +1,7 @@
 #ifdef NAMALSK_SURVIVAL
 modded class dzn_map_namalsk  extends ItemMap
 {
-	protected ref array<ref BasicMapMarker> 	m_BasicMapMarkerArray = new ref array<ref BasicMapMarker>;
+	protected ref array<ref BasicMapMarker> 	m_BasicMapMarkerArray = new array<ref BasicMapMarker>;
 	
 	//Only used if using Basic Treasure Maps
 	protected vector m_TreasureLocation;
@@ -91,7 +91,7 @@ modded class dzn_map_namalsk  extends ItemMap
 			if (ctx.Read(data)){
 				Markers = array<ref BasicMapMarker>.Cast(data.param1);
 				if (Markers){
-					m_BasicMapMarkerArray = new ref array<ref BasicMapMarker>; //Weird issues doing if I just set the array
+					m_BasicMapMarkerArray = new array<ref BasicMapMarker>; //Weird issues doing if I just set the array
 					for (i = 0; i < data.param1.Count(); i++){
 						m_BasicMapMarkerArray.Insert(data.param1.Get(i));
 					}

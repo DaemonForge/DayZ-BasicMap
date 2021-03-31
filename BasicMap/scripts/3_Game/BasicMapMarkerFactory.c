@@ -1,7 +1,7 @@
 class BasicMapMarkerFactory {
 	
-    ref BasicMapMarker Create(string name, vector position) {
-		BasicMapMarker marker = new ref BasicMapMarker(name, position);
+    BasicMapMarker Create(string name, vector position) {
+		BasicMapMarker marker = new BasicMapMarker(name, position);
 		marker.SetIcon("BasicMap\\gui\\images\\marker.paa");
 		marker.SetGroup(BasicMap().CLIENT_KEY);
 		marker.ShowOnHUD(true);

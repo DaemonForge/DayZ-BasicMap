@@ -85,7 +85,7 @@ class BasicMapMenu extends UIScriptedMenu
 		m_NextGroup					= ButtonWidget.Cast(layoutRoot.FindAnyWidget("NextGroup"));
 		m_PreviousGroup				= ButtonWidget.Cast(layoutRoot.FindAnyWidget("PreviousGroup"));
 		m_MarkersListPanel			= Widget.Cast( layoutRoot.FindAnyWidget( "MarkersList" ) );
-		m_MarkerListWidget 			= new ref array<ref Widget>;
+		m_MarkerListWidget 			= new array<ref Widget>;
 		string MarkerFrame;
 		for (int i = 0; i <= 17; i++){
 			MarkerFrame = "MarkerFrame" + i;
@@ -132,7 +132,7 @@ class BasicMapMenu extends UIScriptedMenu
 		m_Show3dMakersPanel.Show(GetBasicMapConfig().Allow3dMarkers);
 		m_Show3dMakers.SetChecked(!BasicMap().ShowMarkersOnHUD());
 		DayZPlayer me = DayZPlayer.Cast(GetGame().GetPlayer());
-		BasicMapPlayerMarker playerMarker = new ref BasicMapPlayerMarker("", Vector(0,0,0));
+		BasicMapPlayerMarker playerMarker = new BasicMapPlayerMarker("", Vector(0,0,0));
 		if (me){
 			playerMarker.SetPlayer(me);
 			if (BasicMap().ShowSelfOnMap()){
@@ -183,7 +183,7 @@ class BasicMapMenu extends UIScriptedMenu
 		ClearMarkerList();
 		if (BasicMap().GetMarkers(m_CurGroup) && BasicMap().GetMarkers(m_CurGroup).Count() > 0){
 			if (!m_MarkerList){
-				m_MarkerList = new ref array<ref BasicMapMarkerListItem>;
+				m_MarkerList = new array<ref BasicMapMarkerListItem>;
 			}
 			//Print("PopulateMarkerList Start");
 			int max = BasicMap().GetMarkers(m_CurGroup).Count() - 10;

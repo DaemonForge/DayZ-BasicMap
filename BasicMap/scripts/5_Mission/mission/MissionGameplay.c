@@ -1,6 +1,7 @@
 modded class MissionGameplay extends MissionBase
 {
 	ref array<ref BasicMapHUDMarker> m_hudMarkers;
+	
 	override void OnMissionStart(){
 		super.OnMissionStart();
 		BasicMap();

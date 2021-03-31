@@ -15,7 +15,7 @@ class BasicMapController{
 	
 	static string InfoText = "<p>Double Left-Click to Create Marker</p><p>Double Right-Click to Delete Marker</p>";
 		
-	ref map< string, ref array<ref BasicMapMarker> > Markers = new ref map< string, ref array<ref BasicMapMarker> >;
+	ref map< string, ref array<ref BasicMapMarker> > Markers = new map< string, ref array<ref BasicMapMarker> >;
 	
 	//GROUP NAME DISPLAYNAME? or MetaDataObject?
 	ref map< string, ref BasicMapGroupMetaData> Groups = new map<string, ref BasicMapGroupMetaData>;
@@ -26,11 +26,11 @@ class BasicMapController{
 		GetRPCManager().AddRPC( "BasicMap", "RPCSyncGroupData", this, SingeplayerExecutionType.Both );
 		
 		
-		RegisterGroup(SERVER_KEY, new ref BasicMapGroupMetaData(SERVER_KEY, "SERVER MARKERS"), NULL);
-		RegisterGroup(CLIENT_KEY, new ref BasicMapGroupMetaData(CLIENT_KEY, "PERSONAL MARKERS", true), new ref BasicMapMarkerFactory());
+		RegisterGroup(SERVER_KEY, new BasicMapGroupMetaData(SERVER_KEY, "SERVER MARKERS"), NULL);
+		RegisterGroup(CLIENT_KEY, new BasicMapGroupMetaData(CLIENT_KEY, "PERSONAL MARKERS", true), new BasicMapMarkerFactory());
 		if (GetGame().IsMultiplayer() && GetGame().IsClient()){
 			Print("[BasicMap] Init Client");
-			GetRPCManager().SendRPC("BasicMap", "RPCSyncServerData", new Param3< array<ref BasicMapMarker>, array<ref BasicMapCircleMarker>, ref BasicMapConfig >( NULL, NULL, NULL ), true, NULL);
+			GetRPCManager().SendRPC("BasicMap", "RPCSyncServerData", new Param3< array<ref BasicMapMarker>, array<ref BasicMapCircleMarker>, BasicMapConfig >( NULL, NULL, NULL ), true, NULL);
 			LoadClientMarkers();
 		} else {
 			Print("[BasicMap] Init Server");
@@ -81,7 +81,7 @@ class BasicMapController{
 	}
 	
 	
-	void RegisterGroup(string id, ref BasicMapGroupMetaData metaData, ref BasicMapMarkerFactory factory){
+	void RegisterGroup(string id, BasicMapGroupMetaData metaData, BasicMapMarkerFactory factory){
 		Groups.Insert(id, metaData);
 		Factories.Insert(id, factory);
 	}
@@ -179,8 +179,8 @@ class BasicMapController{
 	
 	void ServerFirstRun(){
 		array<ref BasicMapMarker> ServerMarkers = new array<ref BasicMapMarker>;
-		ServerMarkers.Insert(new ref BasicMapMarker("GREEN MOUNTAIN", Vector(3693.56, 402.312,6010.05), "BasicMap\\gui\\images\\marker.paa", {212, 138, 251}, 240, true));
-		ServerMarkers.Insert(new ref BasicMapMarker("KUMYRNA", Vector(8345.61, 292.302, 5985.93), "BasicMap\\gui\\images\\marker.paa", {212, 138, 251}, 240, true));
+		ServerMarkers.Insert(new BasicMapMarker("GREEN MOUNTAIN", Vector(3693.56, 402.312,6010.05), "BasicMap\\gui\\images\\marker.paa", {212, 138, 251}, 240, true));
+		ServerMarkers.Insert(new BasicMapMarker("KUMYRNA", Vector(8345.61, 292.302, 5985.93), "BasicMap\\gui\\images\\marker.paa", {212, 138, 251}, 240, true));
 		for (int i = 0; i < ServerMarkers.Count(); i++){
 			ServerMarkers.Get(i).SetCanEdit(false);
 			ServerMarkers.Get(i).SetGroup(SERVER_KEY);
@@ -218,12 +218,12 @@ class BasicMapController{
 	}
 	
 	void SaveClientMarkers(){
-		array<ref BasicMapMarker> ClientMarkers = new ref array<ref BasicMapMarker>;
+		array<ref BasicMapMarker> ClientMarkers = new array<ref BasicMapMarker>;
 		if (Markers.Get(CLIENT_KEY)){
 			ClientMarkers = array<ref BasicMapMarker>.Cast(Markers.Get(CLIENT_KEY));
 		}
 		if (MapItem && GetBasicMapConfig().SaveMarkersToMapItem){
-			GetGame().RPCSingleParam(MapItem, BASICMAPRPCs.SAVE_MARKERS, new ref Param1<array<ref BasicMapMarker>>(ClientMarkers), true, NULL);
+			GetGame().RPCSingleParam(MapItem, BASICMAPRPCs.SAVE_MARKERS, new Param1<array<ref BasicMapMarker>>(ClientMarkers), true, NULL);
 		} else {
 			string server;
        	 	GetCLIParam("connect", server);
@@ -233,7 +233,7 @@ class BasicMapController{
 	}
 	
 	void LoadServerCircleMarkers(){
-		ref array<ref BasicMapCircleMarker> CircleMarkers;
+		array<ref BasicMapCircleMarker> CircleMarkers;
 		JsonFileLoader< array<ref BasicMapCircleMarker> >.JsonLoadFile(BasicMapPath + CircleMarkersPath, CircleMarkers);
 		if (CircleMarkers){
 			for ( int i = 0; i < CircleMarkers.Count(); i++){
@@ -270,17 +270,17 @@ class BasicMapController{
 		return count;
 	}
 	
-	ref array<ref BasicMapMarker> GetMarkers(string id){
+	array<ref BasicMapMarker> GetMarkers(string id){
 		return Markers.Get(id);
 	}
 	
-	void AddMarker(string groupId, ref BasicMapMarker marker){
+	void AddMarker(string groupId, BasicMapMarker marker){
 		if (Markers.Get(groupId)){
 			marker.SetGroup(groupId);
 			OnMarkerSave(marker);
 			Markers.Get(groupId).Insert(marker);
 		} else {
-			ref array<ref BasicMapMarker> markers = new ref array<ref BasicMapMarker>;
+			array<ref BasicMapMarker> markers = new array<ref BasicMapMarker>;
 			marker.SetGroup(groupId);
 			markers.Insert(marker);
 			OnMarkerSave(marker);
@@ -309,7 +309,7 @@ class BasicMapController{
 		}	 
 	}
 	
-	void SetMarkers(string groupId, ref array<ref BasicMapMarker> markers){
+	void SetMarkers(string groupId, array<ref BasicMapMarker> markers){
 		if (Markers.Get(groupId)){
 			Markers.Set(groupId, markers);
 		} else {
@@ -323,14 +323,14 @@ class BasicMapController{
 		}
 	}
 	
-	void RemoveMarker(string key, ref BasicMapMarker marker){
+	void RemoveMarker(string key, BasicMapMarker marker){
 		if (Markers.Get(key)){ 
 			OnMarkerDelete(marker);
 			GetGame().GetCallQueue(CALL_CATEGORY_SYSTEM).Call(Markers.Get(key).RemoveItem, marker);
 		}
 	}
 	
-	bool RemoveMarker(ref BasicMapMarker marker){
+	bool RemoveMarker(BasicMapMarker marker){
 		for (int j = 0; j < Markers.Count(); j++){
 			for (int k = 0; k < Markers.GetElement(j).Count(); k++){
 				if (marker == Markers.GetElement(j).Get(k)){
@@ -359,7 +359,7 @@ class BasicMapController{
 		return Markers.Get(CLIENT_KEY);
 	}
 	
-	int AddClientMarker(ref BasicMapMarker marker){
+	int AddClientMarker(BasicMapMarker marker){
 		if ( Markers.Get(CLIENT_KEY)){
 			marker.SetCanEdit(true);
 			marker.SetGroup(CLIENT_KEY);
@@ -401,7 +401,7 @@ class BasicMapController{
 	}
 	
 	
-	void SetMarkersRemote(string group, array<ref BasicMapMarker> markers, ref PlayerIdentity toPlayer = NULL ){
+	void SetMarkersRemote(string group, array<ref BasicMapMarker> markers, PlayerIdentity toPlayer = NULL ){
 		//Print("[BasicMap] SetMarkersRemote " + group );
 		array<ref BasicMapMarker>  basicMarkers = new array<ref BasicMapMarker>;
 		array<ref BasicMapCircleMarker> circleMarkers = new array<ref BasicMapCircleMarker>;
@@ -416,7 +416,7 @@ class BasicMapController{
 		GetRPCManager().SendRPC("BasicMap", "RPCSyncGroupData", new Param3<string, array<ref BasicMapMarker>, array<ref BasicMapCircleMarker> >( group, basicMarkers, circleMarkers ), true, toPlayer);
 	}
 	
-	void UpdateGroupRemote(string group, ref PlayerIdentity toPlayer = NULL ){
+	void UpdateGroupRemote(string group, PlayerIdentity toPlayer = NULL ){
 		//Print("[BasicMap] UpdateGroupRemote " + group );
 		SetMarkersRemote("BasicMap", GetMarkers(group), toPlayer);
 	}
@@ -521,9 +521,9 @@ class BasicMapController{
 
 ref BasicMapController m_BasicMapController;
 
-ref BasicMapController BasicMap(){
+static BasicMapController BasicMap(){
 	if (!m_BasicMapController){
-		m_BasicMapController = new ref BasicMapController;
+		m_BasicMapController = new BasicMapController;
 		m_BasicMapController.Init();
 	}
 	return m_BasicMapController;

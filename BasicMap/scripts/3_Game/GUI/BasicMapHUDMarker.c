@@ -1,4 +1,4 @@
-class BasicMapHUDMarker {
+class BasicMapHUDMarker extends Managed {
 	
 	protected bool						m_deleted = false;
 	
@@ -17,7 +17,7 @@ class BasicMapHUDMarker {
 	
 	protected string					m_LastLoadedIcon = "";
 	
-	void Init(ref BasicMapMarker markerData){
+	void Init(BasicMapMarker markerData){
 		m_MarkerData 	= BasicMapMarker.Cast(markerData);
 		
 		layoutRoot	 	= Widget.Cast(GetGame().GetWorkspace().CreateWidgets(LayoutPath));
