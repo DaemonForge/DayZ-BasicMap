@@ -1,4 +1,4 @@
-class BasicMapController{
+class BasicMapController extends Managed{
 	
 	EntityAI MapItem = NULL;
 	
