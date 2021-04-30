@@ -13,8 +13,8 @@ class BasicMapMarker extends Managed{
 	float MaxRenderDistance = -1;
 	float MinRenderDistance = -1;
 	
+	protected string MapToShowOn = "";
 	protected bool CanEdit = true;
-	
 	protected string Group = BasicMap().CLIENT_KEY;
 	
 	
@@ -29,6 +29,8 @@ class BasicMapMarker extends Managed{
 		}
 		Alpha = alpha;
 		Is3DMarker = onHUD;
+		GetGame().GetWorldName(MapToShowOn);
+		MapToShowOn.ToLower();
 	}	
 	
 	
@@ -36,8 +38,34 @@ class BasicMapMarker extends Managed{
 		Is3DMarker = onHUD;
 	}
 	
+	void UpdateMap(string mapname = ""){
+		if (mapname != ""){
+			mapname.ToLower();
+			MapToShowOn = mapname;
+			return;
+		}
+		GetGame().GetWorldName(MapToShowOn);
+		MapToShowOn.ToLower();
+	}
+	
+	string GetMapToShowOn(){
+		return MapToShowOn;
+	}
+	
+	bool IsCorrectMap(){
+		if (!GetMapToShowOn() || GetMapToShowOn() == "" || GetMapToShowOn() == "any" || GetMapToShowOn() == "all"){
+			return true;
+		}
+		string CurrentMap = "";
+		GetGame().GetWorldName(CurrentMap);
+		CurrentMap.ToLower();
+		return (CurrentMap == GetMapToShowOn());
+	}
 	
 	bool OnHUD(){
+		if (!IsCorrectMap()) {
+			return false;
+		}
 		if (!MinRenderDistance){
 			MinRenderDistance = -1;
 		}
@@ -130,6 +158,9 @@ class BasicMapMarker extends Managed{
 	}
 	
 	bool OnPanel(){
+		if (!IsCorrectMap()) {
+			return false;
+		}
 		return !HideOnPanel;
 	}
 	
@@ -138,6 +169,9 @@ class BasicMapMarker extends Managed{
 	}
 	
 	bool OnMap(){
+		if (!IsCorrectMap()) {
+			return false;
+		}
 		if (!MinRenderDistance){
 			MinRenderDistance = -1;
 		}

@@ -1,5 +1,5 @@
 class BasicMapController extends Managed{
-	
+	bool IsInit = false;
 	EntityAI MapItem = NULL;
 	
 	static string ServerMarkersPath = "\\ServerMarkers.json";
@@ -22,12 +22,15 @@ class BasicMapController extends Managed{
 	ref map<string, ref BasicMapMarkerFactory> Factories = new map<string, ref BasicMapMarkerFactory>;
 	
 	void Init(){
-		GetRPCManager().AddRPC( "BasicMap", "RPCSyncServerData", this, SingeplayerExecutionType.Both );
-		GetRPCManager().AddRPC( "BasicMap", "RPCSyncGroupData", this, SingeplayerExecutionType.Both );
-		
-		
-		RegisterGroup(SERVER_KEY, new BasicMapGroupMetaData(SERVER_KEY, "SERVER MARKERS"), NULL);
-		RegisterGroup(CLIENT_KEY, new BasicMapGroupMetaData(CLIENT_KEY, "PERSONAL MARKERS", true), new BasicMapMarkerFactory());
+		if (!IsInit){
+			IsInit = true;
+			GetRPCManager().AddRPC( "BasicMap", "RPCSyncServerData", this, SingeplayerExecutionType.Both );
+			GetRPCManager().AddRPC( "BasicMap", "RPCSyncGroupData", this, SingeplayerExecutionType.Both );
+			
+			
+			RegisterGroup(SERVER_KEY, new BasicMapGroupMetaData(SERVER_KEY, "SERVER MARKERS"), NULL);
+			RegisterGroup(CLIENT_KEY, new BasicMapGroupMetaData(CLIENT_KEY, "PERSONAL MARKERS", true), new BasicMapMarkerFactory());
+		}
 		if (GetGame().IsMultiplayer() && GetGame().IsClient()){
 			Print("[BasicMap] Init Client");
 			GetRPCManager().SendRPC("BasicMap", "RPCSyncServerData", new Param3< array<ref BasicMapMarker>, array<ref BasicMapCircleMarker>, BasicMapConfig >( NULL, NULL, NULL ), true, NULL);
@@ -524,7 +527,6 @@ ref BasicMapController m_BasicMapController;
 static BasicMapController BasicMap(){
 	if (!m_BasicMapController){
 		m_BasicMapController = new BasicMapController;
-		m_BasicMapController.Init();
 	}
 	return m_BasicMapController;
 }

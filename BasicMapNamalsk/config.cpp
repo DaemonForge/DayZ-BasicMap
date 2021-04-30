@@ -4,7 +4,6 @@ class CfgPatches
 	{
 		requiredVersion = 0.1;
 		requiredAddons[] = {
-			"ns_dayz_gear_navigation",
 			"namalsk_terrain",
 			"BasicMap"
 		};

@@ -34,6 +34,36 @@ modded class ChernarusMap  extends ItemMap
 		
 	}
 	
+	#ifdef UNIVERSALAPI
+	override void OnUApiSave(UApiEntityStore data){
+		super.OnUApiSave(data);
+		if (m_BasicMapMarkerArray){
+			for (int i = 0; i < m_BasicMapMarkerArray.Count(); i++){
+				string markerdata = UApiJSONHandler<ref BasicMapMarker>.ToString(m_BasicMapMarkerArray.Get(i));
+				data.Write("BasicMap", "M"+i, markerdata);
+				if (i > 128){break;}
+			}
+		}
+	}
+		
+	override void OnUApiLoad(UApiEntityStore data){
+		super.OnUApiLoad(data);
+		string markerdata;
+		int i = 0;
+		int MaxMarkers = 128;
+		while (data.Read("BasicMap", "M"+i, markerdata) && MaxMarkers > 0){
+			i++;
+			MaxMarkers--;		
+			BasicMapMarker marker;
+			if (UApiJSONHandler<ref BasicMapMarker>.FromString(markerdata, marker)){
+				m_BasicMapMarkerArray.Insert(marker);
+			} 
+		}
+		SyncMapMarkers();
+	}
+	#endif
+	
+	
 	override void SyncMapMarkers()
 	{
 		super.SyncMapMarkers();

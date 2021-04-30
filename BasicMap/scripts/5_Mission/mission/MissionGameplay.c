@@ -1,25 +1,45 @@
 modded class MissionGameplay extends MissionBase
 {
-	ref array<ref BasicMapHUDMarker> m_hudMarkers;
+	ref array<autoptr BasicMapHUDMarker> m_hudMarkers;
 	
 	override void OnMissionStart(){
 		super.OnMissionStart();
-		BasicMap();
+		Print("BasicMap().Init();");
+		BasicMap().Init();
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.UpdateHuDIcons, 2000, false);
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.UpdateHuDIcons, 9000, true);
 	}
 	
+	override void OnMissionFinish(){
+		super.OnMissionStart();
+		GetGame().GetCallQueue(CALL_CATEGORY_GUI).Remove(this.UpdateHuDIcons);
+		int preventRunAway = 500; //Sure if you have more than 500 Makers this might become an issue but lets hope that this is so unlikely its not an issue
+		/*while (m_hudMarkers.Count() > 0 && preventRunAway > 0){
+			preventRunAway--;
+			m_hudMarkers.Get(0).Show(false);
+			m_hudMarkers.Get(0).OnDelete();
+			delete m_hudMarkers.Get(0);
+			m_hudMarkers.Remove(0);
+		}*/
+		if (m_hudMarkers){
+			m_hudMarkers.Clear(); //Just to make sure :)
+			delete m_hudMarkers;
+		}
+	}
+	
+	
 	void UpdateHuDIcons(){
 		if (!m_hudMarkers){
-			m_hudMarkers = new array<ref BasicMapHUDMarker>;
+			m_hudMarkers = new array<autoptr BasicMapHUDMarker>;
 		}
-		int preventRunAway = 500; //Sure if you have more than 500 Makers this might become an issue but lets hope that this is so unlikely its not an issue
+		/*int preventRunAway = 500; //Sure if you have more than 500 Makers this might become an issue but lets hope that this is so unlikely its not an issue
 		while (m_hudMarkers.Count() > 0 && preventRunAway > 0){
 			preventRunAway--;
 			m_hudMarkers.Get(0).Show(false);
 			m_hudMarkers.Get(0).OnDelete();
+			delete m_hudMarkers.Get(0);
 			m_hudMarkers.Remove(0);
-		}
+		}*/
 		m_hudMarkers.Clear(); //Just to make sure :)
 		for (int j = 0; j < BasicMap().Count(); j++){
 			m_hudMarkers.Insert(new BasicMapHUDMarker());

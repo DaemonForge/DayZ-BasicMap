@@ -13,10 +13,10 @@ class BasicMapMenu extends UIScriptedMenu
 	
 	static int									m_MarkerRefreshRate = 30;
 	
-	static int 									MarkerListItemFrame_Size = 42;
+	static int 								MarkerListItemFrame_Size = 42;
 	protected ref BasicMapMarker				m_MeMarker;
 	
-    protected ref BasicMapMarkerEditor 			m_MarkerEditor;
+    protected ref BasicMapMarkerEditor 		m_MarkerEditor;
 	
     protected ref BasicMapRightClick 			m_RightClickMenu;
 	
@@ -584,9 +584,6 @@ class BasicMapMenu extends UIScriptedMenu
 		} 
 		return GetBasicMapConfig().AllowPlayerMarkers;
 	}
-	
-	
-	
 	
 	
 	void CloseRightClick(){

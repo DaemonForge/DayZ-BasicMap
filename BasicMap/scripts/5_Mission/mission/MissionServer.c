@@ -1,7 +1,7 @@
 modded class MissionServer extends MissionBase
 {
 	void MissionServer(){
-		BasicMap();
+		BasicMap().Init();
 		GetBasicMapConfig();	
 	}
 }

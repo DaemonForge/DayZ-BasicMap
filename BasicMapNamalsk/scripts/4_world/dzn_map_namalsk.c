@@ -1,5 +1,5 @@
 #ifdef NAMALSK_SURVIVAL
-modded class dzn_map_namalsk  extends ItemMap
+modded class dzn_map_namalsk extends ItemMap
 {
 	protected ref array<ref BasicMapMarker> 	m_BasicMapMarkerArray = new array<ref BasicMapMarker>;
 	
