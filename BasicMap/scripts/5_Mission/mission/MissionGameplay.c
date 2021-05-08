@@ -11,7 +11,6 @@ modded class MissionGameplay extends MissionBase
 	}
 	
 	override void OnMissionFinish(){
-		super.OnMissionStart();
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).Remove(this.UpdateHuDIcons);
 		int preventRunAway = 500; //Sure if you have more than 500 Makers this might become an issue but lets hope that this is so unlikely its not an issue
 		/*while (m_hudMarkers.Count() > 0 && preventRunAway > 0){
@@ -25,6 +24,7 @@ modded class MissionGameplay extends MissionBase
 			m_hudMarkers.Clear(); //Just to make sure :)
 			delete m_hudMarkers;
 		}
+		super.OnMissionFinish();
 	}
 	
 	
