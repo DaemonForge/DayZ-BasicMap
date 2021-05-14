@@ -40,8 +40,8 @@ modded class ChernarusMap  extends ItemMap
 		if (m_BasicMapMarkerArray){
 			for (int i = 0; i < m_BasicMapMarkerArray.Count(); i++){
 				string markerdata = UApiJSONHandler<ref BasicMapMarker>.ToString(m_BasicMapMarkerArray.Get(i));
-				data.Write("BasicMap", "M"+i, markerdata);
-				if (i > 128){break;}
+				data.Write("m_BasicMapMarker_"+i, markerdata);
+				if (i > 128){break;} //Just to stop it from potenitally causing server lag on saving and on load
 			}
 		}
 	}
@@ -50,10 +50,8 @@ modded class ChernarusMap  extends ItemMap
 		super.OnUApiLoad(data);
 		string markerdata;
 		int i = 0;
-		int MaxMarkers = 128;
-		while (data.Read("BasicMap", "M"+i, markerdata) && MaxMarkers > 0){
+		while (data.Read("m_BasicMapMarker_"+i, markerdata)){
 			i++;
-			MaxMarkers--;		
 			BasicMapMarker marker;
 			if (UApiJSONHandler<ref BasicMapMarker>.FromString(markerdata, marker)){
 				m_BasicMapMarkerArray.Insert(marker);
