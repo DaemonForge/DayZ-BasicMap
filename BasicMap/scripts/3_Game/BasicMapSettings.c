@@ -1,4 +1,4 @@
-class BasicMapConfig
+class BasicMapConfig extends Managed
 {
 	protected static string ConfigPATH = "$profile:BasicMap\\ServerSettings.json";
 	string ConfigVersion = "1";
@@ -94,7 +94,7 @@ class BasicMapConfig
 ref BasicMapConfig m_BasicMapConfig;
 
 //Helper function to return Config
-static ref BasicMapConfig GetBasicMapConfig()
+static BasicMapConfig GetBasicMapConfig()
 {
 	if (!m_BasicMapConfig)
 	{

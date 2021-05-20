@@ -14,11 +14,11 @@ class BasicMapMenu extends UIScriptedMenu
 	static int									m_MarkerRefreshRate = 30;
 	
 	static int 								MarkerListItemFrame_Size = 42;
-	protected ref BasicMapMarker				m_MeMarker;
+	protected autoptr BasicMapMarker			m_MeMarker;
 	
-    protected ref BasicMapMarkerEditor 		m_MarkerEditor;
+    protected autoptr BasicMapMarkerEditor 	m_MarkerEditor;
 	
-    protected ref BasicMapRightClick 			m_RightClickMenu;
+    protected autoptr BasicMapRightClick 		m_RightClickMenu;
 	
 	protected string							m_CurGroup;
 	protected int								m_CurGroupIndex;
@@ -26,8 +26,8 @@ class BasicMapMenu extends UIScriptedMenu
 	protected TextWidget						m_SelectedGroup;
 	protected ButtonWidget						m_NextGroup;
 	protected ButtonWidget						m_PreviousGroup;
-	protected ref array<ref Widget>				m_MarkerListWidget;
-	protected ref array<ref BasicMapMarkerListItem>	m_MarkerList;
+	protected autoptr array<Widget>			m_MarkerListWidget;
+	protected autoptr array<autoptr BasicMapMarkerListItem>	m_MarkerList;
 	protected Widget 							m_MarkersListPanel;
 	protected CheckBoxWidget 					m_ShowGroup3D;
 	protected CheckBoxWidget 					m_ShowGroupMap;
@@ -47,7 +47,7 @@ class BasicMapMenu extends UIScriptedMenu
 	
 	
 	protected Widget 							m_MapPanel;
-	protected MapWidget							m_Map;
+	protected MapWidget						m_Map;
 	
 	protected Widget 							m_Expand;
 	protected Widget							m_Minimize;
@@ -69,7 +69,7 @@ class BasicMapMenu extends UIScriptedMenu
 	override Widget Init()
     {
 		
-		layoutRoot 					= GetGame().GetWorkspace().CreateWidgets("BasicMap/gui/layouts/BasicMap.layout");
+		layoutRoot 					= Widget.Cast(  GetGame().GetWorkspace().CreateWidgets("BasicMap/gui/layouts/BasicMap.layout"));
 		
         m_MapPanel 					= Widget.Cast( layoutRoot.FindAnyWidget( "MapPanel" ) );
 		
@@ -85,7 +85,7 @@ class BasicMapMenu extends UIScriptedMenu
 		m_NextGroup					= ButtonWidget.Cast(layoutRoot.FindAnyWidget("NextGroup"));
 		m_PreviousGroup				= ButtonWidget.Cast(layoutRoot.FindAnyWidget("PreviousGroup"));
 		m_MarkersListPanel			= Widget.Cast( layoutRoot.FindAnyWidget( "MarkersList" ) );
-		m_MarkerListWidget 			= new array<ref Widget>;
+		m_MarkerListWidget 			= new array<Widget>;
 		string MarkerFrame;
 		for (int i = 0; i <= 17; i++){
 			MarkerFrame = "MarkerFrame" + i;

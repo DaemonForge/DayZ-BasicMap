@@ -40,7 +40,7 @@ class BasicMapRightClick  extends ScriptedWidgetEventHandler {
 	
 	bool IsOpen(){
 		
-		return m_IsOpen && m_RightClickRoot.IsVisible();
+		return m_IsOpen && m_RightClickRoot && m_RightClickRoot.IsVisible();
 	}
 	
 	void Open(BasicMapMarker marker, int x, int y ){

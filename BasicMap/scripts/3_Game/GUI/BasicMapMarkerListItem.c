@@ -14,7 +14,7 @@ class BasicMapMarkerListItem  extends ScriptedWidgetEventHandler {
 	void BasicMapMarkerListItem(Widget parent, BasicMapMenu mapMenu, BasicMapMarker marker){
 		m_Marker 			= marker;
 		m_MapMenu			= mapMenu;
-		m_Root				= GetGame().GetWorkspace().CreateWidgets( "BasicMap/gui/layouts/MarkerListItem.layout", parent);
+		m_Root				= Widget.Cast(GetGame().GetWorkspace().CreateWidgets( "BasicMap/gui/layouts/MarkerListItem.layout", parent));
 		
 		m_Panel 			= Widget.Cast(m_Root.FindAnyWidget( "MarkerPanel" ));
 		m_icon 				= ImageWidget.Cast(m_Root.FindAnyWidget( "MarkerIcon" ));

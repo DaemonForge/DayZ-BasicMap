@@ -1,3 +1,5 @@
+#define BASICMAP
+
 class CfgPatches
 {
 	class BasicMapDefine

@@ -69,12 +69,12 @@ class BasicMapController extends Managed{
 	}
 	
 	
-	ref map< string, ref BasicMapGroupMetaData> GetGroups(){
+	map< string, ref BasicMapGroupMetaData> GetGroups(){
 		return Groups;
 	}
 	
 	
-	ref BasicMapGroupMetaData GetGroup(string id){
+	BasicMapGroupMetaData GetGroup(string id){
 		return Groups.Get(id);
 	}
 	

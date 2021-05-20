@@ -1,4 +1,4 @@
-class BasicMapGroupMetaData {
+class BasicMapGroupMetaData  extends Managed {
 	
 	string ID;
 	
