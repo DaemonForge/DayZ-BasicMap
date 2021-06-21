@@ -65,7 +65,7 @@ class BasicMapController extends Managed{
 	}
 	
 	void ClearMapItem(){
-			MapItem = NULL;
+		MapItem = NULL;
 	}
 	
 	
@@ -274,6 +274,9 @@ class BasicMapController extends Managed{
 	}
 	
 	array<ref BasicMapMarker> GetMarkers(string id){
+		if (id == ""){
+			return NULL;
+		}
 		return Markers.Get(id);
 	}
 	

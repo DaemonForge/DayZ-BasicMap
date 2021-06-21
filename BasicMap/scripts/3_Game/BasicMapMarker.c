@@ -146,6 +146,9 @@ class BasicMapMarker extends Managed{
 	}
 	
 	string GetGroup(){
+		if (!Group){
+			return "";
+		}
 		return Group;
 	}
 	
