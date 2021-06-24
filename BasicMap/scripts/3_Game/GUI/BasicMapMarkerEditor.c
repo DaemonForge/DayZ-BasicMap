@@ -143,8 +143,8 @@ class BasicMapMarkerEditor  extends ScriptedWidgetEventHandler {
 			RefreshEditorIcon();
 		}
 		if (w == m_Editor_Name){
-			m_SelectedMarker.Name = m_Editor_Name.GetText();
-			m_Editor_Name.SetText(m_SelectedMarker.GetName());
+			m_SelectedMarker.SetName(m_Editor_Name.GetText());
+			m_Editor_Name.SetText(m_Editor_Name.GetText());
 		}
 		if (w == m_Editor_3DMakerBox){
 			m_SelectedMarker.ShowOnHUD(m_Editor_3DMakerBox.IsChecked());

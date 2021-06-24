@@ -85,6 +85,9 @@ class BasicMapMarker extends Managed{
 		return Is3DMarker;
 	}
 	
+	void SetName(string name){
+		Name = name;
+	}
 	
 	string GetName(){
 		return Name;
