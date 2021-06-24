@@ -183,7 +183,7 @@ class BasicMapMenu extends UIScriptedMenu
 		ClearMarkerList();
 		if (BasicMap().GetMarkers(m_CurGroup) && BasicMap().GetMarkers(m_CurGroup).Count() > 0){
 			if (!m_MarkerList){
-				m_MarkerList = new array<ref BasicMapMarkerListItem>;
+				m_MarkerList = new array<autoptr BasicMapMarkerListItem>;
 			}
 			//Print("PopulateMarkerList Start");
 			int max = BasicMap().GetMarkers(m_CurGroup).Count() - 10;

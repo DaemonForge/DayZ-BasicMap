@@ -7,7 +7,7 @@ class BasicMapCircleMarker extends BasicMapMarker{
 	bool HideIntersects = true;
 		
 	[NonSerialized()]
-	ref array<vector> Edge;
+	autoptr array<vector> Edge;
 	
 	[NonSerialized()]
 	bool Updated = true;
@@ -75,7 +75,7 @@ class BasicMapCircleMarker extends BasicMapMarker{
 		return HideIntersects;
 	}
 	
-	array<vector> GetEdge(array<ref BasicMapMarker> Conflicting = NULL) {
+	array<vector> GetEdge(array<autoptr BasicMapMarker> Conflicting = NULL) {
 		if ( !GetUpdated() && Edge && Edge.Count() > 0){
 			return Edge;
 		}
@@ -100,7 +100,7 @@ class BasicMapCircleMarker extends BasicMapMarker{
 	}
 	
 	
-	bool Intersects(vector posToCheck, array<ref BasicMapMarker> Conflicting) {
+	bool Intersects(vector posToCheck, array<autoptr BasicMapMarker> Conflicting) {
 		if (Conflicting){
 			for (int i = 0; i < Conflicting.Count(); i++) {
 				BasicMapCircleMarker MarkToCheck = BasicMapCircleMarker.Cast(Conflicting.Get(i));

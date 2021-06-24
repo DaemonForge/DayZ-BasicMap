@@ -3,7 +3,7 @@ class BasicMapMarker extends Managed{
 	vector Pos = Vector(0,0,0);
 	string Icon = "BasicMap\\gui\\images\\marker.paa";
 	bool Is3DMarker = false;
-	ref array<int> Colour = {119, 136, 198};
+	autoptr array<int> Colour = {119, 136, 198};
 	int Alpha = 235;
 	
 	bool HideOnPanel = false;

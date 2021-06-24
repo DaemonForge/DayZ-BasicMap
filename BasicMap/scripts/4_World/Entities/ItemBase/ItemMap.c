@@ -1,6 +1,6 @@
 modded class ChernarusMap  extends ItemMap
 {
-	protected ref array<ref BasicMapMarker> 	m_BasicMapMarkerArray = new array<ref BasicMapMarker>;
+	protected ref array<autoptr BasicMapMarker> 	m_BasicMapMarkerArray = new array<autoptr BasicMapMarker>;
 	
 	override void SetActions()
 	{
@@ -28,7 +28,7 @@ modded class ChernarusMap  extends ItemMap
 		ctx.Write(m_BasicMapMarkerArray);
 	}
 	
-	array<ref BasicMapMarker> GetBasicMapMarkers()
+	array<autoptr BasicMapMarker> GetBasicMapMarkers()
 	{
 		return m_BasicMapMarkerArray;
 		
@@ -39,7 +39,7 @@ modded class ChernarusMap  extends ItemMap
 		super.OnUApiSave(data);
 		if (m_BasicMapMarkerArray){
 			for (int i = 0; i < m_BasicMapMarkerArray.Count(); i++){
-				string markerdata = UApiJSONHandler<ref BasicMapMarker>.ToString(m_BasicMapMarkerArray.Get(i));
+				string markerdata = UApiJSONHandler<autoptr BasicMapMarker>.ToString(m_BasicMapMarkerArray.Get(i));
 				data.Write("m_BasicMapMarker_"+i, markerdata);
 				if (i > 128){break;} //Just to stop it from potenitally causing server lag on saving and on load
 			}
@@ -53,7 +53,7 @@ modded class ChernarusMap  extends ItemMap
 		while (data.Read("m_BasicMapMarker_"+i, markerdata)){
 			i++;
 			BasicMapMarker marker;
-			if (UApiJSONHandler<ref BasicMapMarker>.FromString(markerdata, marker)){
+			if (UApiJSONHandler<autoptr BasicMapMarker>.FromString(markerdata, marker)){
 				m_BasicMapMarkerArray.Insert(marker);
 			} 
 		}
@@ -68,7 +68,7 @@ modded class ChernarusMap  extends ItemMap
 		if (GetGame().IsServer() && GetHierarchyRootPlayer()) {
 			PlayerIdentity  pid = PlayerIdentity.Cast(GetHierarchyRootPlayer().GetIdentity());
 			if (pid) {
-				RPCSingleParam(BASICMAPRPCs.SEND_MARKERS, new Param1<array<ref BasicMapMarker>>( m_BasicMapMarkerArray ), true, pid);
+				RPCSingleParam(BASICMAPRPCs.SEND_MARKERS, new Param1<array<autoptr BasicMapMarker>>( m_BasicMapMarkerArray ), true, pid);
 			}
 		} else if (GetGame().IsClient() && GetHierarchyRootPlayer()){
 			RPCSingleParam(BASICMAPRPCs.REQUEST_MARKERS, new Param1<bool>( true ), true, NULL);
@@ -79,15 +79,15 @@ modded class ChernarusMap  extends ItemMap
 	{
 		super.OnRPC(sender, rpc_type, ctx);
 		int i;
-		Param1<array<ref BasicMapMarker>> data;
-		array<ref BasicMapMarker> Markers;
+		Param1<array<autoptr BasicMapMarker>> data;
+		array<autoptr BasicMapMarker> Markers;
 		PlayerIdentity  pid = PlayerIdentity.Cast(GetHierarchyRootPlayer().GetIdentity());
 		
 		if (rpc_type == BASICMAPRPCs.SEND_MARKERS && GetGame().IsClient()) {
 			if (ctx.Read(data))	{
-				Markers = array<ref BasicMapMarker>.Cast(data.param1);
+				Markers = array<autoptr BasicMapMarker>.Cast(data.param1);
 				if (Markers){
-					m_BasicMapMarkerArray = new array<ref BasicMapMarker>; //Weird issues doing if I just set the array
+					m_BasicMapMarkerArray = new array<autoptr BasicMapMarker>; //Weird issues doing if I just set the array
 					for (i = 0; i < data.param1.Count(); i++){
 						m_BasicMapMarkerArray.Insert(data.param1.Get(i));
 					}
@@ -104,9 +104,9 @@ modded class ChernarusMap  extends ItemMap
 		}
 		if (rpc_type == BASICMAPRPCs.SAVE_MARKERS && GetGame().IsServer()){
 			if (ctx.Read(data)){
-				Markers = array<ref BasicMapMarker>.Cast(data.param1);
+				Markers = array<autoptr BasicMapMarker>.Cast(data.param1);
 				if (Markers){
-					m_BasicMapMarkerArray = new array<ref BasicMapMarker>; //Weird issues doing if I just set the array
+					m_BasicMapMarkerArray = new array<autoptr BasicMapMarker>; //Weird issues doing if I just set the array
 					for (i = 0; i < data.param1.Count(); i++){
 						m_BasicMapMarkerArray.Insert(data.param1.Get(i));
 					}
