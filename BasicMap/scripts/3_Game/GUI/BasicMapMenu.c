@@ -246,8 +246,13 @@ class BasicMapMenu extends UIScriptedMenu
 						vector pos = marker.GetPosition();
 						float x = pos[0] - offset; // Markers are a little off from the true postion
 						BasicMapCircleMarker cMarker;
-						if (marker.IsInherited(BasicMapCircleMarker) && Class.CastTo(cMarker, marker) && cMarker.GetRadius() > 0 && cMarker.GetGroup() && cMarker){
-							array<vector> edge = cMarker.GetEdge( BasicMap().GetMarkers( cMarker.GetGroup() ) );
+						if (marker.IsInherited(BasicMapCircleMarker) && Class.CastTo(cMarker, marker) && cMarker.GetRadius() > 0){
+							array<vector> edge;
+							if ( cMarker.GetGroup() && BasicMap().GetMarkers( cMarker.GetGroup() ) ){
+							 	edge = cMarker.GetEdge( BasicMap().GetMarkers( cMarker.GetGroup() ) );
+							} else {
+								edge =  cMarker.GetEdge();
+							}
 							if (edge){
 								for ( int j = 0; j < edge.Count(); j++){
 									markerCount++;
