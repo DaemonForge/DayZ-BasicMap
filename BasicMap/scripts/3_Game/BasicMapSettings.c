@@ -2,7 +2,7 @@ class BasicMapConfig extends Managed
 {
 	protected static string ConfigPATH = "$profile:BasicMap\\ServerSettings.json";
 	string ConfigVersion = "1";
-	ref TStringArray Icons = { 
+	autoptr TStringArray Icons = { 
 		"BasicMap\\gui\\images\\marker.paa", 
 		"BasicMap\\gui\\images\\location.paa", 
 		"BasicMap\\gui\\images\\info.paa", 

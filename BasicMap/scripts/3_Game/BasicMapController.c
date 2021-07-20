@@ -69,7 +69,7 @@ class BasicMapController extends Managed{
 	}
 	
 	
-	map< string, ref BasicMapGroupMetaData> GetGroups(){
+	map< string, autoptr BasicMapGroupMetaData> GetGroups(){
 		return Groups;
 	}
 	

@@ -1,6 +1,6 @@
 modded class ChernarusMap  extends ItemMap
 {
-	protected ref array<autoptr BasicMapMarker> 	m_BasicMapMarkerArray = new array<autoptr BasicMapMarker>;
+	protected autoptr array<autoptr BasicMapMarker> m_BasicMapMarkerArray = new array<autoptr BasicMapMarker>;
 	
 	override void SetActions()
 	{
