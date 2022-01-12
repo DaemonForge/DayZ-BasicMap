@@ -424,7 +424,7 @@ class BasicMapController extends Managed{
 	
 	void UpdateGroupRemote(string group, PlayerIdentity toPlayer = NULL ){
 		//Print("[BasicMap] UpdateGroupRemote " + group );
-		SetMarkersRemote("BasicMap", GetMarkers(group), toPlayer);
+		SetMarkersRemote(group, GetMarkers(group), toPlayer);
 	}
 	
 	void RequestGroupUpdate(string group){
@@ -509,10 +509,10 @@ class BasicMapController extends Managed{
 				array<EntityAI> itemsArray = new array<EntityAI>;
 				player.GetInventory().EnumerateInventory(InventoryTraversalType.PREORDER, itemsArray);    	
                 for (int i = 0; i < itemsArray.Count(); i++){
-                    if (itemsArray.Get(i)){ 
+                    if (itemsArray.Get(i) && (!itemsArray.Get(i).GetCompEM() || (itemsArray.Get(i).GetCompEM().IsSwitchedOn() && itemsArray.Get(i).GetCompEM().IsWorking())) ){ 
 						string itemType = itemsArray.Get(i).GetType();
 						itemType.ToLower();
-						if (itemType.Contains("compass")){
+						if (itemType.Contains(GetBasicMapConfig().ItemRequiredToSeeSelf)){
                             return true;
 						}
                     }
@@ -525,7 +525,7 @@ class BasicMapController extends Managed{
 }
 
 
-ref BasicMapController m_BasicMapController;
+static ref BasicMapController m_BasicMapController;
 
 static BasicMapController BasicMap(){
 	if (!m_BasicMapController){

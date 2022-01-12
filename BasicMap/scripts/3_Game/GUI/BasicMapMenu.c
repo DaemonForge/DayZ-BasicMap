@@ -140,7 +140,7 @@ class BasicMapMenu extends UIScriptedMenu
 			}
 		}
 		m_MeMarker = BasicMapPlayerMarker.Cast(playerMarker);
-		if (BasicMap().ClientMarkers().Count() > 0){
+		if (BasicMap().ClientMarkers() && BasicMap().ClientMarkers().Count() > 0){
 			m_CurGroup = BasicMap().CLIENT_KEY;
 		} else {
 			m_CurGroup = BasicMap().SERVER_KEY;

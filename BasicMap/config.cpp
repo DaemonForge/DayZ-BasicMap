@@ -58,6 +58,46 @@ class CfgMods
 	
 };
 
+class CfgVehicles
+{
+	class Inventory_Base;
+	class BM_Navigator: Inventory_Base
+	{
+		scope = 2;
+		displayName = "Navigator";
+		descriptionShort = "A Navigator GPS Unit to help you find your way";
+		model = "BasicMap\data\Navigator\Navigator.p3d";
+		itemSize[] = {1,3};
+		weight = 950;
+		absorbency = 0.5;
+		rotationFlags = 1;
+		class DamageSystem
+		{
+			class GlobalHealth
+			{
+				class Health
+				{
+					hitpoints = 125;
+					healthLevels[] = {{1.0,{}},{0.7,{}},{0.5,{}},{0.3,{}},{0.0,{}}};
+				};
+			};
+		};
+		attachments[] = {"BatteryD"};
+		inventorySlot[] = {"WalkieTalkie"};
+		repairableWithKits[] = {7};
+		repairCosts[] = {25.0};
+		class EnergyManager
+		{
+			hasIcon = 1;
+			autoSwitchOffWhenInCargo = 0;
+			energyUsagePerSecond = 0.005;
+			plugType = 1;
+			attachmentAction = 1;
+			updateInterval = 40;
+		};
+	};
+};
+
 class CfgWorlds
 {
 	class Names;

@@ -1,7 +1,7 @@
 class BasicMapConfig extends Managed
 {
 	protected static string ConfigPATH = "$profile:BasicMap\\ServerSettings.json";
-	string ConfigVersion = "1";
+	string ConfigVersion = "2";
 	autoptr TStringArray Icons = { 
 		"BasicMap\\gui\\images\\marker.paa", 
 		"BasicMap\\gui\\images\\location.paa", 
@@ -64,6 +64,7 @@ class BasicMapConfig extends Managed
 	bool SaveMarkersToMapItem = false; // Requires `OnlyOnOpenAction` or `RequireMapItemInInventory`
 	bool RequireCompassToSeeSelf = false;
 	bool RequireCompassToSee3d = false;
+	string ItemRequiredToSeeSelf = "bm_navigator";
 	
 	void Load(){
 		if (GetGame().IsServer()){
@@ -78,6 +79,11 @@ class BasicMapConfig extends Managed
 					SaveMarkersToMapItem = false;
 					RequireCompassToSeeSelf = false;
 					RequireCompassToSee3d = false;
+					Save();
+				}
+				if (ConfigVersion != "2"){
+					ConfigVersion = "2";
+					ItemRequiredToSeeSelf = "compass";
 					Save();
 				}
 			}else{ //File does not exist create file	
