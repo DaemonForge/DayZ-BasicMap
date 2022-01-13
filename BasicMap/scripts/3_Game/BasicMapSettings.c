@@ -70,7 +70,7 @@ class BasicMapConfig extends Managed
 		if (GetGame().IsServer()){
 			if (FileExist(ConfigPATH)){ //If config exist load File
 			    JsonFileLoader<BasicMapConfig>.JsonLoadFile(ConfigPATH, this);
-				if (ConfigVersion != "1"){
+				if (ConfigVersion != "1" && ConfigVersion != "2"){
 					ConfigVersion = "1";
 					ShowSelfOnMap = true;
 					RequireMapItemInInventory = false; 

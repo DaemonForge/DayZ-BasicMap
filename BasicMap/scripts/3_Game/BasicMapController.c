@@ -509,10 +509,11 @@ class BasicMapController extends Managed{
 				array<EntityAI> itemsArray = new array<EntityAI>;
 				player.GetInventory().EnumerateInventory(InventoryTraversalType.PREORDER, itemsArray);    	
                 for (int i = 0; i < itemsArray.Count(); i++){
-                    if (itemsArray.Get(i) && (!itemsArray.Get(i).GetCompEM() || (itemsArray.Get(i).GetCompEM().IsSwitchedOn() && itemsArray.Get(i).GetCompEM().IsWorking())) ){ 
-						string itemType = itemsArray.Get(i).GetType();
+					EntityAI item;
+                    if (Class.CastTo(item, itemsArray.Get(i)) ){ 
+						string itemType = item.GetType();
 						itemType.ToLower();
-						if (itemType.Contains(GetBasicMapConfig().ItemRequiredToSeeSelf)){
+						if (itemType.Contains(GetBasicMapConfig().ItemRequiredToSeeSelf) && (!item.GetCompEM() || (item.GetCompEM().IsSwitchedOn() && item.GetCompEM().IsWorking()))){
                             return true;
 						}
                     }

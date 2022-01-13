@@ -130,7 +130,7 @@ modded class MissionGameplay extends MissionBase
 		}
         if (GetBasicMapConfig() && GetBasicMapConfig().RequireMapItemInInventory) {
             DayZPlayer player = DayZPlayer.Cast(GetGame().GetPlayer());
-			
+
             if (player){
 				array<EntityAI> itemsArray = new array<EntityAI>;
 				player.GetInventory().EnumerateInventory(InventoryTraversalType.PREORDER, itemsArray);
