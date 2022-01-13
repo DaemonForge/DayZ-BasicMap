@@ -90,7 +90,7 @@ class CfgVehicles
 		{
 			hasIcon = 1;
 			autoSwitchOffWhenInCargo = 0;
-			energyUsagePerSecond = 0.005;
+			energyUsagePerSecond = 0.008;
 			plugType = 1;
 			attachmentAction = 1;
 			updateInterval = 40;
