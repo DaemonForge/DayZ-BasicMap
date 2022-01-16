@@ -1040,6 +1040,468 @@ class CfgWorlds
 				position[] = {1192.99,7236.72};
 				type = "MilitaryOutpost";
 			};
+			class Local_Custom_MIL_Balota
+			{
+				name = "BUNKER BALOTA";
+				position[] = {5167.10, 2388.16};
+				type = "MilitaryOutpost";
+			};
+			class Local_Chernogorsk_rus
+			{
+				name = "Черногорск";
+				position[] = {6778.619,2230};
+				type = "RussianNameCity";
+			};
+			class Local_Novodmitrovsk_rus
+			{
+				name = "Новодмитровск";
+				position[] = {11324.77,14290};
+				type = "RussianNameCity";
+			};
+			class Local_Novoselki_rus
+			{
+				name = "Новоселки";
+				position[] = {6115.91,3216.36};
+				type = "RussianName";
+			};
+			class Local_Dubovo_rus
+			{
+				name = "Дубово";
+				position[] = {6754.51,3555.257};
+				type = "RussianName";
+			};
+			class Local_Vysotovo_rus
+			{
+				name = "Высотово";
+				position[] = {5701.24,2516.11};
+				type = "RussianName";
+			};
+			class Local_Zelenogorsk_rus
+			{
+				name = "Зеленогорск";
+				position[] = {2796,5080};
+				type = "RussianNameCity";
+			};
+			class Local_Berezino_rus
+			{
+				name = "Березино";
+				position[] = {12362.383,9670};
+				type = "RussianNameCity";
+			};
+			class Local_Elektrozavodsk_rus
+			{
+				name = "Электрозаводск";
+				position[] = {10276.68,1900};
+				type = "RussianNameCity";
+			};
+			class Local_NovayaPetrovka_rus
+			{
+				name = "Новая Петровка";
+				position[] = {3477.169,12840};
+				type = "RussianNameCity";
+			};
+			class Local_Gorka_rus
+			{
+				name = "Горка";
+				position[] = {9524,8910};
+				type = "RussianName";
+			};
+			class Local_Solnechny_rus
+			{
+				name = "Солнечный";
+				position[] = {13487.724,6180};
+				type = "RussianName";
+			};
+			class Local_StarySobor_rus
+			{
+				name = "Старый Собор";
+				position[] = {6114,7810};
+				type = "RussianName";
+			};
+			class Local_Vybor_rus
+			{
+				name = "Выбор";
+				position[] = {3909.831,8970};
+				type = "RussianName";
+			};
+			class Local_Severograd_rus
+			{
+				name = "Североград";
+				position[] = {8168.484,12480};
+				type = "RussianNameCity";
+			};
+			class Local_Bor_rus
+			{
+				name = "Бор";
+				position[] = {3316.406,4030};
+				type = "RussianName";
+			};
+			class Local_Svetloyarsk_rus
+			{
+				name = "Светлоярск";
+				position[] = {13989.74,13220};
+				type = "RussianName";
+			};
+			class Local_Krasnostav_rus
+			{
+				name = "Красностав";
+				position[] = {11203.167,12300};
+				type = "RussianName";
+			};
+			class Local_ChernayaPolyana_rus
+			{
+				name = "Черная Поляна";
+				position[] = {12158.54,13730};
+				type = "RussianName";
+			};
+			class Local_Polyana_rus
+			{
+				name = "Поляна";
+				position[] = {10794,8120};
+				type = "RussianName";
+			};
+			class Local_Tulga_rus
+			{
+				name = "Тулга";
+				position[] = {12768,4340};
+				type = "RussianName";
+			};
+			class Local_Msta_rus
+			{
+				name = "Мста";
+				position[] = {11333.79,5380};
+				type = "RussianName";
+			};
+			class Local_Staroye_rus
+			{
+				name = "Старое";
+				position[] = {10212.52,5340};
+				type = "RussianName";
+			};
+			class Local_Shakhovka_rus
+			{
+				name = "Шаковка";
+				position[] = {9728.64,6520};
+				type = "RussianName";
+			};
+			class Local_Dolina_rus
+			{
+				name = "Долина";
+				position[] = {11285.17,6590};
+				type = "RussianName";
+			};
+			class Local_Orlovets_rus
+			{
+				name = "Орловец";
+				position[] = {12250,7210};
+				type = "RussianName";
+			};
+			class Local_NovySobor_rus
+			{
+				name = "Новый Собор";
+				position[] = {7123.63,7730};
+				type = "RussianName";
+			};
+			class Local_Kabanino_rus
+			{
+				name = "Кабанино";
+				position[] = {5300.71,8600};
+				type = "RussianName";
+			};
+			class Local_Mogilevka_rus
+			{
+				name = "Могилевка";
+				position[] = {7650.41,5050};
+				type = "RussianName";
+			};
+			class Local_Nadezhdino_rus
+			{
+				name = "Надеждино";
+				position[] = {5894,4740};
+				type = "RussianName";
+			};
+			class Local_Guglovo_rus
+			{
+				name = "Гуглово";
+				position[] = {8445,6530};
+				type = "RussianName";
+			};
+			class Local_Kamyshovo_rus
+			{
+				name = "Камышово";
+				position[] = {12170,3410};
+				type = "RussianName";
+			};
+			class Local_Pusta_rus
+			{
+				name = "Пуста";
+				position[] = {9197,3830};
+				type = "RussianName";
+			};
+			class Local_Dubrovka_rus
+			{
+				name = "Дубровка";
+				position[] = {10324.299,9840};
+				type = "RussianName";
+			};
+			class Local_VyshnayaDubrovka_rus
+			{
+				name = "Верхняя Дубровка";
+				position[] = {9926.823,10420};
+				type = "RussianName";
+			};
+			class Local_Khelm_rus
+			{
+				name = "Хелм";
+				position[] = {12329.27,10730};
+				type = "RussianName";
+			};
+			class Local_Olsha_rus
+			{
+				name = "Ольша";
+				position[] = {13402,12850};
+				type = "RussianName";
+			};
+			class Local_Gvozdno_rus
+			{
+				name = "Гвоздно";
+				position[] = {8644.751,11890};
+				type = "RussianName";
+			};
+			class Local_Grishino_rus
+			{
+				name = "Гришино";
+				position[] = {5980,10210};
+				type = "RussianName";
+			};
+			class Local_Rogovo_rus
+			{
+				name = "Рогово";
+				position[] = {4802,6700};
+				type = "RussianName";
+			};
+			class Local_Pogorevka_rus
+			{
+				name = "Погоревка";
+				position[] = {4445,6280};
+				type = "RussianName";
+			};
+			class Local_Pustoshka_rus
+			{
+				name = "Пустошка";
+				position[] = {3137.944,7850};
+				type = "RussianName";
+			};
+			class Local_Kozlovka_rus
+			{
+				name = "Козловка";
+				position[] = {4402,4690};
+				type = "RussianName";
+			};
+			class Local_Karmanovka_rus
+			{
+				name = "Кармановка";
+				position[] = {12700.628,14650};
+				type = "RussianName";
+			};
+			class Local_Balota_rus
+			{
+				name = "Балота";
+				position[] = {4527.58,2420};
+				type = "RussianName";
+			};
+			class Local_Komarovo_rus
+			{
+				name = "Комарово";
+				position[] = {3702,2400};
+				type = "RussianName";
+			};
+			class Local_Kamenka_rus
+			{
+				name = "Каменка";
+				position[] = {1981,2160};
+				type = "RussianName";
+			};
+			class Local_Myshkino_rus
+			{
+				name = "Мышкино";
+				position[] = {2048,7220};
+				type = "RussianName";
+			};
+			class Local_Pavlovo_rus
+			{
+				name = "Павлово";
+				position[] = {1693.98,3810};
+				type = "RussianName";
+			};
+			class Local_Lopatino_rus
+			{
+				name = "Лопатино";
+				position[] = {2801,9990};
+				type = "RussianName";
+			};
+			class Local_Vyshnoye_rus
+			{
+				name = "Вышное";
+				position[] = {6629,6010};
+				type = "RussianName";
+			};
+			class Local_Prigorodki_rus
+			{
+				name = "Пригородки";
+				position[] = {7760,3290};
+				type = "RussianName";
+			};
+			class Local_Drozhino_rus
+			{
+				name = "Дрожжино";
+				position[] = {3374,4820};
+				type = "RussianName";
+			};
+			class Local_Sosnovka_rus
+			{
+				name = "Сосновка";
+				position[] = {2556,6160};
+				type = "RussianName";
+			};
+			class Local_Nizhneye_rus
+			{
+				name = "Нижнее";
+				position[] = {12824.88,8050};
+				type = "RussianName";
+			};
+			class Local_Pulkovo_rus
+			{
+				name = "Пулково";
+				position[] = {5015,5560};
+				type = "RussianName";
+			};
+			class Local_Berezhki_rus
+			{
+				name = "Бережки";
+				position[] = {15020,13860};
+				type = "RussianName";
+			};
+			class Local_Turovo_rus
+			{
+				name = "Турово";
+				position[] = {13630,14110};
+				type = "RussianName";
+			};
+			class Local_BelayaPolyana_rus
+			{
+				name = "Белая Поляна";
+				position[] = {14166,14920};
+				type = "RussianName";
+			};
+			class Local_Dobroye_rus
+			{
+				name = "Доброе";
+				position[] = {12996,15020};
+				type = "RussianName";
+			};
+			class Local_Nagornoye_rus
+			{
+				name = "Нагорное";
+				position[] = {9286,14630};
+				type = "RussianName";
+			};
+			class Local_Svergino_rus
+			{
+				name = "Свергино";
+				position[] = {9493.52,13830};
+				type = "RussianName";
+			};
+			class Local_Ratnoye_rus
+			{
+				name = "Ратное";
+				position[] = {6195.878,12720};
+				type = "RussianName";
+			};
+			class Local_Kamensk_rus
+			{
+				name = "Каменск";
+				position[] = {6748.741,14390};
+				type = "RussianName";
+			};
+			class Local_Krasnoye_rus
+			{
+				name = "Красное";
+				position[] = {6411.374,14980};
+				type = "RussianName";
+			};
+			class Local_StaryYar_rus
+			{
+				name = "Старый Яр";
+				position[] = {4987.86,14950};
+				type = "RussianName";
+			};
+			class Local_Polesovo_rus
+			{
+				name = "Полесово";
+				position[] = {5955.737,13510};
+				type = "RussianName";
+			};
+			class Local_Tisy_rus
+			{
+				name = "Тисы";
+				position[] = {3441.65,14750};
+				type = "RussianName";
+			};
+			class Local_Topolniki_rus
+			{
+				name = "Топольники";
+				position[] = {2913.745,12320};
+				type = "RussianName";
+			};
+			class Local_Zaprudnoye_rus
+			{
+				name = "Запрудное";
+				position[] = {5214,12750};
+				type = "RussianName";
+			};
+			class Local_Sinystok_rus
+			{
+				name = "Синысток";
+				position[] = {1538.278,11860};
+				type = "RussianName";
+			};
+			class Local_Vavilovo_rus
+			{
+				name = "Вавилово";
+				position[] = {2260,11060};
+				type = "RussianName";
+			};
+			class Local_Kumyrna_rus
+			{
+				name = "Кумырна";
+				position[] = {8297,6000};
+				type = "RussianName";
+			};
+			class Local_Kalinovka_rus
+			{
+				name = "Калиновка";
+				position[] = {7445,13360};
+				type = "RussianName";
+			};
+			class Local_Bogatyrka_rus
+			{
+				name = "Богатырка";
+				position[] = {1453.62,8830.92};
+				type = "RussianName";
+			};
+			class Local_Zvir_rus
+			{
+				name = "Звир";
+				position[] = {574.33,5270.42};
+				type = "RussianName";
+			};
+			class Local_Zabolotye_rus
+			{
+				name = "Заболотье";
+				position[] = {1253.859,9930.26};
+				type = "RussianName";
+			};
 		};
 	};
 };
@@ -1196,6 +1658,18 @@ class CfgLocationTypes
 		color[] = {0.970,0.239,0.314,1};
 		textSize = 0.048;
 		importance = 4;
+	};
+	class RussianName: Name
+	{
+		color[] = {0.272, 0.759, 0.951,1};
+		textSize = 0.052;
+		importance = 4;
+	};
+	class RussianNameCity: Name
+	{
+		color[] = {0.272, 0.759, 0.951,1};
+		textSize = 0.065;
+		importance = 6;
 	};
 	class MilitaryOutpostShadow: MilitaryOutpost
 	{
