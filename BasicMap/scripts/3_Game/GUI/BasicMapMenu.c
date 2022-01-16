@@ -155,6 +155,12 @@ class BasicMapMenu extends UIScriptedMenu
 		} else {
 			Minimize();
 		}
+		vector lastLookPos;
+		float lastLookZoom;
+		if (BasicMap().GetLastLook(lastLookPos,lastLookZoom)){
+			m_Map.SetScale(lastLookZoom);
+			m_Map.SetMapPos(lastLookPos);
+		}
 	}
 	
 	void SetMapPos(vector pos){
@@ -237,6 +243,7 @@ class BasicMapMenu extends UIScriptedMenu
 	void UpdateMarkers(){
 		int markerCount = 0;
 		if (m_PanelIsOpen && m_Map && BasicMap()){
+			BasicMap().SetLastLook(m_Map.GetMapPos(),m_Map.GetScale());
 			m_Map.ClearUserMarks();
 			for (int i = 0; i < BasicMap().Count(); i++) {
 				BasicMapMarker marker = BasicMapMarker.Cast(BasicMap().Marker(i));

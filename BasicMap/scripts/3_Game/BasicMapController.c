@@ -21,6 +21,9 @@ class BasicMapController extends Managed{
 	autoptr map< string, autoptr BasicMapGroupMetaData> Groups = new map<string, autoptr BasicMapGroupMetaData>;
 	autoptr map<string, autoptr BasicMapMarkerFactory> Factories = new map<string, autoptr BasicMapMarkerFactory>;
 	
+	protected vector LastLookedAtPos = vector.Zero;
+	protected float LastLookedAtZoom = -1;
+	
 	void Init(){
 		if (!IsInit){
 			IsInit = true;
@@ -55,6 +58,21 @@ class BasicMapController extends Managed{
 	
 	EntityAI GetMapItem(){
 		return MapItem;
+	}
+	
+	void SetLastLook(vector pos, float zoom){
+		LastLookedAtPos = pos;
+		LastLookedAtZoom = zoom;
+	}
+	
+	bool GetLastLook(out vector pos, out float zoom){
+		if (LastLookedAtPos != vector.Zero && LastLookedAtZoom != -1){
+			pos = LastLookedAtPos;
+			zoom = LastLookedAtZoom;
+			return true;
+		}
+		return false;
+		
 	}
 	
 	void OnMapClose(){
