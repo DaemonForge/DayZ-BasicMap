@@ -248,7 +248,11 @@ class BasicMapMenu extends UIScriptedMenu
 			for (int i = 0; i < BasicMap().Count(); i++) {
 				BasicMapMarker marker = BasicMapMarker.Cast(BasicMap().Marker(i));
 				if (marker && marker.OnMap()){
-					if ( marker.GetGroup() && (!BasicMap().GetGroups().Get( marker.GetGroup() ) || BasicMap().GetGroups().Get( marker.GetGroup() ).OnMap() ) ) {		
+					bool ShowOnMap = !(marker.GetGroup());
+					ShowOnMap = (ShowOnMap || !(BasicMap().GetGroups()));
+					ShowOnMap = (ShowOnMap || !(BasicMap().GetGroups().Get(marker.GetGroup())));
+					ShowOnMap = (ShowOnMap || BasicMap().GetGroups().Get(marker.GetGroup()).OnMap());
+					if ( ShowOnMap ) {		
 						float offset = 5.7;
 						vector pos = marker.GetPosition();
 						float x = pos[0] - offset; // Markers are a little off from the true postion
