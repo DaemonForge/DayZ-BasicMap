@@ -515,7 +515,23 @@ class BasicMapController extends Managed{
 						if (itemType.Contains("compass")){
                             return true;
 						}
-                    }
+	bool ShowSelfOnMap(){
+		if ( GetBasicMapConfig().RequireGPSRecieverToSeeSelf && GetGame().IsClient() ){
+			DayZPlayer player = DayZPlayer.Cast(GetGame().GetPlayer());
+
+            if (player){
+				array<EntityAI> itemsArray = new array<EntityAI>;
+				player.GetInventory().EnumerateInventory(InventoryTraversalType.PREORDER, itemsArray);    	
+                for (int i = 0; i < itemsArray.Count(); i++){
+                    if (itemsArray.Get(i)){ 
+						string itemType = itemsArray.Get(i).GetType();
+						itemType.ToLower();
+						if (itemType.Contains("gpsreceiver")){
+                            return true;
+						}
+		    
+		    
+		    }
                 }
             }
 			return false;
