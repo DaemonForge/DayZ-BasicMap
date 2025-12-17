@@ -11,7 +11,7 @@ FrameWidgetClass rootFrame {
   FrameWidgetClass Marker {
    clipchildren 0
    ignorepointer 1
-   position 0 -18
+   position 0 -12
    size 0 0
    hexactpos 1
    vexactpos 1
@@ -22,7 +22,7 @@ FrameWidgetClass rootFrame {
      clipchildren 0
      ignorepointer 1
      position 0 0
-     size 284 33
+     size 200 80
      halign center_ref
      hexactpos 1
      vexactpos 1
@@ -33,10 +33,10 @@ FrameWidgetClass rootFrame {
        clipchildren 0
        ignorepointer 1
        position 0 0
-       size 13 13
+       size 20 20
        halign center_ref
-       hexactpos 0
-       vexactpos 0
+       hexactpos 1
+       vexactpos 1
        hexactsize 1
        vexactsize 1
        mode blend
@@ -46,40 +46,40 @@ FrameWidgetClass rootFrame {
       TextWidgetClass Name {
        clipchildren 0
        ignorepointer 1
-       position 0 12
-       size 1 12
+       color 0.9412 0.9608 0.9882 1
+       position 0 22
+       size 200 24
        halign center_ref
-       valign bottom_ref
-       hexactpos 0
+       hexactpos 1
        vexactpos 1
-       hexactsize 0
+       hexactsize 1
        vexactsize 1
-       text "Marker Name"
-       font "BasicMap/gui/fonts/Oswald-Regular/Oswald-Regular12"
-       "shadow size" 10
-       "exact text" 1
-       "size to text h" 1
-       "size to text v" 0
+       text "Marker"
+       font "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium"
+       "exact text" 0
        "text halign" center
+       "shadow size" 14
+       "shadow offset" 1 1
+       "shadow color" 0 0 0 0.85
       }
       TextWidgetClass Distance {
        clipchildren 0
        ignorepointer 1
-       position 0 0
-       size 1 9
+       color 0.7059 0.8392 0.9804 1
+       position 0 46
+       size 200 22
        halign center_ref
-       valign bottom_ref
-       hexactpos 0
+       hexactpos 1
        vexactpos 1
-       hexactsize 0
+       hexactsize 1
        vexactsize 1
-       text "100m"
-       font "BasicMap/gui/fonts/Oswald-Regular/Oswald-Regular10"
-       "shadow size" 10
-       "exact text" 1
-       "size to text h" 1
-       "size to text v" 0
+       text ""
+       font "BasicMap/gui/fonts/Oswald-Regular/Oswald-Regular"
+       "exact text" 0
        "text halign" center
+       "shadow size" 12
+       "shadow offset" 1 1
+       "shadow color" 0 0 0 0.85
       }
      }
     }

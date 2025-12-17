@@ -11,6 +11,7 @@ class BasicMapMarkerEditor  extends ScriptedWidgetEventHandler {
 	
 	
 	protected bool						m_EditorIsOpen = false;
+	protected bool						m_NameFieldFocused = false;
 	
 	protected Widget					m_EditorRoot;
 	
@@ -93,26 +94,26 @@ class BasicMapMarkerEditor  extends ScriptedWidgetEventHandler {
 		if (w == m_Editor_Colour_Red){
 			m_SelectedMarker.Colour[0] = m_Editor_Colour_Red.GetCurrent();
 			if (m_Editor_Colour_Red.GetCurrent() <= 0){
-				m_Editor_Colour_Red.SetColor(ARGB(255, 35, 0, 0));
+				m_Editor_Colour_Red.SetColor(ARGB(200, 35, 0, 0));
 			} else {
 				barColour =  m_Editor_Colour_Red.GetCurrent() / 255;
 				barColour = barColour * 205;
-				barColour = barColour + 50; // So people can still tell which color each bar should of been
-				safeBarColour = barColour; 
-				m_Editor_Colour_Red.SetColor(ARGB(255,safeBarColour, 0, 0));
+				barColour = barColour + 120; // So people can still tell which color each bar should of been
+				safeBarColour = Math.Clamp(barColour, 120, 255); 
+				m_Editor_Colour_Red.SetColor(ARGB(200,safeBarColour, 0, 0));
 			}
 			RefreshEditorIcon();
 		}
 		if (w ==  m_Editor_Colour_Green){
 			m_SelectedMarker.Colour[1] = m_Editor_Colour_Green.GetCurrent();
 			if (m_Editor_Colour_Green.GetCurrent() <= 0){
-				m_Editor_Colour_Green.SetColor(ARGB(255, 35, 0, 0));
+				m_Editor_Colour_Green.SetColor(ARGB(200, 35, 0, 0));
 			} else {
 				barColour =  m_Editor_Colour_Green.GetCurrent() / 255;
 				barColour = barColour * 205;
-				barColour = barColour + 50; // So people can still tell which color each bar should of been
-				safeBarColour = barColour; 
-				m_Editor_Colour_Green.SetColor(ARGB(255, 0, safeBarColour, 0));
+				barColour = barColour + 120; // So people can still tell which color each bar should of been
+				safeBarColour = Math.Clamp(barColour, 120, 255); 
+				m_Editor_Colour_Green.SetColor(ARGB(200, 0, safeBarColour, 0));
 			}
 			RefreshEditorIcon();
 		}
@@ -123,22 +124,22 @@ class BasicMapMarkerEditor  extends ScriptedWidgetEventHandler {
 			} else {
 				barColour =  m_Editor_Colour_Blue.GetCurrent() / 255;
 				barColour = barColour * 205;
-				barColour = barColour + 50; // So people can still tell which color each bar should of been
-				safeBarColour = barColour; 
-				m_Editor_Colour_Blue.SetColor(ARGB(255, 0, 0, safeBarColour));
+				barColour = barColour + 120; // So people can still tell which color each bar should of been
+				safeBarColour = Math.Clamp(barColour, 120, 255); 
+				m_Editor_Colour_Blue.SetColor(ARGB(200, 0, 0, safeBarColour));
 			}
 			RefreshEditorIcon();
 		}
 		if (w == m_Editor_Colour_Alpha){
 			m_SelectedMarker.Alpha = m_Editor_Colour_Alpha.GetCurrent();
 			if (m_Editor_Colour_Alpha.GetCurrent() <= 0){
-				m_Editor_Colour_Alpha.SetColor(ARGB(255, 55, 55, 55));
+				m_Editor_Colour_Alpha.SetColor(ARGB(200, 55, 55, 55));
 			} else {
 				barColour =  m_Editor_Colour_Alpha.GetCurrent() / 255;
 				barColour = barColour * 150;
 				barColour = barColour + 55; // So people can still tell which color each bar should of been
-				safeBarColour = barColour; 
-				m_Editor_Colour_Alpha.SetColor(ARGB(210, safeBarColour, safeBarColour, safeBarColour));
+				safeBarColour = Math.Clamp(barColour, 120, 255);  
+				m_Editor_Colour_Alpha.SetColor(ARGB(200, safeBarColour, safeBarColour, safeBarColour));
 			}
 			RefreshEditorIcon();
 		}
@@ -150,6 +151,33 @@ class BasicMapMarkerEditor  extends ScriptedWidgetEventHandler {
 			m_SelectedMarker.ShowOnHUD(m_Editor_3DMakerBox.IsChecked());
 		}
         return super.OnChange(w,x,y,finished);
+	}
+	
+	override bool OnFocus(Widget w, int x, int y)
+	{
+		if (w == m_Editor_Name)
+		{
+			m_NameFieldFocused = true;
+			// Disable player movement while typing in the name field
+			GetGame().GetMission().PlayerControlDisable(INPUT_EXCLUDE_ALL);
+		}
+		return super.OnFocus(w, x, y);
+	}
+	
+	override bool OnFocusLost(Widget w, int x, int y)
+	{
+		if (w == m_Editor_Name)
+		{
+			m_NameFieldFocused = false;
+			// Re-enable player movement when leaving the name field
+			GetGame().GetMission().PlayerControlEnable(false);
+		}
+		return super.OnFocusLost(w, x, y);
+	}
+	
+	bool IsNameFieldFocused()
+	{
+		return m_NameFieldFocused;
 	}
 	
 	void StepIcon(int dir){
@@ -178,6 +206,10 @@ class BasicMapMarkerEditor  extends ScriptedWidgetEventHandler {
 			m_SelectedMarker = BasicMapMarker.Cast(marker);
 			m_EditorIsOpen = true;
 			m_EditorRoot.Show(true);
+			
+			// Disable player movement while editor is open
+			GetGame().GetMission().PlayerControlDisable(INPUT_EXCLUDE_ALL);
+			
 			m_WidgetX  = x;
 			m_WidgetY  = y;
 			float maxX = m_ScreenX - m_WidgetWidth - 3;
@@ -216,6 +248,7 @@ class BasicMapMarkerEditor  extends ScriptedWidgetEventHandler {
 	}	
 	
 	void CloseEditor(){
+		m_NameFieldFocused = false;
 		m_EditorIsOpen = false;
 		m_EditorRoot.Show(false);
 		m_Editor_Name.SetText("");
@@ -223,6 +256,9 @@ class BasicMapMarkerEditor  extends ScriptedWidgetEventHandler {
 		m_Editor_Colour_Green.SetCurrent(150);
 		m_Editor_Colour_Blue.SetCurrent(150);
 		m_Editor_Colour_Alpha.SetCurrent(150);
+		
+		// Re-enable player control when editor closes
+		GetGame().GetMission().PlayerControlEnable(false);
 	}
 	
 	bool IsEditorOpen(){

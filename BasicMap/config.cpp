@@ -4,7 +4,6 @@ class CfgPatches
 	{
 		requiredVersion = 0.1;
 		requiredAddons[] = {
-			"BasicMapDefine", 
 			"DZ_Worlds_Chernarusplus_World",
 			"DZ_Gear_Navigation",
 			"DZ_Data",
@@ -33,7 +32,8 @@ class CfgMods
             {
 				value = "";
                 files[]={
-					"BasicMap/scripts/3_Game"
+					"BasicMap/scripts/3_Game",
+					"BasicMapDefine/scripts/Common"
 					};
             };
 			
@@ -41,7 +41,8 @@ class CfgMods
             {
                 value="";
                 files[]={ 
-					"BasicMap/scripts/4_World" 
+					"BasicMap/scripts/4_World", 
+					"BasicMapDefine/scripts/Common"
 				};
             };
 			
@@ -49,7 +50,8 @@ class CfgMods
             {
                 value="";
                 files[]={
-					"BasicMap/scripts/5_Mission" 
+					"BasicMap/scripts/5_Mission", 
+					"BasicMapDefine/scripts/Common"
 				};
             };
         };
@@ -1512,8 +1514,8 @@ class CfgLocationTypes
 	{
 		name = "keypoint";
 		drawStyle = "name";
-		texture = "#(argb,1,1,1)color(0.15,0.15,0.12,0.80)";
-		color[] = {0.984, 0.831, 0.541,0.99};
+		texture = "#(argb,1,1,1)color(0.12,0.14,0.18,0.75)";
+		color[] = {0.78, 0.84, 0.92, 0.95};
 		size = 0;
 		font = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
 		textSize = 0.033;
@@ -1524,8 +1526,8 @@ class CfgLocationTypes
 	{
 		name = "keypoint";
 		drawStyle = "icon";
-		texture = "#(argb,1,1,1)color(0.15,0.15,0.25,0.50)";
-		color[] = {0.984, 0.831, 0.541,0.95};
+		texture = "#(argb,1,1,1)color(0.12,0.14,0.20,0.45)";
+		color[] = {0.75, 0.82, 0.90, 0.92};
 		size = 0;
 		font = "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium26";
 		textSize = 0.048;
@@ -1534,49 +1536,49 @@ class CfgLocationTypes
 	};
 	class Capital: Name
 	{
-		color[] = {0.262, 0.749, 0.941,1};
+		color[] = {0.45, 0.78, 0.95, 1};
 		importance = 7;
 		textSize = 0.08;
 	};
 	class CapitalShadow: Name
 	{
-		color[] = {0.839, 0.839, 0.839,0.7};
+		color[] = {0.75, 0.78, 0.82, 0.6};
 		importance = 6;
 		textSize = 0.083;
 	};
 	class City: Name
 	{
-		color[] = {0.262, 0.749, 0.941,1};
+		color[] = {0.42, 0.75, 0.92, 1};
 		textSize = 0.065;
 		importance = 6;
 	};
 	class CityShadow: City
 	{
-		color[] = {0.839, 0.839, 0.839,0.7};
+		color[] = {0.70, 0.73, 0.78, 0.55};
 		textSize = 0.068;
 		importance = 5;
 	};
 	class Village: Name
 	{
-		color[] = {0.262, 0.749, 0.941,1};
+		color[] = {0.50, 0.72, 0.88, 1};
 		textSize = 0.046;
 		importance = 4;
 	};
 	class VillageShadow: Village
 	{
-		color[] = {0.839, 0.839, 0.839,0.7};
+		color[] = {0.65, 0.68, 0.72, 0.5};
 		textSize = 0.049;
 		importance = 4;
 	};
 	class Local: Name
 	{
-		color[] = {0.262, 0.749, 0.941,1};
+		color[] = {0.55, 0.70, 0.85, 1};
 		textSize = 0.046;
 		importance = 2;
 	};
 	class Marine: Name
 	{
-		color[] = {0.05,0.4,0.6,0.95};
+		color[] = {0.25, 0.50, 0.70, 0.9};
 		textSize = 0.042;
 		importance = 3;
 	};
@@ -1589,7 +1591,7 @@ class CfgLocationTypes
 	};
 	class Camp: NameIcon
 	{
-		color[] = {0.698, 0.980, 0.619,1};
+		color[] = {0.55, 0.82, 0.62, 1};
 		texture = "\DZ\gear\navigation\data\map_camp_ca.paa";
 		textSize = 0.042;
 		importance = 3;
@@ -1597,7 +1599,7 @@ class CfgLocationTypes
 	};
 	class Hill: NameIcon
 	{
-		color[] = {0.698, 0.980, 0.619,1};
+		color[] = {0.58, 0.80, 0.60, 1};
 		texture = "\DZ\gear\navigation\data\map_hill_ca.paa";
 		textSize = 0.042;
 		importance = 6;
@@ -1605,7 +1607,7 @@ class CfgLocationTypes
 	};
 	class ViewPoint: NameIcon
 	{
-		color[] = {0.698, 0.980, 0.619,1};
+		color[] = {0.52, 0.78, 0.58, 1};
 		texture = "\DZ\gear\navigation\data\map_viewpoint_ca.paa";
 		textSize = 0.042;
 		importance = 6;
@@ -1613,67 +1615,67 @@ class CfgLocationTypes
 	};
 	class RockArea: NameIcon
 	{
-		color[] = {0.541, 0.921, 0.984,0.9};
+		color[] = {0.60, 0.78, 0.88, 0.85};
 		texture = "\DZ\gear\navigation\data\map_rock_ca.paa";
 		size = 8;
 	};
 	class RailroadStation: NameIcon
 	{
-		color[] = {0.541, 0.921, 0.984,0.9};
+		color[] = {0.58, 0.75, 0.85, 0.85};
 		texture = "\DZ\gear\navigation\data\map_station_ca.paa";
 		size = 7;
 	};
 	class IndustrialSite: NameIcon
 	{
-		color[] = {0.541, 0.921, 0.984,0.9};
+		color[] = {0.55, 0.72, 0.82, 0.85};
 		texture = "\DZ\gear\navigation\data\map_factory_ca.paa";
 		size = 7;
 	};
 	class LocalOffice: NameIcon
 	{
-		color[] = {0.541, 0.921, 0.984,0.9};
+		color[] = {0.55, 0.72, 0.82, 0.85};
 		texture = "\DZ\gear\navigation\data\map_govoffice_ca.paa";
 		size = 7;
 	};
 	class BorderCrossing: NameIcon
 	{
-		color[] = {0.541, 0.921, 0.984,0.9};
+		color[] = {0.55, 0.72, 0.82, 0.85};
 		texture = "\DZ\gear\navigation\data\map_border_cross_ca.paa";
 		size = 7;
 	};
 	class MilitaryBase: Name
 	{
-		color[] = {0.970,0.239,0.314,1};
+		color[] = {0.92, 0.35, 0.38, 1};
 		textSize = 0.054;
 		importance = 5;
 	};
 	class MilitaryBaseShadow: MilitaryBase
 	{
-		color[] = {0.870,0.870,0.870,0.7};
+		color[] = {0.75, 0.70, 0.72, 0.55};
 		textSize = 0.056;
 		importance = 5;
 	};
 	class MilitaryOutpost: Name
 	{
-		color[] = {0.970,0.239,0.314,1};
+		color[] = {0.88, 0.40, 0.42, 1};
 		textSize = 0.048;
 		importance = 4;
 	};
 	class RussianName: Name
 	{
-		color[] = {0.272, 0.759, 0.951,1};
+		color[] = {0.48, 0.74, 0.90, 1};
 		textSize = 0.052;
 		importance = 4;
 	};
 	class RussianNameCity: Name
 	{
-		color[] = {0.272, 0.759, 0.951,1};
+		color[] = {0.45, 0.76, 0.92, 1};
 		textSize = 0.065;
 		importance = 6;
 	};
 	class MilitaryOutpostShadow: MilitaryOutpost
 	{
-		color[] = {0.870,0.870,0.870,0.7};
+		color[] = {0.72, 0.68, 0.70, 0.5};
 		textSize = 0.051;
 		importance = 4;
 	};

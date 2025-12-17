@@ -8,12 +8,15 @@ class BasicMapController extends Managed{
 	
 	protected bool MarkersOnHUD = true;
 	
+	// Marker visibility mode for K key cycling
+	protected int m_VisibilityMode = BasicMapVisibilityMode.SHOW_ALL;
+	
 	static string SERVER_KEY = "BASICMAP_SERVER";
 	static string CLIENT_KEY = "BASICMAP_CLIENT";
 	
 	static string PARTY_KEY = "";
 	
-	static string InfoText = "<p>Double Left-Click to Create Marker</p><p>Double Right-Click to Delete Marker</p>";
+	static string InfoText = "Single Click to Edit  |  Double Left-Click to Create  |  Double Right-Click to Delete";
 		
 	autoptr map< string, autoptr array<autoptr BasicMapMarker> > Markers = new map< string, autoptr array<autoptr BasicMapMarker> >;
 	
@@ -108,7 +111,7 @@ class BasicMapController extends Managed{
 	}
 	
 
-	void RPCSyncGroupData( CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target ){
+	void RPCSyncGroupData( CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target ){
 		Param3<string, array<autoptr BasicMapMarker>, array<autoptr BasicMapCircleMarker>> data;
 		int i;
 		if ( !ctx.Read( data ) ) return;
@@ -147,7 +150,7 @@ class BasicMapController extends Managed{
 		}
 	}
 	
-	void RPCSyncServerData( CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target ){
+	void RPCSyncServerData( CallType type, ParamsReadContext ctx, PlayerIdentity sender, Object target ){
 		Param3< array<autoptr BasicMapMarker>, array<autoptr BasicMapCircleMarker>, ref BasicMapConfig> data;
 		array<autoptr BasicMapMarker> ServerMarkers = new array<autoptr BasicMapMarker>;
 		array<autoptr BasicMapCircleMarker> ServerCircleMarkers = new array<autoptr BasicMapCircleMarker>;
@@ -320,7 +323,7 @@ class BasicMapController extends Managed{
 		}
 	}
 	
-	void ChangeGroups(string from, string to, ref BasicMapMarker marker){
+	void ChangeGroups(string from, string to, BasicMapMarker marker){
 		if (Markers.Get(to)){
 			Markers.Get(from).Insert(marker);
 		}
@@ -462,13 +465,13 @@ class BasicMapController extends Managed{
 	
 	
 	//Markers are updated live this is more just on marker editor close or marker created
-	void OnMarkerSave(ref BasicMapMarker marker){
+	void OnMarkerSave(BasicMapMarker marker){
 		if (marker.GetGroup() == this.CLIENT_KEY){
 			SaveClientMarkers();
 		}
 	}
 	
-	void OnMarkerDelete(ref BasicMapMarker marker){
+	void OnMarkerDelete(BasicMapMarker marker){
 		if (marker.GetGroup() == this.CLIENT_KEY){
 			SaveClientMarkers();
 		}
@@ -481,6 +484,62 @@ class BasicMapController extends Managed{
 	
 	void ToggleMarkersOnHUD(){
 		MarkersOnHUD = !MarkersOnHUD;
+	}
+	
+	// Get current visibility mode
+	int GetVisibilityMode(){
+		return m_VisibilityMode;
+	}
+	
+	// Set visibility mode directly
+	void SetVisibilityMode(int mode){
+		m_VisibilityMode = mode;
+		// Update the MarkersOnHUD based on mode
+		if (mode == BasicMapVisibilityMode.HIDE_ALL){
+			MarkersOnHUD = false;
+		} else {
+			MarkersOnHUD = true;
+		}
+	}
+	
+	// Cycle to next visibility mode: Show All -> Server Only -> Local Only -> Hide All -> Show All
+	void CycleVisibilityMode(){
+		m_VisibilityMode++;
+		if (m_VisibilityMode > BasicMapVisibilityMode.HIDE_ALL){
+			m_VisibilityMode = BasicMapVisibilityMode.SHOW_ALL;
+		}
+		// Update MarkersOnHUD based on mode
+		if (m_VisibilityMode == BasicMapVisibilityMode.HIDE_ALL){
+			MarkersOnHUD = false;
+		} else {
+			MarkersOnHUD = true;
+		}
+	}
+	
+	// Quick toggle between Show All and Hide All (for long press)
+	void QuickToggleVisibility(){
+		if (m_VisibilityMode == BasicMapVisibilityMode.HIDE_ALL){
+			m_VisibilityMode = BasicMapVisibilityMode.SHOW_ALL;
+			MarkersOnHUD = true;
+		} else {
+			m_VisibilityMode = BasicMapVisibilityMode.HIDE_ALL;
+			MarkersOnHUD = false;
+		}
+	}
+	
+	// Get display name for current visibility mode
+	string GetVisibilityModeName(){
+		switch (m_VisibilityMode){
+			case BasicMapVisibilityMode.SHOW_ALL:
+				return "All Markers";
+			case BasicMapVisibilityMode.SERVER_ONLY:
+				return "Server Markers Only";
+			case BasicMapVisibilityMode.LOCAL_ONLY:
+				return "Personal Markers Only";
+			case BasicMapVisibilityMode.HIDE_ALL:
+				return "Markers Hidden";
+		}
+		return "Unknown";
 	}
 	
 	bool ShowMarkersOnHUD(){
@@ -506,6 +565,23 @@ class BasicMapController extends Managed{
 	}
 	
 	bool ShouldShowOnHUD(string group){
+		// Check visibility mode filter first
+		switch (m_VisibilityMode){
+			case BasicMapVisibilityMode.HIDE_ALL:
+				return false;
+			case BasicMapVisibilityMode.SERVER_ONLY:
+				if (group != SERVER_KEY){
+					return false;
+				}
+				break;
+			case BasicMapVisibilityMode.LOCAL_ONLY:
+				if (group == SERVER_KEY){
+					return false;
+				}
+				break;
+			// SHOW_ALL falls through to normal group check
+		}
+		
 		if (Groups.Get(group)){
 			return Groups.Get(group).OnHUD();
 		} 

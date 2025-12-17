@@ -1,6 +1,5 @@
 ref BasicMapMenu m_BasicMapMenu;
 bool m_BasicMapMenu_Opening = false;
-bool m_BasicMapMenu_sidePanelOpen = false;
 
 
 class BasicMapMenu extends UIScriptedMenu
@@ -13,7 +12,7 @@ class BasicMapMenu extends UIScriptedMenu
 	
 	static int									m_MarkerRefreshRate = 30;
 	
-	static int 								MarkerListItemFrame_Size = 42;
+	static int 								MarkerListItemFrame_Size = 38;
 	protected autoptr BasicMapMarker			m_MeMarker;
 	
     protected autoptr BasicMapMarkerEditor 	m_MarkerEditor;
@@ -40,21 +39,12 @@ class BasicMapMenu extends UIScriptedMenu
 	protected ButtonWidget						m_ScrollDown;
 	
 	protected TextWidget						m_PostionText;
-	
+
 	protected bool								m_PanelIsOpen = false; 
-	protected bool								m_sidePanelOpen = false;
-	protected bool								m_IsInitialized = false;
-	
-	
+	protected bool								m_IsInitialized = false;	
 	protected Widget 							m_MapPanel;
+	protected Widget 							m_MapFrame;
 	protected MapWidget						m_Map;
-	
-	protected Widget 							m_Expand;
-	protected Widget							m_Minimize;
-	
-	protected Widget							m_ExpandPanel;
-	
-	protected Widget							m_Markers;
 	
 	protected TextWidget						m_InfoText;
 	
@@ -65,6 +55,7 @@ class BasicMapMenu extends UIScriptedMenu
 	
 	
 	protected ButtonWidget						m_BackToMe;
+	protected Widget							m_ContentArea;
 	
 	override Widget Init()
     {
@@ -73,13 +64,11 @@ class BasicMapMenu extends UIScriptedMenu
 		
         m_MapPanel 					= Widget.Cast( layoutRoot.FindAnyWidget( "MapPanel" ) );
 		
+		m_MapFrame					= Widget.Cast( layoutRoot.FindAnyWidget( "MapFrame" ) );
+		
         m_Map 						= MapWidget.Cast( layoutRoot.FindAnyWidget( "Map" ) );
 		
-		m_ExpandPanel 				= Widget.Cast( layoutRoot.FindAnyWidget( "ExpandPanel" ) );
-		
-		m_Expand					= Widget.Cast( layoutRoot.FindAnyWidget( "Expand" ) );
-		m_Minimize					= Widget.Cast( layoutRoot.FindAnyWidget( "Minimize" ) );
-		
+		m_ContentArea				= Widget.Cast( layoutRoot.FindAnyWidget( "ContentArea" ) );
 		
 		m_SelectedGroup				= TextWidget.Cast( layoutRoot.FindAnyWidget( "CurrentGroup" ));
 		m_NextGroup					= ButtonWidget.Cast(layoutRoot.FindAnyWidget("NextGroup"));
@@ -107,7 +96,7 @@ class BasicMapMenu extends UIScriptedMenu
 		
 		
 		m_Show3dMakers				= CheckBoxWidget.Cast( layoutRoot.FindAnyWidget( "Show3dMakers" ) );
-		m_Markers					= Widget.Cast( layoutRoot.FindAnyWidget( "Markers" ) );
+
 		
 		m_InfoText					= TextWidget.Cast( layoutRoot.FindAnyWidget( "InfoText" ));
 		m_Editor					= Widget.Cast( layoutRoot.FindAnyWidget( "EditorFrame" ) ); 		
@@ -146,15 +135,10 @@ class BasicMapMenu extends UIScriptedMenu
 			m_CurGroup = BasicMap().SERVER_KEY;
 		}
 		m_CurGroupIndex = BasicMap().GetGroups().GetKeyArray().Find(m_CurGroup);
-		m_SelectedGroup.SetText(BasicMap().GetGroupName(m_CurGroup));
-		m_ShowGroup3D.SetChecked(BasicMap().GetGroup(m_CurGroup).OnHUD());
-		m_ShowGroupMap.SetChecked(BasicMap().GetGroup(m_CurGroup).OnMap());
+		if (m_SelectedGroup) m_SelectedGroup.SetText(BasicMap().GetGroupName(m_CurGroup));
+		if (m_ShowGroup3D) m_ShowGroup3D.SetChecked(BasicMap().GetGroup(m_CurGroup).OnHUD());
+		if (m_ShowGroupMap) m_ShowGroupMap.SetChecked(BasicMap().GetGroup(m_CurGroup).OnMap());
 		PopulateMarkerList();
-		if (m_BasicMapMenu_sidePanelOpen){
-			Expand();
-		} else {
-			Minimize();
-		}
 		vector lastLookPos;
 		float lastLookZoom;
 		if (BasicMap().GetLastLook(lastLookPos,lastLookZoom)){
@@ -167,6 +151,48 @@ class BasicMapMenu extends UIScriptedMenu
 		m_Map.SetMapPos(pos);
 	}
 	
+	// Dynamically size the ContentArea to fit between header (40px) and footer (40px)
+	// This ensures the footer bar with "Find Me" button is always visible
+	void UpdateContentAreaSize()
+	{
+		if (m_ContentArea && m_MapPanel)
+		{
+			// Force parent layout update first (vanilla pattern from sizetochild.c)
+			m_MapPanel.Update();
+			
+			float panelW, panelH;
+			m_MapPanel.GetScreenSize(panelW, panelH);
+			
+			// ContentArea height = MapPanel height - header (40px) - footer (35px)
+			float contentHeight = panelH - 75;
+			if (contentHeight > 0)
+			{
+				// Set ContentArea size
+				m_ContentArea.SetScreenSize(panelW, contentHeight);
+				m_ContentArea.Update();
+				
+				// Also update MapFrame inside ContentArea to fill the new size
+				// MapFrame is positioned at Y=3px (after top border), bottom border is 2px
+				if (m_MapFrame)
+				{
+					float frameHeight = contentHeight - 5; // 3px top border + 2px bottom border
+					if (frameHeight > 0)
+					{
+						m_MapFrame.SetScreenSize(panelW, frameHeight);
+						m_MapFrame.Update();
+					}
+				}
+			}
+		}
+	}
+	
+	override void OnShow()
+	{
+		// Recalculate content area size when menu is shown
+		// This ensures footer bar is always visible (header=40px, footer=40px)
+		UpdateContentAreaSize();
+	}
+	
 	void StepMarkerList(int i){
 		m_CurGroupIndex = m_CurGroupIndex + i;
 		if (m_CurGroupIndex < 0){
@@ -176,9 +202,9 @@ class BasicMapMenu extends UIScriptedMenu
 			m_CurGroupIndex = 0;
 		}
 		m_CurGroup = BasicMap().GetGroups().GetKey(m_CurGroupIndex);
-		m_SelectedGroup.SetText(BasicMap().GetGroupName(m_CurGroup));
-		m_ShowGroup3D.SetChecked(BasicMap().GetGroup(m_CurGroup).OnHUD());
-		m_ShowGroupMap.SetChecked(BasicMap().GetGroup(m_CurGroup).OnMap());
+		if (m_SelectedGroup) m_SelectedGroup.SetText(BasicMap().GetGroupName(m_CurGroup));
+		if (m_ShowGroup3D) m_ShowGroup3D.SetChecked(BasicMap().GetGroup(m_CurGroup).OnHUD());
+		if (m_ShowGroupMap) m_ShowGroupMap.SetChecked(BasicMap().GetGroup(m_CurGroup).OnMap());
 		m_CurrentListOffset = 0;
 		PopulateMarkerList();
 		
@@ -187,6 +213,7 @@ class BasicMapMenu extends UIScriptedMenu
 	void PopulateMarkerList(){
 		//Print("PopulateMarkerList Pre");
 		ClearMarkerList();
+		if (!m_MarkerListWidget || m_MarkerListWidget.Count() == 0) return;
 		if (BasicMap().GetMarkers(m_CurGroup) && BasicMap().GetMarkers(m_CurGroup).Count() > 0){
 			if (!m_MarkerList){
 				m_MarkerList = new array<autoptr BasicMapMarkerListItem>;
@@ -203,21 +230,27 @@ class BasicMapMenu extends UIScriptedMenu
 			int maxItems = 17;
 			while ( i_M < BasicMap().GetMarkers(m_CurGroup).Count() && i <= maxItems && i < m_MarkerListWidget.Count()){
 				if (BasicMap().GetMarkers(m_CurGroup).Get(i_M) && BasicMap().GetMarkers(m_CurGroup).Get(i_M).OnPanel() && BasicMap().GetMarkers(m_CurGroup).Get(i_M).OnMap()){
-					m_MarkerListWidget.Get(i).Show(true);
-					m_MarkerList.Insert(new BasicMapMarkerListItem(m_MarkerListWidget.Get(i), this, BasicMap().GetMarkers(m_CurGroup).Get(i_M)));
+					if (m_MarkerListWidget.Get(i)) {
+						m_MarkerListWidget.Get(i).Show(true);
+						m_MarkerList.Insert(new BasicMapMarkerListItem(m_MarkerListWidget.Get(i), this, BasicMap().GetMarkers(m_CurGroup).Get(i_M)));
+					}
 					i++;
 				}
 				i_M++;
 			}
-			if (m_MarkerList.Count() > 12){
-				m_MarkerListBottom.Show(true);
-			} else {
-				m_MarkerListBottom.Show(false);
+			if (m_MarkerListBottom) {
+				if (m_MarkerList.Count() > 12){
+					m_MarkerListBottom.Show(true);
+				} else {
+					m_MarkerListBottom.Show(false);
+				}
 			}
-			if (m_CurrentListOffset > 0){
-				m_MarkerListTop.Show(true);
-			} else {
-				m_MarkerListTop.Show(false);
+			if (m_MarkerListTop) {
+				if (m_CurrentListOffset > 0){
+					m_MarkerListTop.Show(true);
+				} else {
+					m_MarkerListTop.Show(false);
+				}
 			}
 			
 			//Print("PopulateMarkerList End");
@@ -228,7 +261,7 @@ class BasicMapMenu extends UIScriptedMenu
 	protected void ClearMarkerList(){
 		if (m_MarkerListWidget){
 			for ( int j = 0; j < m_MarkerListWidget.Count(); j++){
-				m_MarkerListWidget.Get(j).Show(false);
+				if (m_MarkerListWidget.Get(j)) m_MarkerListWidget.Get(j).Show(false);
 			}
 		}
 		if (m_MarkerList){
@@ -389,20 +422,6 @@ class BasicMapMenu extends UIScriptedMenu
 		m_PanelIsOpen = open;
 	}
 	
-	void Expand(){
-		m_BasicMapMenu_sidePanelOpen = true;
-		m_MapPanel.SetSize(0.82,1);
-		m_ExpandPanel.Show(false);
-		m_Markers.Show(true);
-	}
-	
-	void Minimize(){
-		m_BasicMapMenu_sidePanelOpen = false;
-		m_MapPanel.SetSize(0.988,1);
-		m_ExpandPanel.Show(true);
-		m_Markers.Show(false);
-	}
-	
 	//On click doesn't seem to work with map Widgets
 	override bool OnMouseButtonDown(Widget w, int x, int y, int button ){
 		//Print("[BASICMAP] OnMouseButtonDown " + w.GetName() + " X: " + x + " Y: " + y + " IsEditorOpen():" + IsEditorOpen() );
@@ -442,15 +461,7 @@ class BasicMapMenu extends UIScriptedMenu
 	}
 	
 	override bool OnClick( Widget w, int x, int y, int button )
-	{
-		if (w == m_Expand){
-			Expand();
-			return true;
-		}
-		if (w == m_Minimize){
-			Minimize();
-			return true;
-		}			
+	{			
 		if (w == m_BackToMe){
 			SetMapPos(m_MeMarker.GetPosition());
 			return true;
@@ -564,7 +575,7 @@ class BasicMapMenu extends UIScriptedMenu
 	}
 	
 	
-	void LockControls() {
+	override void LockControls() {
 		GetGame().GetMission().GetHud().ShowHudUI( false );
 		GetGame().GetMission().GetHud().ShowQuickbarUI( false );
         GetGame().GetMission().PlayerControlDisable(INPUT_EXCLUDE_MOUSE_ALL);

@@ -12,21 +12,19 @@ FrameWidgetClass rootFrame {
   PanelWidgetClass Editor {
    visible 1
    ignorepointer 0
-   color 0.0588 0.0863 0.1686 1
+   color 0.0196 0.0235 0.0314 0.98
    position 8 16
-   size 328 108
+   size 320 190
    hexactpos 1
    vexactpos 1
    hexactsize 1
    vexactsize 1
    priority 999
    draggable 1
-   scriptclass ""
-   style Outline
+   style rover_sim_colorable
    {
-    PanelWidgetClass EditorBG {
-     ignorepointer 0
-     color 0.1098 0.1608 0.3059 0.9216
+    PanelWidgetClass EditorBorderContainer {
+     ignorepointer 1
      position 0 0
      size 1 1
      halign center_ref
@@ -35,286 +33,649 @@ FrameWidgetClass rootFrame {
      vexactpos 0
      hexactsize 0
      vexactsize 0
-     style rover_sim_colorable
+     priority 1001
      {
-      PanelWidgetClass ThreeDMarkerPanel {
+      PanelWidgetClass EditorBorderTop {
        ignorepointer 1
-       size 0.4 0.16
-       halign right_ref
+       color 0.3529 0.5098 0.8235 0.9
+       position 0 0
+       size 1 3
+       halign center_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 1
+       style rover_sim_colorable
+      }
+      PanelWidgetClass EditorBorderBottom {
+       ignorepointer 1
+       color 0.3529 0.5098 0.8235 0.9
+       position 0 0
+       size 1 3
+       halign center_ref
        valign bottom_ref
        hexactpos 0
        vexactpos 0
        hexactsize 0
-       vexactsize 0
-       {
-        TextWidgetClass ThreeDMarker_Label {
-         ignorepointer 1
-         size 0.88 1
-         valign center_ref
-         hexactpos 0
-         vexactpos 0
-         hexactsize 0
-         vexactsize 0
-         text "3D Marker"
-         font "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium"
-         "exact text" 1
-         "text valign" center
-        }
-        CheckBoxWidgetClass ThreeDMarker {
-         size 0.12 0.95
-         halign right_ref
-         valign bottom_ref
-         hexactpos 0
-         vexactpos 0
-         hexactsize 0
-         vexactsize 0
-        }
-       }
+       vexactsize 1
+       style rover_sim_colorable
       }
-      PanelWidgetClass NamePanel {
+      PanelWidgetClass EditorBorderLeft {
        ignorepointer 1
-       position 0.01 0.035
-       size 0.9 0.24
+       color 0.3529 0.5098 0.8235 0.9
+       position 0 0
+       size 3 1
+       valign center_ref
        hexactpos 0
        vexactpos 0
-       hexactsize 0
+       hexactsize 1
        vexactsize 0
-       {
-        TextWidgetClass Name_Label {
-         ignorepointer 1
-         size 0.18 1
-         valign bottom_ref
-         hexactpos 0
-         vexactpos 0
-         hexactsize 0
-         vexactsize 0
-         text "Name:"
-         font "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium"
-         "exact text" 1
-         "text halign" right
-         "text valign" center
-        }
-        EditBoxWidgetClass Name {
-         size 0.81 0.95
-         halign right_ref
-         valign bottom_ref
-         hexactpos 0
-         vexactpos 0
-         hexactsize 0
-         vexactsize 0
-         "exact text" 1
-         font "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium"
-        }
-       }
+       style rover_sim_colorable
       }
-      ButtonWidgetClass Close {
-       position 0.015 0.03
-       size 18 18
+      PanelWidgetClass EditorBorderRight {
+       ignorepointer 1
+       color 0.3529 0.5098 0.8235 0.9
+       position 0 0
+       size 3 1
+       halign right_ref
+       valign center_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 1
+       vexactsize 0
+       style rover_sim_colorable
+      }
+      PanelWidgetClass EditorCornerTL {
+       ignorepointer 1
+       color 0.549 0.7059 0.902 1
+       position 0 0
+       size 20 3
+       hexactpos 0
+       vexactpos 0
+       hexactsize 1
+       vexactsize 1
+       style rover_sim_colorable
+      }
+      PanelWidgetClass EditorCornerTL2 {
+       ignorepointer 1
+       color 0.549 0.7059 0.902 1
+       position 0 0
+       size 3 20
+       hexactpos 0
+       vexactpos 0
+       hexactsize 1
+       vexactsize 1
+       style rover_sim_colorable
+      }
+      PanelWidgetClass EditorCornerTR {
+       ignorepointer 1
+       color 0.549 0.7059 0.902 1
+       position 0 0
+       size 20 3
        halign right_ref
        hexactpos 0
        vexactpos 0
        hexactsize 1
        vexactsize 1
-       scriptclass ""
-       {
-        ImageWidgetClass Close_Label {
-         ignorepointer 1
-         size 1 1
-         halign right_ref
-         hexactpos 0
-         vexactpos 0
-         hexactsize 0
-         vexactsize 0
-         image0 "BasicMap/gui/images/close.paa"
-         mode blend
-         "src alpha" 1
-         stretch 1
-        }
-       }
+       style rover_sim_colorable
       }
-      PanelWidgetClass PartyMarkerPanel {
+      PanelWidgetClass EditorCornerTR2 {
        ignorepointer 1
+       color 0.549 0.7059 0.902 1
        position 0 0
-       size 0.55 0.16
+       size 3 20
+       halign right_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 1
+       vexactsize 1
+       style rover_sim_colorable
+      }
+      PanelWidgetClass EditorCornerBL {
+       ignorepointer 1
+       color 0.549 0.7059 0.902 1
+       position 0 0
+       size 20 3
        valign bottom_ref
        hexactpos 0
        vexactpos 0
-       hexactsize 0
-       vexactsize 0
-       scriptclass ""
-       {
-        TextWidgetClass PartyMarker_Label {
-         ignorepointer 1
-         position 0 0
-         size 0.9 1
-         valign center_ref
-         hexactpos 0
-         vexactpos 0
-         hexactsize 0
-         vexactsize 0
-         text "Party Marker:"
-         font "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium"
-         "exact text" 1
-         "text valign" center
-        }
-        CheckBoxWidgetClass PartyMarker {
-         position 0 0
-         size 0.1 0.95
-         halign right_ref
-         valign center_ref
-         hexactpos 0
-         vexactpos 0
-         hexactsize 0
-         vexactsize 0
-        }
-       }
+       hexactsize 1
+       vexactsize 1
+       style rover_sim_colorable
       }
-      PanelWidgetClass IconPanel {
+      PanelWidgetClass EditorCornerBL2 {
        ignorepointer 1
-       position 0 0.18
-       size 0.25 0.5
+       color 0.549 0.7059 0.902 1
+       position 0 0
+       size 3 20
+       valign bottom_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 1
+       vexactsize 1
+       style rover_sim_colorable
+      }
+      PanelWidgetClass EditorCornerBR {
+       ignorepointer 1
+       color 0.549 0.7059 0.902 1
+       position 0 0
+       size 20 3
        halign right_ref
        valign bottom_ref
        hexactpos 0
        vexactpos 0
+       hexactsize 1
+       vexactsize 1
+       style rover_sim_colorable
+      }
+      PanelWidgetClass EditorCornerBR2 {
+       ignorepointer 1
+       color 0.549 0.7059 0.902 1
+       position 0 0
+       size 3 20
+       halign right_ref
+       valign bottom_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 1
+       vexactsize 1
+       style rover_sim_colorable
+      }
+     }
+    }
+    PanelWidgetClass HeaderBar {
+     ignorepointer 1
+     color 0.0275 0.0353 0.0471 1
+     position 0 0
+     size 1 32
+     halign center_ref
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 1
+     priority 1000
+     style rover_sim_colorable
+     {
+      PanelWidgetClass HeaderAccent {
+       ignorepointer 1
+       color 0.2745 0.4392 0.7843 1
+       position 0 0
+       size 1 2
+       halign center_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 1
+       style rover_sim_colorable
+      }
+      TextWidgetClass EditorTitle {
+       ignorepointer 1
+       color 0.8235 0.8784 0.9608 1
+       position 12 0
+       size 0.7 1
+       valign center_ref
+       hexactpos 1
+       vexactpos 0
        hexactsize 0
        vexactsize 0
-       scriptclass ""
+       text "EDIT MARKER"
+       font "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium"
+       "exact text" 1
+       "text valign" center
+      }
+      ButtonWidgetClass Close {
+       position 4 0
+       size 26 26
+       halign right_ref
+       valign center_ref
+       hexactpos 1
+       vexactpos 0
+       hexactsize 1
+       vexactsize 1
        {
-        ImageWidgetClass Icon {
+        ImageWidgetClass Close_Label {
          ignorepointer 1
-         position 0 0
-         size 36 36
+         color 0.9412 0.4118 0.4118 1
+         size 12 12
          halign center_ref
          valign center_ref
          hexactpos 0
          vexactpos 0
          hexactsize 1
          vexactsize 1
+         image0 "BasicMap/gui/images/close.paa"
          mode blend
          "src alpha" 1
-         stretch 1
+         "stretch mode" stretch_w_h
         }
-        ButtonWidgetClass Left {
+       }
+      }
+     }
+    }
+    PanelWidgetClass ContentArea {
+     ignorepointer 1
+     position 0 30
+     size 1 1
+     halign center_ref
+     hexactpos 0
+     vexactpos 1
+     hexactsize 0
+     vexactsize 0
+     {
+      PanelWidgetClass NameRow {
+       ignorepointer 0
+       position 12 8
+       size 296 28
+       hexactpos 1
+       vexactpos 1
+       hexactsize 1
+       vexactsize 1
+       {
+        TextWidgetClass Name_Label {
+         ignorepointer 1
+         color 0.7059 0.7647 0.8431 1
          position 0 0
-         size 0.18 0.5
+         size 48 28
+         hexactpos 1
+         vexactpos 1
+         hexactsize 1
+         vexactsize 1
+         text "Name:"
+         font "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium"
+         "exact text" 1
+         "text valign" center
+        }
+        EditBoxWidgetClass Name {
+         visible 1
+         position 52 0
+         size 240 28
+         hexactpos 1
+         vexactpos 1
+         hexactsize 1
+         vexactsize 1
+         "exact text" 1
+         font "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium"
+        }
+       }
+      }
+      PanelWidgetClass OptionsRow {
+       ignorepointer 1
+       position 12 42
+       size 296 24
+       halign center_ref
+       hexactpos 1
+       vexactpos 1
+       hexactsize 1
+       vexactsize 1
+       {
+        PanelWidgetClass ThreeDMarkerPanel {
+         ignorepointer 1
+         position 0 0
+         size 110 1
          valign center_ref
          hexactpos 0
          vexactpos 0
-         hexactsize 0
+         hexactsize 1
          vexactsize 0
          {
-          ImageWidgetClass Left_Label {
-           ignorepointer 1
+          CheckBoxWidgetClass ThreeDMarker {
            position 0 0
-           size 0.9 0.9
-           halign center_ref
+           size 18 18
            valign center_ref
            hexactpos 0
            vexactpos 0
-           hexactsize 0
+           hexactsize 1
+           vexactsize 1
+          }
+          TextWidgetClass ThreeDMarker_Label {
+           ignorepointer 1
+           color 0.7059 0.7647 0.8431 1
+           position 24 0
+           size 80 1
+           valign center_ref
+           hexactpos 1
+           vexactpos 0
+           hexactsize 1
            vexactsize 0
-           image0 "BasicMap/gui/images/minimize.paa"
-           mode blend
-           "src alpha" 1
-           stretch 1
+           text "3D Marker"
+           font "BasicMap/gui/fonts/Oswald-Regular/Oswald-Regular"
+           "exact text" 1
+           "text valign" center
           }
          }
         }
-        ButtonWidgetClass Right {
+        PanelWidgetClass PartyMarkerPanel {
+         visible 0
+         ignorepointer 1
          position 0 0
-         size 0.18 0.5
+         size 120 1
          halign right_ref
          valign center_ref
          hexactpos 0
          vexactpos 0
-         hexactsize 0
+         hexactsize 1
          vexactsize 0
          {
-          ImageWidgetClass Right_Label {
-           ignorepointer 1
-           size 0.9 0.9
-           halign center_ref
+          CheckBoxWidgetClass PartyMarker {
+           position 0 0
+           size 18 18
            valign center_ref
            hexactpos 0
            vexactpos 0
-           hexactsize 0
+           hexactsize 1
+           vexactsize 1
+          }
+          TextWidgetClass PartyMarker_Label {
+           ignorepointer 1
+           color 0.7059 0.7647 0.8431 1
+           position 24 0
+           size 90 1
+           valign center_ref
+           hexactpos 1
+           vexactpos 0
+           hexactsize 1
            vexactsize 0
-           image0 "BasicMap/gui/images/expand.paa"
-           mode blend
-           "src alpha" 1
-           stretch 1
+           text "Party Marker"
+           font "BasicMap/gui/fonts/Oswald-Regular/Oswald-Regular"
+           "exact text" 1
+           "text valign" center
           }
          }
         }
        }
       }
-      PanelWidgetClass Colors {
+      PanelWidgetClass Divider1 {
        ignorepointer 1
-       position 0 0.18
-       size 0.73 0.5
-       valign bottom_ref
+       color 0.2745 0.4392 0.7843 0.4
+       position 0 72
+       size 0.92 1
+       halign center_ref
        hexactpos 0
-       vexactpos 0
+       vexactpos 1
        hexactsize 0
-       vexactsize 0
-       scriptclass ""
+       vexactsize 1
+       style rover_sim_colorable
+      }
+      PanelWidgetClass ColorIconRow {
+       ignorepointer 1
+       position 12 80
+       size 296 70
+       halign center_ref
+       hexactpos 1
+       vexactpos 1
+       hexactsize 1
+       vexactsize 1
        {
-        SliderWidgetClass Red {
-         color 1 0 0 1
+        PanelWidgetClass Colors {
+         ignorepointer 1
+         color 1 1 1 0
+         position 0 4
+         size 200 62
+         valign center_ref
+         hexactpos 0
+         vexactpos 1
+         hexactsize 1
+         vexactsize 1
+         {
+          PanelWidgetClass RedRow {
+           ignorepointer 1
+           color 1 0 0 1
+           position 0 0
+           size 1 14
+           halign center_ref
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 1
+           style rover_sim_colorable
+           {
+            TextWidgetClass Red_Label {
+             ignorepointer 1
+             color 1 0.5 0.5 1
+             position 0 0
+             size 16 1
+             valign center_ref
+             hexactpos 0
+             vexactpos 0
+             hexactsize 1
+             vexactsize 0
+             text "R"
+             font "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium"
+             "exact text" 1
+             "text valign" center
+            }
+            SliderWidgetClass Red {
+             color 0.3686 0.1373 0.1373 0.7843
+             position 20 0
+             size 180 12
+             valign center_ref
+             hexactpos 1
+             vexactpos 0
+             hexactsize 1
+             vexactsize 1
+             style Default
+             maximum 255
+             step 1
+             current 150
+             "marker thickness" 0.9
+            }
+           }
+          }
+          PanelWidgetClass GreenRow {
+           ignorepointer 1
+           color 0.0314 1 0 1
+           position 0 16
+           size 1 14
+           halign center_ref
+           hexactpos 0
+           vexactpos 1
+           hexactsize 0
+           vexactsize 1
+           style rover_sim_colorable
+           {
+            TextWidgetClass Green_Label {
+             ignorepointer 1
+             color 0.5 1 0.6 1
+             position 0 0
+             size 16 1
+             valign center_ref
+             hexactpos 0
+             vexactpos 0
+             hexactsize 1
+             vexactsize 0
+             text "G"
+             font "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium"
+             "exact text" 1
+             "text valign" center
+            }
+            SliderWidgetClass Green {
+             color 0.1137 0.3451 0.1686 0.7843
+             position 20 0
+             size 180 12
+             valign center_ref
+             hexactpos 1
+             vexactpos 0
+             hexactsize 1
+             vexactsize 1
+             style Default
+             maximum 255
+             step 1
+             current 150
+             "marker thickness" 0.9
+             "fill in" 1
+            }
+           }
+          }
+          PanelWidgetClass BlueRow {
+           ignorepointer 1
+           color 0 0.251 1 1
+           position 0 32
+           size 1 14
+           halign center_ref
+           hexactpos 0
+           vexactpos 1
+           hexactsize 0
+           vexactsize 1
+           style rover_sim_colorable
+           {
+            TextWidgetClass Blue_Label {
+             ignorepointer 1
+             color 0.5 0.7 1 1
+             position 0 0
+             size 16 1
+             valign center_ref
+             hexactpos 0
+             vexactpos 0
+             hexactsize 1
+             vexactsize 0
+             text "B"
+             font "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium"
+             "exact text" 1
+             "text valign" center
+            }
+            SliderWidgetClass Blue {
+             color 0.0588 0.2118 0.4706 0.7843
+             position 20 0
+             size 180 12
+             valign center_ref
+             hexactpos 1
+             vexactpos 0
+             hexactsize 1
+             vexactsize 1
+             style Default
+             maximum 255
+             step 1
+             current 150
+             "marker thickness" 0.9
+            }
+           }
+          }
+          PanelWidgetClass AlphaRow {
+           ignorepointer 1
+           color 0.6196 0.6196 0.6196 1
+           position 0 48
+           size 1 14
+           halign center_ref
+           hexactpos 0
+           vexactpos 1
+           hexactsize 0
+           vexactsize 1
+           {
+            TextWidgetClass Alpha_Label {
+             ignorepointer 1
+             color 0.9 0.9 0.95 1
+             position 0 0
+             size 16 1
+             valign center_ref
+             hexactpos 0
+             vexactpos 0
+             hexactsize 1
+             vexactsize 0
+             text "A"
+             font "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium"
+             "exact text" 1
+             "text valign" center
+            }
+            SliderWidgetClass Alpha {
+             color 1 1 1 0.7843
+             position 20 0
+             size 180 12
+             valign center_ref
+             hexactpos 1
+             vexactpos 0
+             hexactsize 1
+             vexactsize 1
+             style Default
+             maximum 255
+             step 1
+             current 220
+             "marker thickness" 0.9
+            }
+           }
+          }
+         }
+        }
+        PanelWidgetClass IconPanel {
+         ignorepointer 1
+         color 0.0353 0.0431 0.0549 1
          position 0 0
-         size 1 0.23
-         halign center_ref
+         size 88 66
+         halign right_ref
+         valign center_ref
          hexactpos 0
          vexactpos 0
-         hexactsize 0
-         vexactsize 0
-         style DayZDefault
-         maximum 255
-         step 5
-         current 150
-        }
-        SliderWidgetClass Green {
-         color 0 1 0 1
-         position 0 0.25
-         size 1 0.23
-         halign center_ref
-         hexactpos 0
-         vexactpos 0
-         hexactsize 0
-         vexactsize 0
-         style DayZDefault
-         maximum 255
-         step 5
-         current 150
-        }
-        SliderWidgetClass Blue {
-         color 0 0 1 1
-         position 0 0.5
-         size 1 0.23
-         halign center_ref
-         hexactpos 0
-         vexactpos 0
-         hexactsize 0
-         vexactsize 0
-         style DayZDefault
-         maximum 255
-         step 5
-         current 150
-        }
-        SliderWidgetClass Alpha {
-         color 0.2784 0.2784 0.2784 0.9373
-         position 0 0.75
-         size 1 0.23
-         halign center_ref
-         hexactpos 0
-         vexactpos 0
-         hexactsize 0
-         vexactsize 0
-         style DayZDefault
-         maximum 255
-         step 5
-         current 220
+         hexactsize 1
+         vexactsize 1
+         style rover_sim_colorable
+         {
+          ImageWidgetClass Icon {
+           ignorepointer 1
+           position 0 0
+           size 28 28
+           halign center_ref
+           valign center_ref
+           hexactpos 0
+           vexactpos 0
+           hexactsize 1
+           vexactsize 1
+           mode blend
+           "src alpha" 1
+           "stretch mode" stretch_w_h
+          }
+          ButtonWidgetClass Left {
+           position 4 0
+           size 24 1
+           valign center_ref
+           hexactpos 1
+           vexactpos 0
+           hexactsize 1
+           vexactsize 0
+           {
+            ImageWidgetClass Left_Label {
+             ignorepointer 1
+             color 0.549 0.7059 0.902 1
+             size 14 14
+             halign center_ref
+             valign center_ref
+             hexactpos 0
+             vexactpos 0
+             hexactsize 1
+             vexactsize 1
+             image0 "BasicMap/gui/images/minimize.paa"
+             mode blend
+             "src alpha" 1
+             "stretch mode" stretch_w_h
+            }
+           }
+          }
+          ButtonWidgetClass Right {
+           position 4 0
+           size 24 1
+           halign right_ref
+           valign center_ref
+           hexactpos 1
+           vexactpos 0
+           hexactsize 1
+           vexactsize 0
+           {
+            ImageWidgetClass Right_Label {
+             ignorepointer 1
+             color 0.549 0.7059 0.902 1
+             size 14 14
+             halign center_ref
+             valign center_ref
+             hexactpos 0
+             vexactpos 0
+             hexactsize 1
+             vexactsize 1
+             image0 "BasicMap/gui/images/expand.paa"
+             mode blend
+             "src alpha" 1
+             "stretch mode" stretch_w_h
+            }
+           }
+          }
+         }
         }
        }
       }

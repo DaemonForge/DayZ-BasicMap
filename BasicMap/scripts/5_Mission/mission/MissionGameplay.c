@@ -2,6 +2,13 @@ modded class MissionGameplay extends MissionBase
 {
 	autoptr array<autoptr BasicMapHUDMarker> m_hudMarkers;
 	
+	// Marker visibility key hold detection
+	protected float m_MarkerKeyHoldTime = 0;           // How long K has been held
+	protected bool m_MarkerKeyWasPressed = false;       // Track if key was pressed last frame
+	protected float m_MarkerHoldCooldown = 0;           // Cooldown after hold action
+	protected const float MARKER_HOLD_THRESHOLD = 2.5;  // 2.5 seconds to trigger hold action
+	protected const float MARKER_HOLD_COOLDOWN = 3.5;   // 3.5 seconds before hold can trigger again
+	
 	override void OnMissionStart(){
 		super.OnMissionStart();
 		Print("BasicMap().Init();");
@@ -32,19 +39,20 @@ modded class MissionGameplay extends MissionBase
 		if (!m_hudMarkers){
 			m_hudMarkers = new array<autoptr BasicMapHUDMarker>;
 		}
-		/*int preventRunAway = 500; //Sure if you have more than 500 Makers this might become an issue but lets hope that this is so unlikely its not an issue
-		while (m_hudMarkers.Count() > 0 && preventRunAway > 0){
-			preventRunAway--;
-			m_hudMarkers.Get(0).Show(false);
-			m_hudMarkers.Get(0).OnDelete();
-			delete m_hudMarkers.Get(0);
-			m_hudMarkers.Remove(0);
-		}*/
-		m_hudMarkers.Clear(); //Just to make sure :)
-		for (int j = 0; j < BasicMap().Count(); j++){
-			m_hudMarkers.Insert(new BasicMapHUDMarker());
-			m_hudMarkers.Get(j).Init(BasicMap().Marker(j));
+		
+		int markerCount = BasicMap().Count();
+		int hudCount = m_hudMarkers.Count();
+		
+		// Only rebuild if marker count changed (markers added/removed)
+		if (hudCount != markerCount){
+			// Clear and rebuild
+			m_hudMarkers.Clear();
+			for (int j = 0; j < markerCount; j++){
+				m_hudMarkers.Insert(new BasicMapHUDMarker());
+				m_hudMarkers.Get(j).Init(BasicMap().Marker(j));
+			}
 		}
+		// Otherwise, the existing HUD markers will update themselves via their CallLater
 	}
 
 	override void OnUpdate (float timeslice) {
@@ -88,9 +96,8 @@ modded class MissionGameplay extends MissionBase
 			}
         }
 		
-		if (input.LocalPress("UABasicMap3DMarkers", false) && GetGame().GetUIManager().GetMenu() == NULL && player && !player.IsUnconscious()) {
-            BasicMap().ToggleMarkersOnHUD();
-        }
+		// Handle marker visibility key (K) with short press cycle and long press quick toggle
+		HandleMarkerVisibilityKey(input, player, timeslice);
     }
 	
 	void BasicMapCreatePanel()
@@ -153,4 +160,62 @@ modded class MissionGameplay extends MissionBase
 		}
         return false;
     }
+	
+	// Handle marker visibility key (K) with:
+	// - Short press: Cycle through modes (Show All -> Server Only -> Local Only -> Hide All)
+	// - Long press (2.5s): Toggle between Show All and Hide All
+	// - 3.5s cooldown after hold before hold can trigger again
+	void HandleMarkerVisibilityKey(Input input, PlayerBase player, float timeslice)
+	{
+		// Decrease cooldown timer
+		if (m_MarkerHoldCooldown > 0){
+			m_MarkerHoldCooldown = m_MarkerHoldCooldown - timeslice;
+		}
+		
+		// Only process when no menu is open and player is valid
+		if (GetGame().GetUIManager().GetMenu() != NULL || !player || player.IsUnconscious()){
+			m_MarkerKeyHoldTime = 0;
+			m_MarkerKeyWasPressed = false;
+			return;
+		}
+		
+		// Check if key is currently held
+		float keyValue = input.LocalValue("UABasicMap3DMarkers", false);
+		bool keyHeld = keyValue > 0;
+		
+		if (keyHeld){
+			// Key is being held
+			m_MarkerKeyHoldTime = m_MarkerKeyHoldTime + timeslice;
+			
+			// Check for long press threshold (only if not on cooldown)
+			if (m_MarkerKeyHoldTime >= MARKER_HOLD_THRESHOLD && m_MarkerHoldCooldown <= 0){
+				// Long press detected - quick toggle
+				BasicMap().QuickToggleVisibility();
+				Print("[BasicMap] Hold detected - Quick toggle to: " + BasicMap().GetVisibilityModeName());
+				
+				// Start cooldown and reset hold time to prevent re-triggering
+				m_MarkerHoldCooldown = MARKER_HOLD_COOLDOWN;
+				m_MarkerKeyHoldTime = 0; // Reset so we don't keep triggering
+				m_MarkerKeyWasPressed = true; // Mark as processed
+			}
+			
+			m_MarkerKeyWasPressed = true;
+		}
+		else {
+			// Key was released
+			if (m_MarkerKeyWasPressed){
+				// Only do short press cycle if we didn't trigger a hold action
+				// and hold time was less than threshold
+				if (m_MarkerKeyHoldTime > 0 && m_MarkerKeyHoldTime < MARKER_HOLD_THRESHOLD){
+					// Short press - cycle to next mode
+					BasicMap().CycleVisibilityMode();
+					Print("[BasicMap] Short press - Cycled to: " + BasicMap().GetVisibilityModeName());
+				}
+			}
+			
+			// Reset state
+			m_MarkerKeyHoldTime = 0;
+			m_MarkerKeyWasPressed = false;
+		}
+	}
 }
