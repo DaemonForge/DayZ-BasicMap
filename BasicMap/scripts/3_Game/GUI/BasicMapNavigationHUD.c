@@ -1,0 +1,363 @@
+// BasicMapNavigationHUD.c
+// Handles the compass HUD (requires compass item) and GPS minimap (requires GPS item)
+// GPS takes priority over compass - if both present, shows both
+
+class BasicMapNavigationHUD extends Managed
+{
+	// Layout paths
+	protected static const string COMPASS_LAYOUT_PATH = "BasicMap/gui/layouts/CompassHUD.layout";
+	protected static const string MINIMAP_LAYOUT_PATH = "BasicMap/gui/layouts/MinimapHUD.layout";
+	
+	// Compass strip configuration
+	protected static const float COMPASS_STRIP_WIDTH = 720.0;   // Width of one full 360 degree cycle
+	protected static const float COMPASS_VIEW_WIDTH = 396.0;    // Visible width of compass strip
+	protected static const float COMPASS_OFFSET_BASE = 720.0;   // Start offset (one full cycle to allow left scrolling)
+	protected static const float MINIMAP_RADIUS = 400.0;        // 400m radius around player
+	
+	// Compass widgets
+	protected Widget m_CompassRoot;
+	protected Widget m_CompassContent;
+	
+	// Minimap widgets
+	protected Widget m_MinimapRoot;
+	protected MapWidget m_MinimapWidget;
+	protected ImageWidget m_PlayerMarker;
+	protected TextWidget m_CoordinatesText;
+	
+	// State
+	protected bool m_IsEnabled = false;
+	protected bool m_HasCompass = false;
+	protected bool m_HasGPS = false;
+	protected bool m_HadCompass = false;     // Track previous frame state
+	protected bool m_HadGPS = false;         // Track previous frame state
+	protected float m_LastHeading = 0;
+	
+	void BasicMapNavigationHUD()
+	{
+	}
+	
+	void ~BasicMapNavigationHUD()
+	{
+		Destroy();
+	}
+	
+	void Init()
+	{
+		// Create compass HUD
+		m_CompassRoot = GetGame().GetWorkspace().CreateWidgets(COMPASS_LAYOUT_PATH);
+		if (m_CompassRoot)
+		{
+			m_CompassContent = m_CompassRoot.FindAnyWidget("CompassContent");
+			m_CompassRoot.Show(false);
+		}
+		
+		// Create minimap HUD
+		m_MinimapRoot = GetGame().GetWorkspace().CreateWidgets(MINIMAP_LAYOUT_PATH);
+		if (m_MinimapRoot)
+		{
+			m_MinimapWidget = MapWidget.Cast(m_MinimapRoot.FindAnyWidget("MinimapWidget"));
+			m_PlayerMarker = ImageWidget.Cast(m_MinimapRoot.FindAnyWidget("PlayerMarker"));
+			m_CoordinatesText = TextWidget.Cast(m_MinimapRoot.FindAnyWidget("CoordinatesText"));
+			m_MinimapRoot.Show(false);
+		}
+	}
+	
+	void Destroy()
+	{
+		if (m_CompassRoot)
+		{
+			m_CompassRoot.Unlink();
+			m_CompassRoot = null;
+		}
+		if (m_MinimapRoot)
+		{
+			m_MinimapRoot.Unlink();
+			m_MinimapRoot = null;
+		}
+	}
+	
+	void Toggle()
+	{
+		m_IsEnabled = !m_IsEnabled;
+		UpdateVisibility();
+		
+		if (m_IsEnabled)
+		{
+			Print("[BasicMap] Navigation HUD enabled");
+		}
+		else
+		{
+			Print("[BasicMap] Navigation HUD disabled");
+		}
+	}
+	
+	bool IsEnabled()
+	{
+		return m_IsEnabled;
+	}
+	
+	void SetEnabled(bool enabled)
+	{
+		m_IsEnabled = enabled;
+		UpdateVisibility();
+	}
+	
+	void Update(float timeslice)
+	{
+		if (!m_IsEnabled)
+		{
+			return;
+		}
+		
+		// Hide when any menu is open
+		if (GetGame().GetUIManager().GetMenu() != NULL)
+		{
+			if (m_CompassRoot) m_CompassRoot.Show(false);
+			if (m_MinimapRoot) m_MinimapRoot.Show(false);
+			return;
+		}
+		
+		Man player = GetGame().GetPlayer();
+		if (!player)
+		{
+			if (m_CompassRoot) m_CompassRoot.Show(false);
+			if (m_MinimapRoot) m_MinimapRoot.Show(false);
+			return;
+		}
+		
+		// Store previous state before checking
+		m_HadCompass = m_HasCompass;
+		m_HadGPS = m_HasGPS;
+		
+		// Check for navigation items in player inventory
+		CheckNavigationItems(player);
+		
+		// Auto-disable if player lost all navigation items
+		if (!m_HasCompass && !m_HasGPS)
+		{
+			// Only notify if we previously had at least one item
+			if (m_HadCompass || m_HadGPS)
+			{
+				Print("[BasicMap] Navigation HUD auto-disabled - no navigation items");
+			}
+			
+			// Reset enabled state and hide everything
+			m_IsEnabled = false;
+			if (m_CompassRoot) m_CompassRoot.Show(false);
+			if (m_MinimapRoot) m_MinimapRoot.Show(false);
+			return;
+		}
+		
+		// Notify if compass was lost (but still have GPS)
+		if (m_HadCompass && !m_HasCompass && m_HasGPS)
+		{
+			Print("[BasicMap] Compass lost - hiding compass HUD");
+		}
+		
+		// Notify if GPS was lost (but still have compass)
+		if (m_HadGPS && !m_HasGPS && m_HasCompass)
+		{
+			Print("[BasicMap] GPS lost - hiding minimap HUD");
+		}
+		
+		// Update compass if player has one
+		if (m_HasCompass && m_CompassRoot)
+		{
+			m_CompassRoot.Show(true);
+			UpdateCompass(player);
+		}
+		else if (m_CompassRoot)
+		{
+			m_CompassRoot.Show(false);
+		}
+		
+		// Update minimap if player has GPS (GPS takes priority)
+		if (m_HasGPS && m_MinimapRoot)
+		{
+			m_MinimapRoot.Show(true);
+			UpdateMinimap(player);
+		}
+		else if (m_MinimapRoot)
+		{
+			m_MinimapRoot.Show(false);
+		}
+	}
+	
+	protected void CheckNavigationItems(Man player)
+	{
+		m_HasCompass = false;
+		m_HasGPS = false;
+		
+		if (!player || !player.GetInventory())
+		{
+			return;
+		}
+		
+		array<EntityAI> itemsArray = new array<EntityAI>;
+		player.GetInventory().EnumerateInventory(InventoryTraversalType.PREORDER, itemsArray);
+		
+		for (int i = 0; i < itemsArray.Count(); i++)
+		{
+			EntityAI item = itemsArray.Get(i);
+			if (!item)
+			{
+				continue;
+			}
+			
+			// Get item type as lowercase string for comparison
+			string itemType = item.GetType();
+			itemType.ToLower();
+			
+			// Check for compass (type name contains "compass")
+			if (itemType.Contains("compass"))
+			{
+				// Only count non-ruined compasses
+				if (!item.IsRuined())
+				{
+					m_HasCompass = true;
+				}
+			}
+			
+			// Check for GPS (type name contains "gps")
+			// Also check for BM_Navigator which is the BasicMap GPS item
+			if (itemType.Contains("gps") || itemType.Contains("navigator"))
+			{
+				// GPS/Navigator needs to be on (has power)
+				if (item.GetCompEM() && item.GetCompEM().IsSwitchedOn() && item.GetCompEM().IsWorking())
+				{
+					m_HasGPS = true;
+				}
+			}
+		}
+	}
+	
+	protected void UpdateCompass(Man player)
+	{
+		if (!m_CompassContent)
+		{
+			return;
+		}
+		
+		// Get player's heading (yaw from camera direction)
+		vector camDir = GetGame().GetCurrentCameraDirection();
+		float heading = Math.Atan2(camDir[0], camDir[2]) * Math.RAD2DEG;
+		
+		// Normalize to 0-360
+		if (heading < 0)
+		{
+			heading = heading + 360;
+		}
+		
+		m_LastHeading = heading;
+		
+		// Compass strip layout:
+		// - Cycle 1: positions 0-720 (degrees 0-360)  
+		// - Cycle 2: positions 720-1440 (degrees 0-360 repeated)
+		// 
+		// View window is 396px wide = 198 degrees visible (99° each side of center).
+		// 
+		// Strategy: Choose which cycle to use based on heading to ensure
+		// the entire view (center ± 99°) falls within valid content.
+		//
+		// Cycle 1 valid view: heading 99° to 261° (mark 198-522, edges 0-720)
+		// Cycle 2 valid view: heading 0° to 162° OR 198° to 360° 
+		//                     (mark 720-1044 or 1116-1440, edges stay in 522-1638)
+		//
+		// Simplest approach: 
+		// - Use cycle 2 (base 720) for heading 0-180° 
+		// - Use cycle 1 (base 0) for heading 180-360°
+		// This ensures we never hit the boundaries.
+		
+		float pixelsPerDegree = 2.0;
+		float viewHalfWidth = COMPASS_VIEW_WIDTH / 2.0;  // 198 pixels
+		
+		float markPosition;
+		
+		// For headings 0-180°: use cycle 2 (720-1080)
+		// View left edge at heading 0° = 720 - 198 = 522 (safe, in cycle 1)
+		// View right edge at heading 180° = 1080 + 198 = 1278 (safe, in cycle 2)
+		//
+		// For headings 180-360°: use cycle 1 (360-720)  
+		// View left edge at heading 180° = 360 - 198 = 162 (safe, in cycle 1)
+		// View right edge at heading 360° = 720 + 198 = 918 (safe, in cycle 2)
+		
+		if (heading <= 180.0)
+		{
+			// Use cycle 2: mark position = 720 + heading*2
+			markPosition = 720.0 + (heading * pixelsPerDegree);
+		}
+		else
+		{
+			// Use cycle 1: mark position = heading*2
+			markPosition = heading * pixelsPerDegree;
+		}
+		
+		// Calculate strip X position to center the mark in view
+		float stripX = viewHalfWidth - markPosition;
+		
+		m_CompassContent.SetPos(stripX, 0);
+	}
+	
+	protected void UpdateMinimap(Man player)
+	{
+		if (!m_MinimapWidget)
+		{
+			return;
+		}
+		
+		vector playerPos = player.GetPosition();
+		
+		// Center map on player position - pass world position directly
+		// MapWidget.SetMapPos expects the world position vector
+		m_MinimapWidget.SetMapPos(playerPos);
+		
+		// Set scale to show approximately 400m radius
+		// Scale is a zoom factor - lower = more zoomed out, higher = more zoomed in
+		// We want roughly 800m diameter visible in the 192px widget
+		// A scale of around 0.1 to 0.15 gives a good minimap view
+		m_MinimapWidget.SetScale(0.12);
+		
+		// Rotate player marker based on heading
+		if (m_PlayerMarker)
+		{
+			vector camDir = GetGame().GetCurrentCameraDirection();
+			float heading = Math.Atan2(camDir[0], camDir[2]) * Math.RAD2DEG;
+			m_PlayerMarker.SetRotation(0, 0, heading);
+		}
+		
+		// Update coordinates text
+		if (m_CoordinatesText)
+		{
+			int gridX = Math.Round(playerPos[0]);
+			int gridZ = Math.Round(playerPos[2]);
+			
+			string coordStr = gridX.ToString() + " / " + gridZ.ToString();
+			m_CoordinatesText.SetText(coordStr);
+		}
+	}
+	
+	protected void UpdateVisibility()
+	{
+		if (!m_IsEnabled)
+		{
+			if (m_CompassRoot) m_CompassRoot.Show(false);
+			if (m_MinimapRoot) m_MinimapRoot.Show(false);
+		}
+		// Actual visibility depends on having the required items, handled in Update()
+	}
+	
+	bool HasCompass()
+	{
+		return m_HasCompass;
+	}
+	
+	bool HasGPS()
+	{
+		return m_HasGPS;
+	}
+	
+	float GetCurrentHeading()
+	{
+		return m_LastHeading;
+	}
+}

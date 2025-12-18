@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BasicMap - Feature Roadmap 2025</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: #fff;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #00d4ff, #7b2cbf);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .subtitle {
+            color: #8892b0;
+            font-size: 1.1em;
+        }
+        .version-badge {
+            display: inline-block;
+            background: rgba(0, 212, 255, 0.2);
+            border: 1px solid #00d4ff;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-top: 15px;
+            color: #00d4ff;
+        }
+
+        /* Current Features */
+        .current-features {
+            background: rgba(39, 174, 96, 0.1);
+            border: 1px solid rgba(39, 174, 96, 0.3);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 40px;
+        }
+        .current-features h2 {
+            color: #27ae60;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        .feature-item {
+            background: rgba(255,255,255,0.05);
+            padding: 12px 15px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .feature-item .check {
+            color: #27ae60;
+            font-size: 1.2em;
+        }
+
+        /* Roadmap Timeline */
+        .roadmap {
+            position: relative;
+        }
+        .roadmap::before {
+            content: '';
+            position: absolute;
+            left: 30px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(to bottom, #e74c3c, #f39c12, #f1c40f, #27ae60, #3498db);
+            border-radius: 3px;
+        }
+        .phase {
+            position: relative;
+            margin-bottom: 40px;
+            padding-left: 80px;
+        }
+        .phase-marker {
+            position: absolute;
+            left: 15px;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9em;
+            z-index: 1;
+        }
+        .phase-1 .phase-marker { background: #e74c3c; }
+        .phase-2 .phase-marker { background: #f39c12; }
+        .phase-3 .phase-marker { background: #f1c40f; color: #333; }
+        .phase-4 .phase-marker { background: #27ae60; }
+        .phase-5 .phase-marker { background: #3498db; }
+
+        .phase-content {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 25px;
+            border-left: 4px solid;
+        }
+        .phase-1 .phase-content { border-color: #e74c3c; }
+        .phase-2 .phase-content { border-color: #f39c12; }
+        .phase-3 .phase-content { border-color: #f1c40f; }
+        .phase-4 .phase-content { border-color: #27ae60; }
+        .phase-5 .phase-content { border-color: #3498db; }
+
+        .phase-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .phase-title {
+            font-size: 1.3em;
+            font-weight: 600;
+        }
+        .phase-1 .phase-title { color: #e74c3c; }
+        .phase-2 .phase-title { color: #f39c12; }
+        .phase-3 .phase-title { color: #f1c40f; }
+        .phase-4 .phase-title { color: #27ae60; }
+        .phase-5 .phase-title { color: #3498db; }
+
+        .phase-tag {
+            font-size: 0.75em;
+            padding: 4px 12px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.1);
+            color: #8892b0;
+        }
+
+        .feature-list {
+            list-style: none;
+        }
+        .feature-list li {
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        .feature-list li:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        .feature-icon {
+            font-size: 1.3em;
+            min-width: 30px;
+            text-align: center;
+        }
+        .feature-details h4 {
+            font-size: 1em;
+            margin-bottom: 4px;
+        }
+        .feature-details p {
+            font-size: 0.85em;
+            color: #8892b0;
+            line-height: 1.5;
+        }
+
+        /* Legend */
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 50px;
+            flex-wrap: wrap;
+            padding: 20px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85em;
+            color: #8892b0;
+        }
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            color: #5a6a8a;
+            font-size: 0.85em;
+        }
+        footer a {
+            color: #00d4ff;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🗺️ BasicMap</h1>
+            <p class="subtitle">DayZ In-Game Map & Navigation Mod</p>
+            <span class="version-badge">Feature Roadmap 2025</span>
+        </header>
+
+        <!-- Current Features -->
+        <div class="current-features">
+            <h2>✅ Current Features (v1.0)</h2>
+            <div class="feature-grid">
+                <div class="feature-item"><span class="check">✓</span> Personal markers</div>
+                <div class="feature-item"><span class="check">✓</span> Server-synced markers</div>
+                <div class="feature-item"><span class="check">✓</span> 3D HUD waypoints</div>
+                <div class="feature-item"><span class="check">✓</span> Circle zone markers</div>
+                <div class="feature-item"><span class="check">✓</span> Compass HUD</div>
+                <div class="feature-item"><span class="check">✓</span> GPS minimap</div>
+                <div class="feature-item"><span class="check">✓</span> Custom marker icons</div>
+                <div class="feature-item"><span class="check">✓</span> Marker visibility modes</div>
+                <div class="feature-item"><span class="check">✓</span> Map item requirement</div>
+                <div class="feature-item"><span class="check">✓</span> Compass/GPS item checks</div>
+                <div class="feature-item"><span class="check">✓</span> JSON persistence</div>
+                <div class="feature-item"><span class="check">✓</span> Server configuration</div>
+            </div>
+        </div>
+
+        <!-- Roadmap Timeline -->
+        <div class="roadmap">
+            
+            <!-- Phase 1 -->
+            <div class="phase phase-1">
+                <div class="phase-marker">1</div>
+                <div class="phase-content">
+                    <div class="phase-header">
+                        <span class="phase-title">🛠️ Stability & Polish</span>
+                        <span class="phase-tag">Q1 2025</span>
+                    </div>
+                    <ul class="feature-list">
+                        <li>
+                            <span class="feature-icon">🔧</span>
+                            <div class="feature-details">
+                                <h4>Bug Fixes</h4>
+                                <p>Complete missing pen requirement check, fix potential null reference errors in HUD updates</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="feature-icon">🌍</span>
+                            <div class="feature-details">
+                                <h4>Multi-Map Support</h4>
+                                <p>Dynamic map bounds detection instead of hardcoded Chernarus values - works on Livonia, Namalsk, custom maps</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="feature-icon">⚡</span>
+                            <div class="feature-details">
+                                <h4>Performance Optimization</h4>
+                                <p>Object pooling for HUD markers, lazy widget creation, reduced memory footprint</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Phase 2 -->
+            <div class="phase phase-2">
+                <div class="phase-marker">2</div>
+                <div class="phase-content">
+                    <div class="phase-header">
+                        <span class="phase-title">🎯 User Experience</span>
+                        <span class="phase-tag">Q2 2025</span>
+                    </div>
+                    <ul class="feature-list">
+                        <li>
+                            <span class="feature-icon">🏷️</span>
+                            <div class="feature-details">
+                                <h4>Marker Categories</h4>
+                                <p>Tag markers as Base, Loot, Danger, Meeting Point, etc. Filter by category on map and in list</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="feature-icon">🔍</span>
+                            <div class="feature-details">
+                                <h4>Search & Filter</h4>
+                                <p>Text search to find markers by name, filter panel by type, sort by distance from player</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="feature-icon">📝</span>
+                            <div class="feature-details">
+                                <h4>Marker Notes</h4>
+                                <p>Add detailed descriptions to markers beyond just the name - loot lists, warnings, coordinates</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="feature-icon">🔔</span>
+                            <div class="feature-details">
+                                <h4>Proximity Alerts</h4>
+                                <p>Optional audio/visual notification when approaching a waypoint marker</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Phase 3 -->
+            <div class="phase phase-3">
+                <div class="phase-marker">3</div>
+                <div class="phase-content">
+                    <div class="phase-header">
+                        <span class="phase-title">🚀 New Features</span>
+                        <span class="phase-tag">Q3 2025</span>
+                    </div>
+                    <ul class="feature-list">
+                        <li>
+                            <span class="feature-icon">📍</span>
+                            <div class="feature-details">
+                                <h4>Route Drawing</h4>
+                                <p>Connect markers with lines to create travel routes. Polyline paths with distance calculation</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="feature-icon">⏱️</span>
+                            <div class="feature-details">
+                                <h4>Temporary Markers</h4>
+                                <p>Markers that auto-expire after set time. Perfect for "meet here in 10 minutes" scenarios</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="feature-icon">📤</span>
+                            <div class="feature-details">
+                                <h4>Import/Export</h4>
+                                <p>Export marker sets to JSON files, share with friends, import community POI packs</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="feature-icon">🔭</span>
+                            <div class="feature-details">
+                                <h4>Marker Clustering</h4>
+                                <p>When zoomed out, nearby markers group into clusters with count badges</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Phase 4 -->
+            <div class="phase phase-4">
+                <div class="phase-marker">4</div>
+                <div class="phase-content">
+                    <div class="phase-header">
+                        <span class="phase-title">👥 Multiplayer & Social</span>
+                        <span class="phase-tag">Q4 2025</span>
+                    </div>
+                    <ul class="feature-list">
+                        <li>
+                            <span class="feature-icon">👨‍👩‍👧‍👦</span>
+                            <div class="feature-details">
+                                <h4>Party System</h4>
+                                <p>Create groups, invite players, share party markers in real-time. See teammate positions on map</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="feature-icon">📡</span>
+                            <div class="feature-details">
+                                <h4>Marker Sharing</h4>
+                                <p>Share individual markers with other players - send a location ping to your group</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="feature-icon">🎨</span>
+                            <div class="feature-details">
+                                <h4>Custom Icons</h4>
+                                <p>Upload and use custom .paa marker icons. Server-side icon packs</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="feature-icon">🗺️</span>
+                            <div class="feature-details">
+                                <h4>Map Overlays</h4>
+                                <p>Add image overlays to map - base blueprints, territory boundaries, trade zones</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Phase 5 -->
+            <div class="phase phase-5">
+                <div class="phase-marker">5</div>
+                <div class="phase-content">
+                    <div class="phase-header">
+                        <span class="phase-title">🔌 Integration & API</span>
+                        <span class="phase-tag">2026+</span>
+                    </div>
+                    <ul class="feature-list">
+                        <li>
+                            <span class="feature-icon">🧩</span>
+                            <div class="feature-details">
+                                <h4>Mod API</h4>
+                                <p>Public API for other mods to create/manage markers. Quest markers, trader locations, event zones</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="feature-icon">🌐</span>
+                            <div class="feature-details">
+                                <h4>Localization</h4>
+                                <p>Multi-language support via string tables. Community translations welcome</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="feature-icon">🔄</span>
+                            <div class="feature-details">
+                                <h4>Hot Reload Config</h4>
+                                <p>Server admins can update settings without restart. RCON integration</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="feature-icon">📊</span>
+                            <div class="feature-details">
+                                <h4>Analytics Dashboard</h4>
+                                <p>Optional server-side tracking of popular locations, heatmaps for admins</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Legend -->
+        <div class="legend">
+            <div class="legend-item">
+                <span class="legend-dot" style="background: #e74c3c;"></span>
+                <span>Critical / Stability</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-dot" style="background: #f39c12;"></span>
+                <span>Quality of Life</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-dot" style="background: #f1c40f;"></span>
+                <span>New Features</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-dot" style="background: #27ae60;"></span>
+                <span>Multiplayer</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-dot" style="background: #3498db;"></span>
+                <span>Future / API</span>
+            </div>
+        </div>
+
+        <footer>
+            <p>BasicMap by DaemonForge | Roadmap generated December 2025</p>
+            <p style="margin-top: 8px;">Priorities may shift based on community feedback</p>
+        </footer>
+    </div>
+</body>
+</html>

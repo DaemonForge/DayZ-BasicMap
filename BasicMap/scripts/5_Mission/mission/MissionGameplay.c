@@ -2,6 +2,9 @@ modded class MissionGameplay extends MissionBase
 {
 	autoptr array<autoptr BasicMapHUDMarker> m_hudMarkers;
 	
+	// Navigation HUD (compass and minimap)
+	protected ref BasicMapNavigationHUD m_NavigationHUD;
+	
 	// Marker visibility key hold detection
 	protected float m_MarkerKeyHoldTime = 0;           // How long K has been held
 	protected bool m_MarkerKeyWasPressed = false;       // Track if key was pressed last frame
@@ -13,6 +16,11 @@ modded class MissionGameplay extends MissionBase
 		super.OnMissionStart();
 		Print("BasicMap().Init();");
 		BasicMap().Init();
+		
+		// Initialize navigation HUD
+		m_NavigationHUD = new BasicMapNavigationHUD();
+		m_NavigationHUD.Init();
+		
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.UpdateHuDIcons, 2000, false);
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.UpdateHuDIcons, 9000, true);
 	}
@@ -31,6 +39,13 @@ modded class MissionGameplay extends MissionBase
 			m_hudMarkers.Clear(); //Just to make sure :)
 			delete m_hudMarkers;
 		}
+		
+		// Clean up navigation HUD
+		if (m_NavigationHUD){
+			m_NavigationHUD.Destroy();
+			delete m_NavigationHUD;
+		}
+		
 		super.OnMissionFinish();
 	}
 	
@@ -98,6 +113,9 @@ modded class MissionGameplay extends MissionBase
 		
 		// Handle marker visibility key (K) with short press cycle and long press quick toggle
 		HandleMarkerVisibilityKey(input, player, timeslice);
+		
+		// Handle navigation HUD toggle (B key) and update
+		HandleNavigationHUD(input, player, timeslice);
     }
 	
 	void BasicMapCreatePanel()
@@ -216,6 +234,31 @@ modded class MissionGameplay extends MissionBase
 			// Reset state
 			m_MarkerKeyHoldTime = 0;
 			m_MarkerKeyWasPressed = false;
+		}
+	}
+	
+	// Handle navigation HUD (B key to toggle, updates each frame when enabled)
+	// Compass HUD shows when player has compass item
+	// GPS minimap shows when player has working GPS (takes priority)
+	void HandleNavigationHUD(Input input, PlayerBase player, float timeslice)
+	{
+		// Toggle navigation HUD with B key
+		if (input.LocalPress("UABasicMapNavigation", false) && player && !player.IsUnconscious())
+		{
+			// Only toggle if no menu is open
+			if (GetGame().GetUIManager().GetMenu() == NULL)
+			{
+				if (m_NavigationHUD)
+				{
+					m_NavigationHUD.Toggle();
+				}
+			}
+		}
+		
+		// Update navigation HUD each frame
+		if (m_NavigationHUD)
+		{
+			m_NavigationHUD.Update(timeslice);
 		}
 	}
 }

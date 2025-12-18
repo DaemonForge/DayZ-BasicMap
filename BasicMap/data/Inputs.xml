@@ -4,6 +4,7 @@
         <actions>
             <input name="UABasicMap" loc="Map" />
             <input name="UABasicMap3DMarkers" loc="Toggle 3D Map Markers" />
+            <input name="UABasicMapNavigation" loc="Toggle Navigation HUD" />
         </actions>
     </inputs>
     <preset>
@@ -12,6 +13,9 @@
         </input>
 		<input name="UABasicMap3DMarkers">
             <btn name="kK" />
+        </input>
+        <input name="UABasicMapNavigation">
+            <btn name="kB" />
         </input>
     </preset>
 </modded_inputs>

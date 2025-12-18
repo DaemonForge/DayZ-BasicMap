@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BasicMap - Code Review & Roadmap</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+            padding: 10px 0;
+            border-bottom: 2px solid #ecf0f1;
+        }
+        h3 {
+            color: #7f8c8d;
+            margin-top: 20px;
+        }
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
+            margin-right: 5px;
+        }
+        .badge-success { background: #27ae60; }
+        .badge-warning { background: #f39c12; }
+        .badge-danger { background: #e74c3c; }
+        .badge-info { background: #3498db; }
+        .badge-purple { background: #9b59b6; }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 14px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        th {
+            background: #34495e;
+            color: white;
+        }
+        tr:hover {
+            background: #f8f9fa;
+        }
+        code {
+            background: #ecf0f1;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 13px;
+        }
+        .priority-section {
+            margin: 20px 0;
+            padding: 15px;
+            border-left: 4px solid;
+            background: #fafafa;
+            border-radius: 0 8px 8px 0;
+        }
+        .priority-1 { border-color: #e74c3c; }
+        .priority-2 { border-color: #f39c12; }
+        .priority-3 { border-color: #f1c40f; }
+        .priority-4 { border-color: #27ae60; }
+        .priority-5 { border-color: #3498db; }
+        
+        .priority-title {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        .priority-1 .priority-title { color: #e74c3c; }
+        .priority-2 .priority-title { color: #f39c12; }
+        .priority-3 .priority-title { color: #d4ac0d; }
+        .priority-4 .priority-title { color: #27ae60; }
+        .priority-5 .priority-title { color: #3498db; }
+        
+        ul {
+            margin: 10px 0;
+            padding-left: 25px;
+        }
+        li {
+            margin: 8px 0;
+        }
+        .strength-list li::marker {
+            content: "✅ ";
+        }
+        .file-path {
+            color: #8e44ad;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        .meta {
+            color: #95a5a6;
+            font-size: 12px;
+            margin-bottom: 20px;
+        }
+        .section-icon {
+            margin-right: 8px;
+        }
+        .new-files {
+            background: #e8f6f3;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        .new-files h3 {
+            margin-top: 0;
+            color: #1abc9c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🗺️ BasicMap - Code Review & Roadmap</h1>
+        <p class="meta">Generated: December 17, 2025 | DayZ Mod Development</p>
+
+        <h2><span class="section-icon">✅</span>Strengths</h2>
+        <ul class="strength-list">
+            <li><strong>Well-organized architecture</strong> - Clean separation between controller (<code>BasicMapController</code>), data models (<code>BasicMapMarker</code>, <code>BasicMapCircleMarker</code>), and UI (<code>BasicMapMenu</code>, <code>BasicMapHUDMarker</code>)</li>
+            <li><strong>Good singleton pattern</strong> - <code>BasicMap()</code> provides consistent global access</li>
+            <li><strong>Flexible marker system</strong> - Groups, factories, and inheritance allow extensibility</li>
+            <li><strong>Server/client sync</strong> - RPC-based synchronization for server markers is solid</li>
+            <li><strong>Feature-rich configuration</strong> - <code>BasicMapConfig</code> offers server admins good control (compass requirements, GPS, map items)</li>
+            <li><strong>Visibility modes</strong> - Nice implementation of cycling through SHOW_ALL / SERVER_ONLY / LOCAL_ONLY / HIDE_ALL</li>
+            <li><strong>Navigation HUD</strong> - Compass and minimap tied to inventory items is immersive</li>
+        </ul>
+
+        <h2><span class="section-icon">⚠️</span>Areas for Improvement</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Issue</th>
+                    <th>File</th>
+                    <th>Suggestion</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Empty method body</td>
+                    <td><span class="file-path">MissionGameplay.c:143</span></td>
+                    <td><code>BasicMapHasPen()</code> is incomplete - should return bool</td>
+                </tr>
+                <tr>
+                    <td>Hardcoded map bounds</td>
+                    <td><span class="file-path">BasicMapCircleMarker.c:85</span></td>
+                    <td><code>15360</code> is Chernarus-specific - should be configurable</td>
+                </tr>
+                <tr>
+                    <td>Magic numbers</td>
+                    <td><span class="file-path">Multiple files</span></td>
+                    <td><code>2000ms</code>, <code>9000ms</code> refresh rates, <code>0.28</code> proximity - consider constants</td>
+                </tr>
+                <tr>
+                    <td>Potential null access</td>
+                    <td><span class="file-path">BasicMapMarker.c:103</span></td>
+                    <td><code>Pos</code> null check uses <code>if (!Pos)</code> which may behave unexpectedly for vectors</td>
+                </tr>
+                <tr>
+                    <td>Config version migration</td>
+                    <td><span class="file-path">BasicMapSettings.c:68</span></td>
+                    <td>Version handling could be cleaner with a migration pattern</td>
+                </tr>
+                <tr>
+                    <td>Comment typos</td>
+                    <td><span class="file-path">BasicMapController.c:470</span></td>
+                    <td>"USSAGE" → "USAGE", "consistancy" → "consistency"</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2><span class="section-icon">🗺️</span>Roadmap Suggestions</h2>
+
+        <div class="priority-section priority-1">
+            <div class="priority-title">🔴 Priority 1: Bug Fixes & Stability</div>
+            <ol>
+                <li><strong>Complete <code>BasicMapHasPen()</code></strong> - Currently empty, likely breaks pen-required marking</li>
+                <li><strong>Map bounds detection</strong> - Use <code>GetGame().GetWorld().GetBoundBox()</code> instead of hardcoded 15360</li>
+                <li><strong>Null safety audit</strong> - Add defensive checks in HUD update loops</li>
+            </ol>
+        </div>
+
+        <div class="priority-section priority-2">
+            <div class="priority-title">🟠 Priority 2: Quality of Life</div>
+            <ol start="4">
+                <li><strong>Marker categories/tags</strong> - Allow filtering markers by type (trader, base, danger, etc.)</li>
+                <li><strong>Search/filter in marker list</strong> - Text search to find markers quickly</li>
+                <li><strong>Marker distance sorting</strong> - Option to sort marker list by distance from player</li>
+                <li><strong>Marker sharing between players</strong> - Share personal markers via RPC to party/friends</li>
+            </ol>
+        </div>
+
+        <div class="priority-section priority-3">
+            <div class="priority-title">🟡 Priority 3: New Features</div>
+            <ol start="8">
+                <li><strong>Route/path drawing</strong> - Connect markers with lines to create routes</li>
+                <li><strong>Dynamic/temporal markers</strong> - Markers that expire after X minutes (temporary waypoints)</li>
+                <li><strong>Marker import/export</strong> - JSON export for sharing marker sets externally</li>
+                <li><strong>Marker LOD system</strong> - Cluster nearby markers when zoomed out on map</li>
+                <li><strong>Audio cues</strong> - Proximity notification sounds when approaching waypoints</li>
+            </ol>
+        </div>
+
+        <div class="priority-section priority-4">
+            <div class="priority-title">🟢 Priority 4: Advanced Features</div>
+            <ol start="13">
+                <li><strong>Party/group system integration</strong> - If you add parties, sync markers per-group</li>
+                <li><strong>Custom marker icons</strong> - Allow players to use custom .paa files</li>
+                <li><strong>Marker notes/descriptions</strong> - Extended text per marker (not just name)</li>
+                <li><strong>Map overlay images</strong> - Support for custom map overlays (base blueprints, zone boundaries)</li>
+                <li><strong>Mission/quest marker API</strong> - Let other mods create markers programmatically</li>
+            </ol>
+        </div>
+
+        <div class="priority-section priority-5">
+            <div class="priority-title">🔵 Priority 5: Performance & Polish</div>
+            <ol start="18">
+                <li><strong>Lazy loading for markers</strong> - Don't create all HUD widgets at once</li>
+                <li><strong>Object pooling</strong> - Reuse <code>BasicMapHUDMarker</code> instances instead of recreating</li>
+                <li><strong>Config hot-reload</strong> - Allow server admins to reload settings without restart</li>
+                <li><strong>Localization support</strong> - String table for multi-language UI</li>
+            </ol>
+        </div>
+
+        <div class="new-files">
+            <h3>📁 Suggested New Files for Roadmap</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>New Files</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Party markers</td>
+                        <td><code>scripts/3_Game/BasicMapParty.c</code>, <code>scripts/3_Game/BasicMapPartyMarker.c</code></td>
+                    </tr>
+                    <tr>
+                        <td>Routes</td>
+                        <td><code>scripts/3_Game/BasicMapRoute.c</code></td>
+                    </tr>
+                    <tr>
+                        <td>Temporal markers</td>
+                        <td>Extend <code>BasicMapMarker</code> with <code>ExpiresAt</code> field</td>
+                    </tr>
+                    <tr>
+                        <td>External API</td>
+                        <td><code>scripts/3_Game/BasicMapAPI.c</code> - public methods for other mods</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <hr style="margin-top: 40px; border: none; border-top: 1px solid #ecf0f1;">
+        <p style="color: #95a5a6; font-size: 12px; text-align: center;">
+            BasicMap DayZ Mod | Review by GitHub Copilot | December 2025
+        </p>
+    </div>
+</body>
+</html>
