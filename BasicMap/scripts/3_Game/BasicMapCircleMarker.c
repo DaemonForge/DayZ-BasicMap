@@ -75,12 +75,32 @@ class BasicMapCircleMarker extends BasicMapMarker{
 		return HideIntersects;
 	}
 	
+	// Get map size dynamically - works for any map (Chernarus, Livonia, Namalsk, etc.)
+	// Uses World.GetWorldSize() which returns the map dimension as an int
+	protected int GetMapSize(){
+		// Default fallback (Chernarus = 15360)
+		int mapSize = 15360;
+		
+		// Try to get actual world size
+		if (GetGame() && GetGame().GetWorld()){
+			int worldSize = GetGame().GetWorld().GetWorldSize();
+			if (worldSize > 0){
+				mapSize = worldSize;
+			}
+		}
+		return mapSize;
+	}
+	
 	array<vector> GetEdge(array<autoptr BasicMapMarker> Conflicting = NULL) {
 		if ( !GetUpdated() && Edge && Edge.Count() > 0){
 			return Edge;
 		}
 		Updated = false;
 		Edge = new array<vector>;
+		
+		// Get dynamic map size instead of hardcoded values
+		int mapSize = GetMapSize();
+		
 		float circleLength = Math.PI * GetRadius();
 		circleLength = circleLength * 0.65;
 		int i = 0;
@@ -90,7 +110,8 @@ class BasicMapCircleMarker extends BasicMapMarker{
 			float x = Pos[0] + GetRadius() * Math.Cos(angle);
 			float y = Pos[2] + GetRadius() * Math.Sin(angle);
 			if (!GetHideIntersects() || !Intersects(Vector(x, Pos[1], y), Conflicting)){
-				if ( x >= 0 && y >= 0 && x <= 15360 && y <= 15360){//Prevent markers out of bounds
+				// Use dynamic map size to prevent markers out of bounds
+				if ( x >= 0 && y >= 0 && x <= mapSize && y <= mapSize){
 					Edge.Insert(Vector(x, Pos[1], y));
 				}
 			}

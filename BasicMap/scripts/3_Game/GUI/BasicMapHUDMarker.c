@@ -68,9 +68,25 @@ class BasicMapHUDMarker extends Managed {
 		delete layoutRoot;
 	}
 	
-	void Update(){	
-		if (m_MarkerData && layoutRoot){
-			if (MarkerVisibleOnScreen() && m_MarkerData.OnHUD() && BasicMap().ShowMarkersOnHUD() && BasicMap().ShouldShowOnHUD(m_MarkerData.GetGroup()) ){
+	void Update(){
+		// Null safety checks
+		if (!layoutRoot || m_deleted){
+			OnDelete();
+			return;
+		}
+		
+		if (!m_MarkerData){
+			Show(false);
+			return;
+		}
+		
+		// Ensure BasicMap controller exists
+		if (!BasicMap()){
+			Show(false);
+			return;
+		}
+		
+		if (MarkerVisibleOnScreen() && m_MarkerData.OnHUD() && BasicMap().ShowMarkersOnHUD() && BasicMap().ShouldShowOnHUD(m_MarkerData.GetGroup())){
 				
 				float x;
 				float y;
@@ -209,11 +225,8 @@ class BasicMapHUDMarker extends Managed {
 				}
 				Show();
 				layoutRoot.SetPos(x, y);
-			} else{
-				Show(false);
-			}
-		} else {
-			OnDelete();
+		} else{
+			Show(false);
 		}
 	}
 	

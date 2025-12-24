@@ -146,7 +146,28 @@ modded class MissionGameplay extends MissionBase
 	}
 	
 	bool BasicMapHasPen(){
+		if (!GetBasicMapConfig().RequirePenToMark){
+			return true;
+		}
 		
+		DayZPlayer player = DayZPlayer.Cast(GetGame().GetPlayer());
+		if (!player){
+			return false;
+		}
+		
+		array<EntityAI> itemsArray = new array<EntityAI>;
+		player.GetInventory().EnumerateInventory(InventoryTraversalType.PREORDER, itemsArray);
+		
+		for (int i = 0; i < itemsArray.Count(); i++){
+			if (itemsArray.Get(i)){
+				string itemType = itemsArray.Get(i).GetType();
+				itemType.ToLower();
+				if (itemType.Contains("pen_")){
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 	
 	bool AllowedToOpenBasicMap(){

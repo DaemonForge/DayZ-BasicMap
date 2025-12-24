@@ -1,0 +1,16 @@
+MetaFileClass {
+ Name "{94476517B1F0FF6C}BasicMap/gui/images/dayzarrow.png"
+ Author "laptop-a1dsa5nh"
+ ChangeDate -947604585
+ Configurations {
+  PAAResourceClass PC {
+   SourceFile "dayzarrow.paa"
+  }
+  PAAResourceClass XBOX_ONE : PC {
+  }
+  PAAResourceClass PS4 : PC {
+  }
+  PAAResourceClass LINUX : PC {
+  }
+ }
+}

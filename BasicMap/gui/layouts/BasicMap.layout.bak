@@ -1,0 +1,805 @@
+FrameWidgetClass rootFrame {
+ position 0 0
+ size 1 1
+ halign center_ref
+ valign center_ref
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ priority 50
+ {
+  PanelWidgetClass MapPanel {
+   visible 1
+   ignorepointer 1
+   position 0 0
+   size 0.82 1
+   halign right_ref
+   valign center_ref
+   hexactpos 0
+   vexactpos 0
+   hexactsize 0
+   vexactsize 0
+   priority 55
+   {
+    WindowWidgetClass MapFrame {
+     ignorepointer 1
+     position 0 0
+     size 1 1
+     halign center_ref
+     valign center_ref
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     priority 56
+     {
+      MapWidgetClass Map {
+       position 0 0
+       size 1 1
+       halign center_ref
+       valign center_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       priority 60
+      }
+     }
+    }
+   }
+  }
+  PanelWidgetClass ExpandPanel {
+   visible 0
+   clipchildren 0
+   ignorepointer 1
+   color 0.1098 0.1569 0.298 1
+   position 0 0
+   size 28 1
+   hexactpos 0
+   vexactpos 0
+   hexactsize 1
+   vexactsize 0
+   priority 80
+   style rover_sim_colorable
+   {
+    ButtonWidgetClass Expand {
+     position 0 0
+     size 28 28
+     hexactpos 0
+     vexactpos 0
+     hexactsize 1
+     vexactsize 1
+     priority 90
+     {
+      ImageWidgetClass ExpandImage {
+       ignorepointer 1
+       position 0 0
+       size 28 28
+       hexactpos 0
+       vexactpos 0
+       hexactsize 1
+       vexactsize 1
+       priority 90
+       image0 "BasicMap/gui/images/expand.paa"
+       mode blend
+       "src alpha" 1
+       stretch 1
+      }
+     }
+    }
+   }
+  }
+  PanelWidgetClass Markers {
+   visible 1
+   clipchildren 0
+   ignorepointer 1
+   color 0.1098 0.1569 0.298 1
+   position 0 0
+   size 0.18 1
+   hexactpos 0
+   vexactpos 0
+   hexactsize 0
+   vexactsize 0
+   priority 60
+   draggable 1
+   style rover_sim_colorable
+   {
+    PanelWidgetClass Heading {
+     ignorepointer 1
+     position 0 0
+     size 1 0.07
+     halign center_ref
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     priority 60
+     {
+      TextWidgetClass HeadingText {
+       ignorepointer 1
+       size 1 0.8
+       halign center_ref
+       valign bottom_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       priority 60
+       text "BASIC MAP"
+       font "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium"
+       "exact text" 1
+       "size to text h" 0
+       "size to text v" 0
+       "text halign" center
+       "text valign" center
+      }
+      ButtonWidgetClass Minimize {
+       visible 1
+       size 28 28
+       halign right_ref
+       hexactpos 1
+       vexactpos 1
+       hexactsize 1
+       vexactsize 1
+       priority 60
+       {
+        ImageWidgetClass MinimizeImage {
+         visible 1
+         ignorepointer 1
+         size 28 28
+         halign right_ref
+         hexactpos 0
+         vexactpos 0
+         hexactsize 1
+         vexactsize 1
+         priority 60
+         image0 "BasicMap/gui/images/minimize.paa"
+         mode blend
+         "src alpha" 1
+         stretch 1
+        }
+       }
+      }
+     }
+    }
+    PanelWidgetClass SidePanel {
+     visible 1
+     clipchildren 1
+     ignorepointer 1
+     position 0 0
+     size 1 0.92
+     valign bottom_ref
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     priority 65
+     {
+      HtmlWidgetClass InfoText {
+       ignorepointer 1
+       position 0 0.065
+       size 0.95 0.125
+       halign center_ref
+       valign bottom_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       priority 66
+       text "<p>Double Left-Click to Create Marker</p><p>Double Right-Click to Delete Marker</p>"
+       font "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium20"
+       "condense whitespace" 1
+      }
+      PanelWidgetClass Settings {
+       ignorepointer 1
+       size 0.95 0.06
+       halign center_ref
+       valign bottom_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       {
+        PanelWidgetClass Show3dMarkersPanel {
+         ignorepointer 1
+         size 0.85 0.55
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         {
+          CheckBoxWidgetClass Show3dMakers {
+           size 22 22
+           halign right_ref
+           valign center_ref
+           hexactpos 0
+           vexactpos 0
+           hexactsize 1
+           vexactsize 1
+           checked 1
+          }
+          TextWidgetClass Show3dMakers_Label {
+           ignorepointer 1
+           position 0 0
+           size 0.9 0.8
+           valign center_ref
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           text "Hide All On HUD"
+           font "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium"
+           "exact text" 1
+           "text valign" center
+          }
+         }
+        }
+        PanelWidgetClass PostionPanel {
+         ignorepointer 1
+         size 0.85 0.45
+         valign bottom_ref
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         {
+          TextWidgetClass PostionText {
+           ignorepointer 1
+           position 0 0
+           size 1 1
+           valign bottom_ref
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           text "<0.000000 0.0000000 0.00000>"
+           font "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium"
+           "exact text" 0
+           "text halign" center
+           "text valign" center
+          }
+         }
+        }
+       }
+      }
+      PanelWidgetClass GroupPanel {
+       ignorepointer 1
+       position 0 0
+       size 0.95 0.74
+       halign center_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       {
+        PanelWidgetClass GroupSelector {
+         ignorepointer 1
+         position 0 0
+         size 1 0.09
+         halign center_ref
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         {
+          TextWidgetClass CurrentGroup {
+           ignorepointer 1
+           position 0 0
+           size 0.8 0.6
+           halign center_ref
+           valign center_ref
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           text "CLIENT MARKERS"
+           font "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium"
+           "exact text" 1
+           "text halign" center
+           "text valign" center
+          }
+          ButtonWidgetClass PreviousGroup {
+           position 0 0
+           size 0.06 0.75
+           valign center_ref
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           {
+            ImageWidgetClass PreviousGroup_Label {
+             visible 1
+             ignorepointer 1
+             size 1 1
+             halign center_ref
+             valign center_ref
+             hexactpos 0
+             vexactpos 0
+             hexactsize 0
+             vexactsize 0
+             image0 "BasicMap/gui/images/minimize.paa"
+             mode blend
+             "src alpha" 1
+             stretch 1
+            }
+           }
+          }
+          ButtonWidgetClass NextGroup {
+           position 0 0
+           size 0.06 0.75
+           halign right_ref
+           valign center_ref
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           {
+            ImageWidgetClass NextGroup_Label {
+             ignorepointer 1
+             position 0 0
+             size 1 1
+             halign center_ref
+             valign center_ref
+             hexactpos 0
+             vexactpos 0
+             hexactsize 0
+             vexactsize 0
+             image0 "BasicMap/gui/images/expand.paa"
+             mode blend
+             "src alpha" 1
+             stretch 1
+            }
+           }
+          }
+         }
+        }
+        PanelWidgetClass GroupSettingsPanel {
+         ignorepointer 1
+         position 0 0.1
+         size 1 0.09
+         halign center_ref
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         {
+          PanelWidgetClass ShowGroup3DPanel {
+           ignorepointer 1
+           position 0 0
+           size 1 0.48
+           halign center_ref
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           {
+            TextWidgetClass ShowGroup3D_Label {
+             ignorepointer 1
+             position 0.04 0
+             size 0.7 0.9
+             valign center_ref
+             hexactpos 0
+             vexactpos 0
+             hexactsize 0
+             vexactsize 0
+             text "Show On HUD"
+             font "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium"
+            }
+            CheckBoxWidgetClass ShowGroup3D {
+             size 0.2 0.9
+             halign right_ref
+             valign center_ref
+             hexactpos 0
+             vexactpos 0
+             hexactsize 0
+             vexactsize 0
+             checked 1
+            }
+           }
+          }
+          PanelWidgetClass ShowGroupMapPanel {
+           ignorepointer 1
+           position 0 0
+           size 1 0.48
+           halign center_ref
+           valign bottom_ref
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           {
+            TextWidgetClass ShowGroupMap_Label {
+             ignorepointer 1
+             position 0.04 0
+             size 0.7 0.9
+             valign center_ref
+             hexactpos 0
+             vexactpos 0
+             hexactsize 0
+             vexactsize 0
+             text "Show On Map"
+             font "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium"
+            }
+            CheckBoxWidgetClass ShowGroupMap {
+             position 0 0
+             size 0.2 0.9
+             halign right_ref
+             valign center_ref
+             hexactpos 0
+             vexactpos 0
+             hexactsize 0
+             vexactsize 0
+             checked 1
+            }
+           }
+          }
+         }
+        }
+        PanelWidgetClass MarkersList {
+         color 1 1 1 0.7373
+         position 0 0
+         size 1 0.8
+         halign center_ref
+         valign bottom_ref
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         draggable 1
+         style Outline
+         {
+          FrameWidgetClass MarkerFrame0 {
+           visible 0
+           ignorepointer 1
+           position 0 2
+           size 0.95 38
+           halign center_ref
+           hexactpos 0
+           vexactpos 1
+           hexactsize 0
+           vexactsize 1
+          }
+          FrameWidgetClass MarkerFrame1 {
+           visible 0
+           ignorepointer 1
+           position 0 40
+           size 0.95 38
+           halign center_ref
+           hexactpos 0
+           vexactpos 1
+           hexactsize 0
+           vexactsize 1
+          }
+          FrameWidgetClass MarkerFrame2 {
+           visible 0
+           ignorepointer 1
+           position 0 78
+           size 0.95 38
+           halign center_ref
+           hexactpos 0
+           vexactpos 1
+           hexactsize 0
+           vexactsize 1
+          }
+          FrameWidgetClass MarkerFrame3 {
+           visible 0
+           ignorepointer 1
+           position 0 116
+           size 0.95 38
+           halign center_ref
+           hexactpos 0
+           vexactpos 1
+           hexactsize 0
+           vexactsize 1
+          }
+          FrameWidgetClass MarkerFrame4 {
+           visible 0
+           ignorepointer 1
+           position 0 154
+           size 0.95 38
+           halign center_ref
+           hexactpos 0
+           vexactpos 1
+           hexactsize 0
+           vexactsize 1
+          }
+          FrameWidgetClass MarkerFrame5 {
+           visible 0
+           ignorepointer 1
+           position 0 192
+           size 0.95 38
+           halign center_ref
+           hexactpos 0
+           vexactpos 1
+           hexactsize 0
+           vexactsize 1
+          }
+          FrameWidgetClass MarkerFrame6 {
+           visible 0
+           ignorepointer 1
+           position 0 230
+           size 0.95 38
+           halign center_ref
+           hexactpos 0
+           vexactpos 1
+           hexactsize 0
+           vexactsize 1
+          }
+          FrameWidgetClass MarkerFrame7 {
+           visible 0
+           ignorepointer 1
+           position 0 268
+           size 0.95 38
+           halign center_ref
+           hexactpos 0
+           vexactpos 1
+           hexactsize 0
+           vexactsize 1
+          }
+          FrameWidgetClass MarkerFrame8 {
+           visible 0
+           ignorepointer 1
+           position 0 306
+           size 0.95 38
+           halign center_ref
+           hexactpos 0
+           vexactpos 1
+           hexactsize 0
+           vexactsize 1
+          }
+          FrameWidgetClass MarkerFrame9 {
+           visible 0
+           ignorepointer 1
+           position 0 344
+           size 0.95 38
+           halign center_ref
+           hexactpos 0
+           vexactpos 1
+           hexactsize 0
+           vexactsize 1
+          }
+          FrameWidgetClass MarkerFrame10 {
+           visible 0
+           ignorepointer 1
+           position 0 382
+           size 0.95 38
+           halign center_ref
+           hexactpos 0
+           vexactpos 1
+           hexactsize 0
+           vexactsize 1
+          }
+          FrameWidgetClass MarkerFrame11 {
+           visible 0
+           ignorepointer 1
+           position 0 420
+           size 0.95 38
+           halign center_ref
+           hexactpos 0
+           vexactpos 1
+           hexactsize 0
+           vexactsize 1
+          }
+          FrameWidgetClass MarkerFrame12 {
+           visible 0
+           ignorepointer 1
+           position 0 458
+           size 0.95 38
+           halign center_ref
+           hexactpos 0
+           vexactpos 1
+           hexactsize 0
+           vexactsize 1
+          }
+          FrameWidgetClass MarkerFrame13 {
+           visible 0
+           ignorepointer 1
+           position 0 496
+           size 0.95 38
+           halign center_ref
+           hexactpos 0
+           vexactpos 1
+           hexactsize 0
+           vexactsize 1
+          }
+          FrameWidgetClass MarkerFrame14 {
+           visible 0
+           ignorepointer 1
+           position 0 534
+           size 0.95 38
+           halign center_ref
+           hexactpos 0
+           vexactpos 1
+           hexactsize 0
+           vexactsize 1
+          }
+          FrameWidgetClass MarkerFrame15 {
+           visible 0
+           ignorepointer 1
+           position 0 572
+           size 0.95 38
+           halign center_ref
+           hexactpos 0
+           vexactpos 1
+           hexactsize 0
+           vexactsize 1
+          }
+          FrameWidgetClass MarkerFrame16 {
+           visible 0
+           ignorepointer 1
+           position 0 610
+           size 0.95 38
+           halign center_ref
+           hexactpos 0
+           vexactpos 1
+           hexactsize 0
+           vexactsize 1
+          }
+          FrameWidgetClass MarkerFrame17 {
+           visible 0
+           ignorepointer 1
+           position 0 648
+           size 0.95 38
+           halign center_ref
+           hexactpos 0
+           vexactpos 1
+           hexactsize 0
+           vexactsize 1
+          }
+          PanelWidgetClass MarkerListBottom {
+           visible 0
+           ignorepointer 1
+           position 0 0
+           size 1 24
+           halign center_ref
+           valign bottom_ref
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 1
+           {
+            ButtonWidgetClass ScrollDown {
+             position 0 0
+             size 1 1
+             halign center_ref
+             valign center_ref
+             hexactpos 0
+             vexactpos 0
+             hexactsize 0
+             vexactsize 0
+             {
+              ImageWidgetClass ScrollDown_Label {
+               ignorepointer 1
+               position 0 0
+               size 0.5 0.8
+               halign center_ref
+               valign center_ref
+               hexactpos 0
+               vexactpos 0
+               hexactsize 0
+               vexactsize 0
+               image0 "BasicMap/gui/images/down.paa"
+               mode blend
+               "src alpha" 1
+               stretch 1
+              }
+             }
+            }
+           }
+          }
+          PanelWidgetClass MarkerListTop {
+           visible 0
+           ignorepointer 1
+           size 1 24
+           halign center_ref
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 1
+           {
+            ButtonWidgetClass ScrollUp {
+             position 0 0
+             size 1 1
+             halign center_ref
+             valign center_ref
+             hexactpos 0
+             vexactpos 0
+             hexactsize 0
+             vexactsize 0
+             {
+              ImageWidgetClass ScrollUp_Label {
+               ignorepointer 1
+               position 0 0
+               size 0.5 0.8
+               halign center_ref
+               valign center_ref
+               hexactpos 0
+               vexactpos 0
+               hexactsize 0
+               vexactsize 0
+               image0 "BasicMap/gui/images/up.paa"
+               mode blend
+               "src alpha" 1
+               stretch 1
+              }
+             }
+            }
+           }
+          }
+         }
+        }
+       }
+      }
+      PanelWidgetClass BackToMePanel {
+       ignorepointer 1
+       position 0 0.195
+       size 0.95 0.05
+       halign center_ref
+       valign bottom_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       {
+        ButtonWidgetClass BackToMe {
+         color 0 0 0 0.6157
+         size 0.65 0.9
+         halign center_ref
+         valign bottom_ref
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         style Colorable
+         {
+          ImageWidgetClass BackToMe_Image {
+           ignorepointer 1
+           position 0.02 0
+           size 32 32
+           valign center_ref
+           hexactpos 0
+           vexactpos 0
+           hexactsize 1
+           vexactsize 1
+           image0 "BasicMap/gui/images/player.paa"
+           mode blend
+           "src alpha" 1
+           stretch 1
+          }
+          TextWidgetClass BackToMe_Label {
+           ignorepointer 1
+           position 0.17 0
+           size 0.8 0.7
+           valign center_ref
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           text "Center On Me"
+           font "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium"
+           "exact text" 1
+           "text halign" center
+           "text valign" center
+          }
+         }
+        }
+       }
+      }
+     }
+    }
+   }
+  }
+  FrameWidgetClass EditorFrame {
+   clipchildren 0
+   ignorepointer 1
+   position 0 0
+   size 1 1
+   hexactpos 1
+   vexactpos 1
+   hexactsize 0
+   vexactsize 0
+   priority 990
+  }
+ }
+}

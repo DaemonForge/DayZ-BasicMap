@@ -300,16 +300,19 @@ class BasicMapMenu extends UIScriptedMenu
 							if (edge){
 								for ( int j = 0; j < edge.Count(); j++){
 									markerCount++;
-									m_Map.AddUserMark(edge.Get(j), "" , cMarker.GetEdgeColour(), cMarker.GetEdgeIcon(m_Map.GetScale()));
+									string edgeIcon = GetSafeIconPath(cMarker.GetEdgeIcon(m_Map.GetScale()));
+									m_Map.AddUserMark(edge.Get(j), "" , cMarker.GetEdgeColour(), edgeIcon);
 								}
 							}
 							if (cMarker.GetShowCenterMarker()){
 								markerCount++;
-								m_Map.AddUserMark(Vector(x, pos[1],pos[2]), " " + marker.GetName(), marker.GetColour(), marker.GetIcon());	
+								string cIcon = GetSafeIconPath(marker.GetIcon());
+								m_Map.AddUserMark(Vector(x, pos[1],pos[2]), " " + marker.GetName(), marker.GetColour(), cIcon);	
 							}
 						} else {
 							markerCount++;
-							m_Map.AddUserMark(Vector(x, pos[1],pos[2]), " " + marker.GetName(), marker.GetColour(), marker.GetIcon());
+							string icon = GetSafeIconPath(marker.GetIcon());
+							m_Map.AddUserMark(Vector(x, pos[1],pos[2]), " " + marker.GetName(), marker.GetColour(), icon);
 						}
 					}
 				}
@@ -323,6 +326,23 @@ class BasicMapMenu extends UIScriptedMenu
 			}
 			GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.UpdateMarkers, RefreshRate, false);
 		}
+	}
+
+	protected string GetSafeIconPath(string iconIn)
+	{
+		string icon = iconIn;
+		if (!icon || icon == "" || icon == " ")
+		{
+			icon = "BasicMap\\gui\\images\\marker.paa";
+		}
+		if (icon.Contains(".edds"))
+		{
+			string fixedIcon = icon;
+			fixedIcon.Replace(".edds", ".paa");
+			Print(string.Format("[BasicMap][MapMenu] Sanitized icon from .edds to .paa: %1 -> %2", icon, fixedIcon));
+			icon = fixedIcon;
+		}
+		return icon;
 	}
 	
     vector MapClickPosition(int x, int y) {
@@ -391,7 +411,8 @@ class BasicMapMenu extends UIScriptedMenu
 	
 	void UpdateMe(){
 		if (BasicMap().ShowSelfOnMap()){
-			m_Map.AddUserMark(m_MeMarker.GetPosition(), " ME", m_MeMarker.GetColour(), m_MeMarker.GetIcon());
+			string icon = GetSafeIconPath(m_MeMarker.GetIcon());
+			m_Map.AddUserMark(m_MeMarker.GetPosition(), " ME", m_MeMarker.GetColour(), icon);
 			m_PostionText.SetText("Postion: " + m_MeMarker.GetPosition().ToString(true));
 		}
 	}

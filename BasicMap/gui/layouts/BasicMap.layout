@@ -244,7 +244,7 @@ FrameWidgetClass rootFrame {
      vexactpos 0
      hexactsize 0
      vexactsize 1
-     priority 56
+     priority 65
      style rover_sim_colorable
      {
       PanelWidgetClass HeaderAccent {
@@ -294,14 +294,14 @@ FrameWidgetClass rootFrame {
     }
     PanelWidgetClass ContentArea {
      ignorepointer 1
-     position 0 40
-     size 1 500
+     position 0 0
+     size 1 0.88
      halign center_ref
-     valign top_ref
+     valign center_ref
      hexactpos 0
-     vexactpos 1
+     vexactpos 0
      hexactsize 0
-     vexactsize 1
+     vexactsize 0
      priority 56
      {
       PanelWidgetClass MapBorderTop {
@@ -367,7 +367,7 @@ FrameWidgetClass rootFrame {
      vexactpos 0
      hexactsize 0
      vexactsize 1
-     priority 56
+     priority 65
      style rover_sim_colorable
      {
       PanelWidgetClass FooterAccent {

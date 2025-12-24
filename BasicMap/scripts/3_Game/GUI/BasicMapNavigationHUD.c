@@ -23,6 +23,7 @@ class BasicMapNavigationHUD extends Managed
 	protected MapWidget m_MinimapWidget;
 	protected ImageWidget m_PlayerMarker;
 	protected TextWidget m_CoordinatesText;
+	protected bool m_PlayerMarkerDebugLogged = false;
 	
 	// State
 	protected bool m_IsEnabled = false;
@@ -58,6 +59,14 @@ class BasicMapNavigationHUD extends Managed
 			m_MinimapWidget = MapWidget.Cast(m_MinimapRoot.FindAnyWidget("MinimapWidget"));
 			m_PlayerMarker = ImageWidget.Cast(m_MinimapRoot.FindAnyWidget("PlayerMarker"));
 			m_CoordinatesText = TextWidget.Cast(m_MinimapRoot.FindAnyWidget("CoordinatesText"));
+			
+			if (m_PlayerMarker)
+			{
+				m_PlayerMarker.Show(true);
+				m_PlayerMarker.SetSort(1000); // Force on top
+				m_PlayerMarker.SetColor(ARGB(255, 255, 255, 255));
+			}
+			
 			m_MinimapRoot.Show(false);
 		}
 	}
@@ -317,12 +326,23 @@ class BasicMapNavigationHUD extends Managed
 		// A scale of around 0.1 to 0.15 gives a good minimap view
 		m_MinimapWidget.SetScale(0.12);
 		
-		// Rotate player marker based on heading
+		// Rotate player marker arrow to face player's look direction
 		if (m_PlayerMarker)
 		{
 			vector camDir = GetGame().GetCurrentCameraDirection();
 			float heading = Math.Atan2(camDir[0], camDir[2]) * Math.RAD2DEG;
+			
+			// SetRotation uses (yaw, pitch, roll) - we want to rotate around Z axis (roll)
+			// Heading from Atan2(x,z) is already clockwise from North (0), which matches UI rotation
 			m_PlayerMarker.SetRotation(0, 0, heading);
+			if (!m_PlayerMarkerDebugLogged)
+			{
+				bool vis = m_PlayerMarker.IsVisibleHierarchy();
+				float px, py; m_PlayerMarker.GetPos(px, py);
+				float sx, sy; m_PlayerMarker.GetSize(sx, sy);
+				Print(string.Format("[BasicMap][NavHUD] PlayerMarker debug: visible=%1 pos=(%2,%3) size=(%4,%5) heading=%6", vis, px, py, sx, sy, heading));
+				m_PlayerMarkerDebugLogged = true;
+			}
 		}
 		
 		// Update coordinates text
