@@ -34,7 +34,7 @@ FrameWidgetClass rootFrame {
      vexactpos 0
      hexactsize 0
      vexactsize 0
-     priority 100
+     priority 210
      {
       PanelWidgetClass BorderTop {
        ignorepointer 1
@@ -244,20 +244,9 @@ FrameWidgetClass rootFrame {
      vexactpos 0
      hexactsize 0
      vexactsize 1
-     priority 65
+     priority 200
      style rover_sim_colorable
      {
-      PanelWidgetClass HeaderAccent {
-       ignorepointer 1
-       color 0.2745 0.4392 0.7843 1
-       position 12 0
-       size 0.7 4
-       hexactpos 1
-       vexactpos 0
-       hexactsize 0
-       vexactsize 1
-       style rover_sim_colorable
-      }
       TextWidgetClass WindowTitle {
        ignorepointer 1
        color 0.92 0.94 0.98 1
@@ -294,14 +283,13 @@ FrameWidgetClass rootFrame {
     }
     PanelWidgetClass ContentArea {
      ignorepointer 1
-     position 0 0
-     size 1 0.88
+     position 0 40
+     size 1 100
      halign center_ref
-     valign center_ref
      hexactpos 0
-     vexactpos 0
+     vexactpos 1
      hexactsize 0
-     vexactsize 0
+     vexactsize 1
      priority 56
      {
       PanelWidgetClass MapBorderTop {
@@ -314,6 +302,7 @@ FrameWidgetClass rootFrame {
        vexactpos 0
        hexactsize 0
        vexactsize 1
+       priority 100
        style rover_sim_colorable
       }
       PanelWidgetClass MapBorderBottom {
@@ -327,16 +316,17 @@ FrameWidgetClass rootFrame {
        vexactpos 0
        hexactsize 0
        vexactsize 1
+       priority 100
        style rover_sim_colorable
       }
       WindowWidgetClass MapFrame {
        ignorepointer 1
-       position 0 3
+       position 0 0
        size 1 1
        halign center_ref
-       valign top_ref
+       valign center_ref
        hexactpos 0
-       vexactpos 1
+       vexactpos 0
        hexactsize 0
        vexactsize 0
        priority 57
@@ -367,26 +357,13 @@ FrameWidgetClass rootFrame {
      vexactpos 0
      hexactsize 0
      vexactsize 1
-     priority 65
+     priority 200
      style rover_sim_colorable
      {
-      PanelWidgetClass FooterAccent {
-       ignorepointer 1
-       color 0.2745 0.4392 0.7843 0.7
-       position 0 0
-       size 0.85 5
-       halign right_ref
-       valign bottom_ref
-       hexactpos 0
-       vexactpos 0
-       hexactsize 0
-       vexactsize 1
-       style rover_sim_colorable
-      }
       PanelWidgetClass Show3dMarkersPanel {
        ignorepointer 1
        position 17 -12
-       size 240 1
+       size 280 1
        valign center_ref
        hexactpos 1
        vexactpos 1
@@ -406,7 +383,7 @@ FrameWidgetClass rootFrame {
          ignorepointer 1
          color 0.58 0.65 0.75 1
          position 24 0
-         size 210 1
+         size 250 1
          valign center_ref
          hexactpos 1
          vexactpos 0

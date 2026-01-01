@@ -248,6 +248,8 @@ class BasicMapNavigationHUD extends Managed
 		}
 		
 		// Get player's heading (yaw from camera direction)
+		// DayZ coordinates: X = East/West, Z = North/South (positive Z = North)
+		// Atan2(x, z) gives: N=0deg, E=90deg, S=180deg/-180deg, W=-90deg
 		vector camDir = GetGame().GetCurrentCameraDirection();
 		float heading = Math.Atan2(camDir[0], camDir[2]) * Math.RAD2DEG;
 		
@@ -259,47 +261,49 @@ class BasicMapNavigationHUD extends Managed
 		
 		m_LastHeading = heading;
 		
-		// Compass strip layout:
-		// - Cycle 1: positions 0-720 (degrees 0-360)  
-		// - Cycle 2: positions 720-1440 (degrees 0-360 repeated)
-		// 
-		// View window is 396px wide = 198 degrees visible (99° each side of center).
-		// 
-		// Strategy: Choose which cycle to use based on heading to ensure
-		// the entire view (center ± 99°) falls within valid content.
-		//
-		// Cycle 1 valid view: heading 99° to 261° (mark 198-522, edges 0-720)
-		// Cycle 2 valid view: heading 0° to 162° OR 198° to 360° 
-		//                     (mark 720-1044 or 1116-1440, edges stay in 522-1638)
-		//
-		// Simplest approach: 
-		// - Use cycle 2 (base 720) for heading 0-180° 
-		// - Use cycle 1 (base 0) for heading 180-360°
-		// This ensures we never hit the boundaries.
-		
-		float pixelsPerDegree = 2.0;
-		float viewHalfWidth = COMPASS_VIEW_WIDTH / 2.0;  // 198 pixels
-		
-		float markPosition;
-		
-		// For headings 0-180°: use cycle 2 (720-1080)
-		// View left edge at heading 0° = 720 - 198 = 522 (safe, in cycle 1)
-		// View right edge at heading 180° = 1080 + 198 = 1278 (safe, in cycle 2)
-		//
-		// For headings 180-360°: use cycle 1 (360-720)  
-		// View left edge at heading 180° = 360 - 198 = 162 (safe, in cycle 1)
-		// View right edge at heading 360° = 720 + 198 = 918 (safe, in cycle 2)
-		
-		if (heading <= 180.0)
+		// Get actual view width from parent widget (CompassStrip)
+		Widget compassStrip = m_CompassContent.GetParent();
+		float viewWidth = COMPASS_VIEW_WIDTH;  // fallback
+		float viewHeight = 38;
+		if (compassStrip)
 		{
-			// Use cycle 2: mark position = 720 + heading*2
-			markPosition = 720.0 + (heading * pixelsPerDegree);
+			compassStrip.GetScreenSize(viewWidth, viewHeight);
+		}
+		float viewHalfWidth = viewWidth / 2.0;
+		
+		// Get actual content width to calculate pixels per degree
+		float contentWidth = 2160;  // fallback - 3 full cycles at 720px each
+		float contentHeight = 38;
+		m_CompassContent.GetScreenSize(contentWidth, contentHeight);
+		
+		// Calculate scale factor - if content is rendered at different size than layout
+		float scaleFactor = contentWidth / 2160.0;
+		
+		// Compass strip layout (2 pixels per degree at 1x scale):
+		// - N at 0px, 720px, 1440px
+		// - Each degree = 2 pixels
+		// - Each mark widget is 30px wide, with text centered within
+		// Scale all values by scaleFactor for actual screen size
+		float pixelsPerDegree = 2.0 * scaleFactor;
+		float markHalfWidth = 15.0 * scaleFactor;  // Half of 30px mark width for centering
+		
+		// Choose which cycle to use based on heading to keep view within valid content:
+		// - Cycle 1 (base 0): Use for headings 180-360 (S through W to N)
+		// - Cycle 2 (base 720): Use for headings 0-180 (N through E to S)
+		// Both cycles show the same marks at the same visual positions, just different copies.
+		float cycleOffset;
+		if (heading < 180.0)
+		{
+			cycleOffset = 720.0 * scaleFactor;  // Cycle 2
 		}
 		else
 		{
-			// Use cycle 1: mark position = heading*2
-			markPosition = heading * pixelsPerDegree;
+			cycleOffset = 0.0;  // Cycle 1
 		}
+		
+		// Calculate mark position
+		// Add markHalfWidth because layout positions are left-edge, but we want text center
+		float markPosition = cycleOffset + (heading * pixelsPerDegree) + markHalfWidth;
 		
 		// Calculate strip X position to center the mark in view
 		float stripX = viewHalfWidth - markPosition;

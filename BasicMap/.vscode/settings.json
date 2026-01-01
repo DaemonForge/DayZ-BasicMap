@@ -1,0 +1,7 @@
+{
+  "files.associations": {
+    "*.c": "enforce",
+    "config.cpp": "plaintext",
+    "mod.cpp": "plaintext"
+  }
+}

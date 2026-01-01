@@ -105,6 +105,9 @@ class BasicMapMenu extends UIScriptedMenu
 		
 		Initialize();
 		
+		// Schedule content area resize after layout is created
+		GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.UpdateContentAreaSize, 100, false);
+		
 		return layoutRoot;
     }
 
@@ -152,45 +155,46 @@ class BasicMapMenu extends UIScriptedMenu
 	}
 	
 	// Dynamically size the ContentArea to fit between header (40px) and footer (40px)
-	// This ensures the footer bar with "Find Me" button is always visible
+	// This ensures the footer bar with "Find Me" button is always visible at all resolutions
 	void UpdateContentAreaSize()
 	{
-		if (m_ContentArea && m_MapPanel)
-		{
-			// Force parent layout update first (vanilla pattern from sizetochild.c)
-			m_MapPanel.Update();
-			
-			float panelW, panelH;
-			m_MapPanel.GetScreenSize(panelW, panelH);
-			
-			// ContentArea height = MapPanel height - header (40px) - footer (35px)
-			float contentHeight = panelH - 75;
-			if (contentHeight > 0)
-			{
-				// Set ContentArea size
-				m_ContentArea.SetScreenSize(panelW, contentHeight);
-				m_ContentArea.Update();
-				
-				// Also update MapFrame inside ContentArea to fill the new size
-				// MapFrame is positioned at Y=3px (after top border), bottom border is 2px
-				if (m_MapFrame)
-				{
-					float frameHeight = contentHeight - 5; // 3px top border + 2px bottom border
-					if (frameHeight > 0)
-					{
-						m_MapFrame.SetScreenSize(panelW, frameHeight);
-						m_MapFrame.Update();
-					}
-				}
-			}
-		}
+		if (!m_ContentArea || !m_MapPanel) return;
+		
+		// Get the MapPanel's actual screen size
+		float panelW, panelH;
+		m_MapPanel.GetScreenSize(panelW, panelH);
+		
+		if (panelH <= 80) return;
+		
+		// Header is 40px, Footer is 40px = 80px total to subtract
+		float headerHeight = 40;
+		float footerHeight = 40;
+		float contentHeight = panelH - headerHeight - footerHeight;
+		
+		// ContentArea layout has: hexactsize 0 (width relative), vexactsize 1 (height pixel)
+		// So SetSize width should be relative (1.0 = 100%), height should be pixel value
+		m_ContentArea.SetSize(1.0, contentHeight);
 	}
 	
 	override void OnShow()
 	{
+		super.OnShow();
 		// Recalculate content area size when menu is shown
-		// This ensures footer bar is always visible (header=40px, footer=40px)
+		// Call immediately and also with a slight delay to ensure layout is settled
 		UpdateContentAreaSize();
+		// Delayed call ensures the layout engine has fully calculated sizes
+		GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.UpdateContentAreaSize, 50, false);
+	}
+
+	override void OnHide()
+	{
+		// This menu can be closed/hidden by multiple paths (hotkey, ESC, UIManager).
+		// Make sure we always restore player controls and close any sub-widgets.
+		CloseRightClick();
+		CloseEditor();
+		SetOpen(false);
+		UnLockControls();
+		super.OnHide();
 	}
 	
 	void StepMarkerList(int i){
@@ -419,7 +423,9 @@ class BasicMapMenu extends UIScriptedMenu
 	
 	void ~BasicMapMenu()
     {
+		CloseRightClick();
 		CloseEditor();
+		UnLockControls();
 		BasicMap().OnMapClose();
 		delete m_MeMarker;
 		layoutRoot.Show(false);
@@ -435,10 +441,12 @@ class BasicMapMenu extends UIScriptedMenu
 			GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.UpdateMarkers, 45, false);
 		}
 		if (m_PanelIsOpen && !open){
+			CloseRightClick();
 			CloseEditor();
 			BasicMap().OnMapClose();
 			delete m_MeMarker;
 			layoutRoot.Show(false);
+			UnLockControls();
 		}
 		m_PanelIsOpen = open;
 	}
@@ -559,6 +567,8 @@ class BasicMapMenu extends UIScriptedMenu
 	void CloseEditor(){
 		if (m_MarkerEditor){
 			if (m_SelectedMarker){
+				// Remember this marker's color for the next new marker
+				BasicMapMarkerFactory.RememberColor(m_SelectedMarker.Colour[0], m_SelectedMarker.Colour[1], m_SelectedMarker.Colour[2], m_SelectedMarker.Alpha, m_SelectedMarker.GetIcon());
 				BasicMap().OnMarkerSave(m_SelectedMarker);
 				m_SelectedMarker = NULL;
 			}
@@ -599,7 +609,7 @@ class BasicMapMenu extends UIScriptedMenu
 	override void LockControls() {
 		GetGame().GetMission().GetHud().ShowHudUI( false );
 		GetGame().GetMission().GetHud().ShowQuickbarUI( false );
-        GetGame().GetMission().PlayerControlDisable(INPUT_EXCLUDE_MOUSE_ALL);
+        GetGame().GetMission().PlayerControlDisable(INPUT_EXCLUDE_ALL);
         GetGame().GetUIManager().ShowUICursor(true);
     }
 

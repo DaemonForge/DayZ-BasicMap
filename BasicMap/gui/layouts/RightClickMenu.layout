@@ -12,7 +12,7 @@ FrameWidgetClass rootFrame {
    ignorepointer 0
    color 0.0314 0.0392 0.0549 0.98
    position -20 -12
-   size 150 60
+   size 180 72
    hexactpos 1
    vexactpos 1
    hexactsize 1
@@ -68,8 +68,7 @@ FrameWidgetClass rootFrame {
          vexactsize 0
          text "DELETE"
          font "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium"
-         "exact text" 1
-         "size to text h" 0
+         "exact text" 0
          "text halign" center
          "text valign" center
         }
@@ -101,7 +100,7 @@ FrameWidgetClass rootFrame {
          vexactsize 0
          text "CHANGE GROUP"
          font "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium"
-         "exact text" 1
+         "exact text" 0
          "text halign" center
          "text valign" center
         }
@@ -113,8 +112,8 @@ FrameWidgetClass rootFrame {
      visible 0
      ignorepointer 0
      color 0.0314 0.0392 0.0549 0.98
-     position 152 28
-     size 180 38
+     position 182 28
+     size 200 42
      hexactpos 1
      vexactpos 1
      hexactsize 1
@@ -213,7 +212,7 @@ FrameWidgetClass rootFrame {
          vexactsize 0
          text "PARTY MARKER"
          font "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium"
-         "exact text" 1
+         "exact text" 0
          "text halign" center
          "text valign" center
         }

@@ -1,6 +1,12 @@
 class BasicMapHUDMarker extends Managed {
+	// Update rates (milliseconds). 10ms ~= 100fps.
+	static int UPDATE_MS_DEFAULT = 14;
+	static int UPDATE_MS_CLOSE = 10;
+	static float CLOSE_DISTANCE_SQ = 42.0 * 42.0;
+
 	
 	protected bool						m_deleted = false;
+	protected int					m_UpdateIntervalMs = 0;
 	
 	protected int 						m_logSkip = 100;
 	protected string 					LayoutPath = "BasicMap/gui/layouts/Marker.layout";
@@ -59,7 +65,8 @@ class BasicMapHUDMarker extends Managed {
 		
 		Update();
 		if (layoutRoot && m_Marker && m_MarkerData){
-			GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.Update, 14, true);
+			m_UpdateIntervalMs = UPDATE_MS_DEFAULT;
+			GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.Update, m_UpdateIntervalMs, true);
 		}
 	}
 	
@@ -87,6 +94,22 @@ class BasicMapHUDMarker extends Managed {
 		}
 		
 		if (MarkerVisibleOnScreen() && m_MarkerData.OnHUD() && BasicMap().ShowMarkersOnHUD() && BasicMap().ShouldShowOnHUD(m_MarkerData.GetGroup())){
+			// When close to a marker, update more frequently to reduce perceived jitter.
+			DayZPlayer playerForRate = DayZPlayer.Cast(GetGame().GetPlayer());
+			if (playerForRate){
+				float distSq = vector.DistanceSq(playerForRate.GetPosition(), m_MarkerData.GetPosition());
+				int desiredInterval;
+				if (distSq <= CLOSE_DISTANCE_SQ){
+					desiredInterval = UPDATE_MS_CLOSE;
+				} else {
+					desiredInterval = UPDATE_MS_DEFAULT;
+				}
+				if (desiredInterval != m_UpdateIntervalMs){
+					m_UpdateIntervalMs = desiredInterval;
+					GetGame().GetCallQueue(CALL_CATEGORY_GUI).Remove(this.Update);
+					GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.Update, m_UpdateIntervalMs, true);
+				}
+			}
 				
 				float x;
 				float y;
@@ -226,6 +249,12 @@ class BasicMapHUDMarker extends Managed {
 				Show();
 				layoutRoot.SetPos(x, y);
 		} else{
+			// Reset to default rate when marker isn't being shown.
+			if (m_UpdateIntervalMs != UPDATE_MS_DEFAULT){
+				m_UpdateIntervalMs = UPDATE_MS_DEFAULT;
+				GetGame().GetCallQueue(CALL_CATEGORY_GUI).Remove(this.Update);
+				GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.Update, m_UpdateIntervalMs, true);
+			}
 			Show(false);
 		}
 	}

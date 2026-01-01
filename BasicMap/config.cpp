@@ -1808,12 +1808,12 @@ class RscMapControl
 	};
 	class Police
 	{
-		icon = "BasicMap\gui\images\police.paa";
-		color[] = {0.09,0.09,0.20,0.6};
-		size = 18;
-		importance = "2 * 20 * 0.05";
-		coefMin = 0.1;
-		coefMax = 2;
+		icon="\dz\gear\navigation\data\map_police_ca.paa";
+		color[]={0.11,0.1,0.25,1};
+		size=20;
+		importance="2 * 16 * 0.05";
+		coefMin=0.5;
+		coefMax=4;
 	};
 	class FireDep
 	{

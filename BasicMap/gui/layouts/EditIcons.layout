@@ -14,7 +14,7 @@ FrameWidgetClass rootFrame {
    ignorepointer 0
    color 0.0196 0.0235 0.0314 0.98
    position 8 16
-   size 320 190
+   size 360 200
    hexactpos 1
    vexactpos 1
    hexactsize 1
@@ -220,7 +220,7 @@ FrameWidgetClass rootFrame {
        vexactsize 0
        text "EDIT MARKER"
        font "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium"
-       "exact text" 1
+       "exact text" 0
        "text valign" center
       }
       ButtonWidgetClass Close {
@@ -275,25 +275,25 @@ FrameWidgetClass rootFrame {
          ignorepointer 1
          color 0.7059 0.7647 0.8431 1
          position 0 0
-         size 48 28
+         size 60 28
          hexactpos 1
          vexactpos 1
          hexactsize 1
          vexactsize 1
          text "Name:"
          font "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium"
-         "exact text" 1
+         "exact text" 0
          "text valign" center
         }
         EditBoxWidgetClass Name {
          visible 1
-         position 52 0
-         size 240 28
+         position 64 0
+         size 270 28
          hexactpos 1
          vexactpos 1
          hexactsize 1
          vexactsize 1
-         "exact text" 1
+         "exact text" 0
          font "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium"
         }
        }
@@ -331,7 +331,7 @@ FrameWidgetClass rootFrame {
            ignorepointer 1
            color 0.7059 0.7647 0.8431 1
            position 24 0
-           size 80 1
+           size 100 1
            valign center_ref
            hexactpos 1
            vexactpos 0
@@ -339,7 +339,7 @@ FrameWidgetClass rootFrame {
            vexactsize 0
            text "3D Marker"
            font "BasicMap/gui/fonts/Oswald-Regular/Oswald-Regular"
-           "exact text" 1
+           "exact text" 0
            "text valign" center
           }
          }
@@ -369,7 +369,7 @@ FrameWidgetClass rootFrame {
            ignorepointer 1
            color 0.7059 0.7647 0.8431 1
            position 24 0
-           size 90 1
+           size 110 1
            valign center_ref
            hexactpos 1
            vexactpos 0
@@ -377,7 +377,7 @@ FrameWidgetClass rootFrame {
            vexactsize 0
            text "Party Marker"
            font "BasicMap/gui/fonts/Oswald-Regular/Oswald-Regular"
-           "exact text" 1
+           "exact text" 0
            "text valign" center
           }
          }
@@ -441,7 +441,7 @@ FrameWidgetClass rootFrame {
              vexactsize 0
              text "R"
              font "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium"
-             "exact text" 1
+             "exact text" 0
              "text valign" center
             }
             SliderWidgetClass Red {
@@ -485,7 +485,7 @@ FrameWidgetClass rootFrame {
              vexactsize 0
              text "G"
              font "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium"
-             "exact text" 1
+             "exact text" 0
              "text valign" center
             }
             SliderWidgetClass Green {
@@ -530,7 +530,7 @@ FrameWidgetClass rootFrame {
              vexactsize 0
              text "B"
              font "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium"
-             "exact text" 1
+             "exact text" 0
              "text valign" center
             }
             SliderWidgetClass Blue {
@@ -573,7 +573,7 @@ FrameWidgetClass rootFrame {
              vexactsize 0
              text "A"
              font "BasicMap/gui/fonts/Oswald-Medium/Oswald-Medium"
-             "exact text" 1
+             "exact text" 0
              "text valign" center
             }
             SliderWidgetClass Alpha {

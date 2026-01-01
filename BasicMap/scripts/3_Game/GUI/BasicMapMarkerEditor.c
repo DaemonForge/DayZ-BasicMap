@@ -158,8 +158,6 @@ class BasicMapMarkerEditor  extends ScriptedWidgetEventHandler {
 		if (w == m_Editor_Name)
 		{
 			m_NameFieldFocused = true;
-			// Disable player movement while typing in the name field
-			GetGame().GetMission().PlayerControlDisable(INPUT_EXCLUDE_ALL);
 		}
 		return super.OnFocus(w, x, y);
 	}
@@ -169,8 +167,6 @@ class BasicMapMarkerEditor  extends ScriptedWidgetEventHandler {
 		if (w == m_Editor_Name)
 		{
 			m_NameFieldFocused = false;
-			// Re-enable player movement when leaving the name field
-			GetGame().GetMission().PlayerControlEnable(false);
 		}
 		return super.OnFocusLost(w, x, y);
 	}
@@ -207,8 +203,9 @@ class BasicMapMarkerEditor  extends ScriptedWidgetEventHandler {
 			m_EditorIsOpen = true;
 			m_EditorRoot.Show(true);
 			
-			// Disable player movement while editor is open
-			GetGame().GetMission().PlayerControlDisable(INPUT_EXCLUDE_ALL);
+			// NOTE: Do NOT call PlayerControlDisable here!
+			// The BasicMapMenu already handles control locking for the entire map UI.
+			// Adding another disable here causes unbalanced enable/disable calls.
 			
 			m_WidgetX  = x;
 			m_WidgetY  = y;
@@ -257,8 +254,8 @@ class BasicMapMarkerEditor  extends ScriptedWidgetEventHandler {
 		m_Editor_Colour_Blue.SetCurrent(150);
 		m_Editor_Colour_Alpha.SetCurrent(150);
 		
-		// Re-enable player control when editor closes
-		GetGame().GetMission().PlayerControlEnable(false);
+		// NOTE: Do NOT call PlayerControlEnable here!
+		// The BasicMapMenu handles all control locking/unlocking.
 	}
 	
 	bool IsEditorOpen(){
