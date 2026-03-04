@@ -27,8 +27,11 @@ class BasicMapMarkerListItem  extends ScriptedWidgetEventHandler {
 	}
 	
 	void ~BasicMapMarkerListItem(){
-		m_Root.Show(false);
-		m_Panel.Show(false);
+		if (m_Root){
+			m_Root.Show(false);
+			m_Root.Unlink();
+		}
+		if (m_Panel) m_Panel.Show(false);
 	}
 	
 	override bool OnClick( Widget w, int x, int y, int button )

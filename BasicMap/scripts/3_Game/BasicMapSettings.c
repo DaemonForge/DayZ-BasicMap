@@ -58,12 +58,12 @@ class BasicMapConfig extends Managed
 	bool AllowPlayerMarkers = true;
 	bool Allow3dMarkers = true;
 	bool ShowSelfOnMap = true;
-	bool RequireMapItemInInventory = false;
+	bool RequireMapItemInInventory = true;
 	bool OnlyOnOpenAction = false;
 	bool RequirePenToMark = false;
 	bool SaveMarkersToMapItem = false; // Requires `OnlyOnOpenAction` or `RequireMapItemInInventory`
-	bool RequireCompassToSeeSelf = false;
-	bool RequireCompassToSee3d = false;
+	bool RequireCompassToSeeSelf = true;
+	bool RequireCompassToSee3d = true;
 	string ItemRequiredToSeeSelf = "bm_navigator";
 	
 	void Load(){

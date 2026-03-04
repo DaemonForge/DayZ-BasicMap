@@ -60,6 +60,7 @@ class ActionOpenBasicMap: ActionSingleUseBase
 	}
 	
 	void OpenPanel(){
+		if (!m_BasicMapMenu) return;
 		GetGame().GetUIManager().ShowScriptedMenu(m_BasicMapMenu, NULL);
 	    m_BasicMapMenu.SetOpen(true);
 	    m_BasicMapMenu.LockControls();
@@ -67,6 +68,7 @@ class ActionOpenBasicMap: ActionSingleUseBase
 	
 	void CreatePanel(){
 	    m_BasicMapMenu = BasicMapMenu.Cast(GetGame().GetUIManager().EnterScriptedMenu(BASICMAP_MENU, null));
+	    if (!m_BasicMapMenu) return;
 	    m_BasicMapMenu.SetOpen(true);
 	    m_BasicMapMenu.LockControls();
 	}

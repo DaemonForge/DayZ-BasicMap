@@ -5,7 +5,7 @@ class BasicMapMarker extends Managed{
 	bool Is3DMarker = false;
 	autoptr array<int> Colour = {119, 136, 198};
 	int Alpha = 235;
-	
+	 
 	bool HideOnPanel = false;
 	
 	bool HideOnMap = false;
@@ -77,7 +77,8 @@ class BasicMapMarker extends Managed{
 			if (vector.Distance( thePlayer.GetPosition(), GetPosition()) <= MinRenderDistance){
 				return false;
 			}
-		} else if ( MaxRenderDistance != -1 && thePlayer){
+		}
+		if ( MaxRenderDistance != -1 && thePlayer){
 			if (vector.Distance( thePlayer.GetPosition(), GetPosition()) >= MaxRenderDistance){
 				return false;
 			}
@@ -101,7 +102,7 @@ class BasicMapMarker extends Managed{
 	
 	vector GetPosition(){
 		if (!Pos){
-			return Vector(0,0,0,);
+			return Vector(0,0,0);
 		}
 		return Pos;
 	}
@@ -159,7 +160,7 @@ class BasicMapMarker extends Managed{
   
 	}
 	
-	void SetHideOnPanel(float state){
+	void SetHideOnPanel(bool state){
 		HideOnPanel = state;
 	}
 	
@@ -190,7 +191,8 @@ class BasicMapMarker extends Managed{
 			if (vector.Distance( thePlayer.GetPosition(), GetPosition()) <= MinRenderDistance){
 				return false;
 			}
-		} else if (MaxRenderDistance != -1 && thePlayer){
+		}
+		if (MaxRenderDistance != -1 && thePlayer){
 			if (vector.Distance( thePlayer.GetPosition(), GetPosition()) >= MaxRenderDistance){
 				return false;
 			}

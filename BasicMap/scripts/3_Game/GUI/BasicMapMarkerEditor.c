@@ -71,6 +71,12 @@ class BasicMapMarkerEditor  extends ScriptedWidgetEventHandler {
 		m_EditorRoot.Show(false);
 	}
 	
+	void ~BasicMapMarkerEditor(){
+		if (m_EditorRoot){
+			m_EditorRoot.Unlink();
+		}
+	}
+	
 	
 	override bool OnClick( Widget w, int x, int y, int button )
 	{		
@@ -223,17 +229,17 @@ class BasicMapMarkerEditor  extends ScriptedWidgetEventHandler {
 			//Print("Editor Panel Opened at X: " + m_WidgetX + " Y: " + m_WidgetY);
 			
 			int red = m_SelectedMarker.Colour[0];
-			int blue = m_SelectedMarker.Colour[1];
-			int green = m_SelectedMarker.Colour[2];
+			int green = m_SelectedMarker.Colour[1];
+			int blue = m_SelectedMarker.Colour[2];
 			int alpha = m_SelectedMarker.Alpha;
 			
 			m_Editor_Colour_Red.SetCurrent(red);
-			m_Editor_Colour_Green.SetCurrent(blue);
-			m_Editor_Colour_Blue.SetCurrent(green);
+			m_Editor_Colour_Green.SetCurrent(green);
+			m_Editor_Colour_Blue.SetCurrent(blue);
 			m_Editor_Colour_Alpha.SetCurrent(alpha);
-			
+			 
 			m_Editor_Icon.LoadImageFile(0, m_SelectedMarker.Icon);
-			
+			 
 			m_Editor_CurIcon = GetBasicMapConfig().Icons.Find(m_SelectedMarker.Icon);
 			
 			m_Editor_Name.SetText(m_SelectedMarker.GetName());

@@ -8,6 +8,9 @@ class BasicMapController extends Managed{
 	
 	protected bool MarkersOnHUD = true;
 	
+	// Set true when markers are replaced/added/removed so HUD can rebuild
+	bool m_MarkersDirty = false;
+	
 	// Marker visibility mode for K key cycling
 	protected int m_VisibilityMode = BasicMapVisibilityMode.SHOW_ALL;
 	
@@ -242,9 +245,12 @@ class BasicMapController extends Managed{
 	}
 	
 	void SaveClientMarkers(){
-		array<autoptr BasicMapMarker> ClientMarkers = new array<autoptr BasicMapMarker>;
+		array<autoptr BasicMapMarker> ClientMarkers;
 		if (Markers.Get(CLIENT_KEY)){
 			ClientMarkers = array<autoptr BasicMapMarker>.Cast(Markers.Get(CLIENT_KEY));
+		}
+		if (!ClientMarkers){
+			ClientMarkers = new array<autoptr BasicMapMarker>;
 		}
 		if (MapItem && GetBasicMapConfig().SaveMarkersToMapItem){
 			GetGame().RPCSingleParam(MapItem, BASICMAPRPCs.SAVE_MARKERS, new Param1<array<autoptr BasicMapMarker>>(ClientMarkers), true, NULL);
@@ -324,8 +330,12 @@ class BasicMapController extends Managed{
 	}
 	
 	void ChangeGroups(string from, string to, BasicMapMarker marker){
+		// Insert into target BEFORE removing from source.
+		// The source array holds an autoptr to the marker. Removing it first
+		// could delete the marker (if it's the last strong ref) before we can
+		// insert it into the target array.
 		if (Markers.Get(to)){
-			Markers.Get(from).Insert(marker);
+			Markers.Get(to).Insert(marker);
 		}
 		
 		if (Markers.Get(from)){
@@ -333,7 +343,7 @@ class BasicMapController extends Managed{
 			if (index >= 0){
 				Markers.Get(from).RemoveOrdered(index);
 			}
-		}	 
+		}
 	}
 	
 	void SetMarkers(string groupId, array<autoptr BasicMapMarker> markers){
@@ -342,12 +352,14 @@ class BasicMapController extends Managed{
 		} else {
 			Markers.Insert(groupId, markers);
 		}
+		m_MarkersDirty = true;
 	}
 	
 	void RemoveAllMarkers(string key){
 		if (Markers.Get(key)){
 			Markers.Remove(key);
 		}
+		m_MarkersDirty = true;
 	}
 	
 	void RemoveMarker(string key, BasicMapMarker marker){
@@ -553,7 +565,7 @@ class BasicMapController extends Managed{
                     if (itemsArray.Get(i)){ 
 						string itemType = itemsArray.Get(i).GetType();
 						itemType.ToLower();
-						if (itemType.Contains("compass")){
+						if (itemType.Contains("compass") != -1){
 							return MarkersOnHUD && GetBasicMapConfig().Allow3dMarkers;
 						}
                     }
@@ -606,8 +618,10 @@ class BasicMapController extends Managed{
 					EntityAI item;
                     if (Class.CastTo(item, itemsArray.Get(i)) ){ 
 						string itemType = item.GetType();
+						string requiredItem = GetBasicMapConfig().ItemRequiredToSeeSelf;
+						requiredItem.ToLower();
 						itemType.ToLower();
-						if (itemType.Contains(GetBasicMapConfig().ItemRequiredToSeeSelf) && (!item.GetCompEM() || (item.GetCompEM().IsSwitchedOn() && item.GetCompEM().IsWorking()))){
+						if (itemType.Contains(requiredItem) != -1 && (!item.GetCompEM() || (item.GetCompEM().IsSwitchedOn() && item.GetCompEM().IsWorking()))){
                             return true;
 						}
                     }

@@ -218,7 +218,7 @@ class BasicMapNavigationHUD extends Managed
 			itemType.ToLower();
 			
 			// Check for compass (type name contains "compass")
-			if (itemType.Contains("compass"))
+			if (itemType.Contains("compass") != -1)
 			{
 				// Only count non-ruined compasses
 				if (!item.IsRuined())
@@ -229,7 +229,7 @@ class BasicMapNavigationHUD extends Managed
 			
 			// Check for GPS (type name contains "gps")
 			// Also check for BM_Navigator which is the BasicMap GPS item
-			if (itemType.Contains("gps") || itemType.Contains("navigator"))
+			if (itemType.Contains("gps") != -1 || itemType.Contains("navigator") != -1)
 			{
 				// GPS/Navigator needs to be on (has power)
 				if (item.GetCompEM() && item.GetCompEM().IsSwitchedOn() && item.GetCompEM().IsWorking())

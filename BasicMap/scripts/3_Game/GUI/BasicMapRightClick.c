@@ -60,9 +60,12 @@ class BasicMapRightClick  extends ScriptedWidgetEventHandler {
 	}
 	
 	void ~BasicMapRightClick(){
-		m_GroupSelector.Show(false);
-		m_RightClickRoot.Show(false);
-		m_RightClickMenu.Show(false);
+		if (m_GroupSelector) m_GroupSelector.Show(false);
+		if (m_RightClickRoot){
+			m_RightClickRoot.Show(false);
+			m_RightClickRoot.Unlink();
+		}
+		if (m_RightClickMenu) m_RightClickMenu.Show(false);
 	}
 	
 	override bool OnClick( Widget w, int x, int y, int button )

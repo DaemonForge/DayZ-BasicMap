@@ -66,7 +66,7 @@ class BasicMapCircleMarker extends BasicMapMarker{
 		return Radius;
 	}
 	
-	void SetHideIntersects(float state){
+	void SetHideIntersects(bool state){
 		HideIntersects = state;
 		Updated = true;
 	}

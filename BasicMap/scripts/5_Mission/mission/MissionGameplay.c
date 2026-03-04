@@ -58,8 +58,11 @@ modded class MissionGameplay extends MissionBase
 		int markerCount = BasicMap().Count();
 		int hudCount = m_hudMarkers.Count();
 		
-		// Only rebuild if marker count changed (markers added/removed)
-		if (hudCount != markerCount){
+		// Rebuild if marker count changed OR markers were replaced (dirty flag).
+		// SetMarkers/RemoveAllMarkers can replace all markers with the same count,
+		// leaving HUD markers with dangling weak references to deleted objects.
+		if (hudCount != markerCount || BasicMap().m_MarkersDirty){
+			BasicMap().m_MarkersDirty = false;
 			// Clear and rebuild
 			m_hudMarkers.Clear();
 			for (int j = 0; j < markerCount; j++){
@@ -121,6 +124,10 @@ modded class MissionGameplay extends MissionBase
 	void BasicMapCreatePanel()
 	{
 	    m_BasicMapMenu = BasicMapMenu.Cast(GetUIManager().EnterScriptedMenu(BASICMAP_MENU, null));
+		if (!m_BasicMapMenu){
+			m_BasicMapMenu_Opening = false;
+			return;
+		}
 		m_BasicMapMenu.LockControls();
 	    m_BasicMapMenu.SetOpen(true);
 		m_BasicMapMenu_Opening = false;
@@ -128,6 +135,10 @@ modded class MissionGameplay extends MissionBase
 	
 	void BasicMapOpenPanel()
 	{	
+		if (!m_BasicMapMenu){
+			m_BasicMapMenu_Opening = false;
+			return;
+		}
 		GetGame().GetUIManager().ShowScriptedMenu(m_BasicMapMenu, NULL);
 	    m_BasicMapMenu.SetOpen(true);
 		m_BasicMapMenu.UpdateMarkers();
@@ -137,6 +148,10 @@ modded class MissionGameplay extends MissionBase
 	
 	void BasicMapClosePanel()
 	{
+		if (!m_BasicMapMenu){
+			m_BasicMapMenu_Opening = false;
+			return;
+		}
 		m_BasicMapMenu.CloseEditor();//Make sure if a marker was open that its closed and saved
 		m_BasicMapMenu.SetOpen(false);
 		m_BasicMapMenu.UnLockControls();
@@ -162,7 +177,7 @@ modded class MissionGameplay extends MissionBase
 			if (itemsArray.Get(i)){
 				string itemType = itemsArray.Get(i).GetType();
 				itemType.ToLower();
-				if (itemType.Contains("pen_")){
+				if (itemType.Contains("pen_") != -1){
 					return true;
 				}
 			}

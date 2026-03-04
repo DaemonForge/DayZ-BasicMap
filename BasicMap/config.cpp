@@ -1042,12 +1042,6 @@ class CfgWorlds
 				position[] = {1192.99,7236.72};
 				type = "MilitaryOutpost";
 			};
-			class Local_Custom_MIL_Balota
-			{
-				name = "BUNKER BALOTA";
-				position[] = {5167.10, 2388.16};
-				type = "MilitaryOutpost";
-			};
 			class Local_Chernogorsk_rus
 			{
 				name = "Черногорск";

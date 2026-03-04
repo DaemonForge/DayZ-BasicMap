@@ -81,7 +81,11 @@ modded class ChernarusMap  extends ItemMap
 		int i;
 		Param1<array<autoptr BasicMapMarker>> data;
 		array<autoptr BasicMapMarker> Markers;
-		PlayerIdentity  pid = PlayerIdentity.Cast(GetHierarchyRootPlayer().GetIdentity());
+		
+		PlayerIdentity pid;
+		if (GetHierarchyRootPlayer()){
+			pid = PlayerIdentity.Cast(GetHierarchyRootPlayer().GetIdentity());
+		}
 		
 		if (rpc_type == BASICMAPRPCs.SEND_MARKERS && GetGame().IsClient()) {
 			if (ctx.Read(data))	{
@@ -98,7 +102,7 @@ modded class ChernarusMap  extends ItemMap
 			}
 		}
 		if (rpc_type == BASICMAPRPCs.REQUEST_MARKERS && GetGame().IsServer()) {
-			if (GetHierarchyRootPlayer() && sender.GetId() == GetHierarchyRootPlayer().GetIdentity().GetId()){
+			if (GetHierarchyRootPlayer() && GetHierarchyRootPlayer().GetIdentity() && sender.GetId() == GetHierarchyRootPlayer().GetIdentity().GetId()){
 				this.SyncMapMarkers();
 			}
 		}

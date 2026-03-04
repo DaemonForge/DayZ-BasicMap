@@ -339,13 +339,8 @@ class BasicMapMenu extends UIScriptedMenu
 		{
 			icon = "BasicMap\\gui\\images\\marker.paa";
 		}
-		if (icon.Contains(".edds"))
-		{
-			string fixedIcon = icon;
-			fixedIcon.Replace(".edds", ".paa");
-			Print(string.Format("[BasicMap][MapMenu] Sanitized icon from .edds to .paa: %1 -> %2", icon, fixedIcon));
-			icon = fixedIcon;
-		}
+		// Replace .edds with .paa if present (MapWidget doesn't support .edds)
+		icon.Replace(".edds", ".paa");
 		return icon;
 	}
 	
@@ -423,12 +418,18 @@ class BasicMapMenu extends UIScriptedMenu
 	
 	void ~BasicMapMenu()
     {
+		// Cancel any pending UpdateMarkers callback before destruction
+		GetGame().GetCallQueue(CALL_CATEGORY_GUI).Remove(this.UpdateMarkers);
+		GetGame().GetCallQueue(CALL_CATEGORY_GUI).Remove(this.UpdateContentAreaSize);
+		GetGame().GetCallQueue(CALL_CATEGORY_GUI).Remove(this.PopulateMarkerList);
+		GetGame().GetCallQueue(CALL_CATEGORY_GUI).Remove(this.StepIconsList);
+		
 		CloseRightClick();
 		CloseEditor();
 		UnLockControls();
 		BasicMap().OnMapClose();
 		delete m_MeMarker;
-		layoutRoot.Show(false);
+		if (layoutRoot) layoutRoot.Show(false);
     }
 	
 	bool IsOpen() {
@@ -594,13 +595,19 @@ class BasicMapMenu extends UIScriptedMenu
 	
 	void RefreshMarkerList(){
 		if (m_MarkerList){
+			bool needsRebuild = false;
 			for (int i = 0; i < m_MarkerList.Count(); i++){
 				if (m_MarkerList.Get(i)){
-					if (m_MarkerList.Get(i).Refresh()){
-					} else {
-						GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(m_MarkerList.RemoveOrdered, 1, false, i);
+					if (!m_MarkerList.Get(i).Refresh()){
+						needsRebuild = true;
 					}
 				}
+			}
+			// Rebuild the entire list instead of removing by index.
+			// Deferred RemoveOrdered by index is unsafe: after the first
+			// removal shifts the array, subsequent queued indices are stale.
+			if (needsRebuild){
+				PopulateMarkerList();
 			}
 		}
 	}
@@ -632,7 +639,7 @@ class BasicMapMenu extends UIScriptedMenu
                     if (itemsArray.Get(i)){ 
 						string itemType = itemsArray.Get(i).GetType();
 						itemType.ToLower();
-						if (itemType.Contains("pen_")){
+						if (itemType.Contains("pen_") != -1){
                             return GetBasicMapConfig().AllowPlayerMarkers;
 						}
                     }

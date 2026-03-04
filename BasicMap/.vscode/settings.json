@@ -1,6 +1,6 @@
 {
   "files.associations": {
-    "*.c": "enforce",
+    "*.c": "enscript",
     "config.cpp": "plaintext",
     "mod.cpp": "plaintext"
   }
