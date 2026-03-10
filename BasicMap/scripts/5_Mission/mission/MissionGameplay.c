@@ -27,14 +27,6 @@ modded class MissionGameplay extends MissionBase
 	
 	override void OnMissionFinish(){
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).Remove(this.UpdateHuDIcons);
-		int preventRunAway = 500; //Sure if you have more than 500 Makers this might become an issue but lets hope that this is so unlikely its not an issue
-		/*while (m_hudMarkers.Count() > 0 && preventRunAway > 0){
-			preventRunAway--;
-			m_hudMarkers.Get(0).Show(false);
-			m_hudMarkers.Get(0).OnDelete();
-			delete m_hudMarkers.Get(0);
-			m_hudMarkers.Remove(0);
-		}*/
 		if (m_hudMarkers){
 			m_hudMarkers.Clear(); //Just to make sure :)
 			delete m_hudMarkers;
@@ -63,11 +55,12 @@ modded class MissionGameplay extends MissionBase
 		// leaving HUD markers with dangling weak references to deleted objects.
 		if (hudCount != markerCount || BasicMap().m_MarkersDirty){
 			BasicMap().m_MarkersDirty = false;
-			// Clear and rebuild
+			// Clear and rebuild using flat array (avoids O(n²) from repeated Marker(i))
 			m_hudMarkers.Clear();
-			for (int j = 0; j < markerCount; j++){
+			array<BasicMapMarker> allMarkers = BasicMap().GetAllMarkers();
+			for (int j = 0; j < allMarkers.Count(); j++){
 				m_hudMarkers.Insert(new BasicMapHUDMarker());
-				m_hudMarkers.Get(j).Init(BasicMap().Marker(j));
+				m_hudMarkers.Get(j).Init(allMarkers.Get(j));
 			}
 		}
 		// Otherwise, the existing HUD markers will update themselves via their CallLater
@@ -90,12 +83,9 @@ modded class MissionGameplay extends MissionBase
         }
 		if (player && player.IsUnconscious()){
 			if (m_BasicMapMenu != NULL && GetGame().GetUIManager().GetMenu() == m_BasicMapMenu) {
-				if (m_BasicMapMenu.IsEditorOpen()){
-					m_BasicMapMenu.CloseEditor();
-				}
-               	BasicMapClosePanel();
+				BasicMapClosePanel();
 				m_BasicMapMenu_Opening = false;
-            }
+			}
 		}
 
         if (input.LocalPress("UABasicMap", false) && player && !player.IsUnconscious()) {
@@ -164,25 +154,7 @@ modded class MissionGameplay extends MissionBase
 		if (!GetBasicMapConfig().RequirePenToMark){
 			return true;
 		}
-		
-		DayZPlayer player = DayZPlayer.Cast(GetGame().GetPlayer());
-		if (!player){
-			return false;
-		}
-		
-		array<EntityAI> itemsArray = new array<EntityAI>;
-		player.GetInventory().EnumerateInventory(InventoryTraversalType.PREORDER, itemsArray);
-		
-		for (int i = 0; i < itemsArray.Count(); i++){
-			if (itemsArray.Get(i)){
-				string itemType = itemsArray.Get(i).GetType();
-				itemType.ToLower();
-				if (itemType.Contains("pen_") != -1){
-					return true;
-				}
-			}
-		}
-		return false;
+		return BasicMap().HasCachedPen();
 	}
 	
 	bool AllowedToOpenBasicMap(){
@@ -190,12 +162,14 @@ modded class MissionGameplay extends MissionBase
 			return false;
 		}
         if (GetBasicMapConfig() && GetBasicMapConfig().RequireMapItemInInventory) {
+			// Quick cache check first - if no map item, skip the full scan
+			if (!BasicMap().HasCachedMapItem()){
+				return false;
+			}
             DayZPlayer player = DayZPlayer.Cast(GetGame().GetPlayer());
-
             if (player){
 				array<EntityAI> itemsArray = new array<EntityAI>;
 				player.GetInventory().EnumerateInventory(InventoryTraversalType.PREORDER, itemsArray);
-            	    
                 for (int i = 0; i < itemsArray.Count(); i++){
                     if (itemsArray.Get(i) && itemsArray.Get(i).IsInherited(ItemMap)){
 						ItemMap mapItem = ItemMap.Cast(itemsArray.Get(i));

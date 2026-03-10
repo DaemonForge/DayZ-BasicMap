@@ -30,6 +30,96 @@ class BasicMapController extends Managed{
 	protected vector LastLookedAtPos = vector.Zero;
 	protected float LastLookedAtZoom = -1;
 	
+	// ---- Inventory item cache (avoids repeated EnumerateInventory scans) ----
+	protected float m_InvCacheTime = -1;       // Time of last cache refresh
+	protected static float INV_CACHE_TTL = 1.0; // Cache valid for 1 second
+	protected bool m_CachedHasCompass = false;
+	protected bool m_CachedHasPen = false;
+	protected bool m_CachedHasSelfItem = false; // compass/navigator for ShowSelfOnMap
+	protected bool m_CachedHasMapItem = false;
+	protected bool m_CachedHasGPS = false;      // GPS/Navigator with power (for NavHUD)
+	
+	// Refresh inventory cache if stale. Called once per frame at most.
+	void RefreshInventoryCache(){
+		float now = GetGame().GetTickTime();
+		if (m_InvCacheTime >= 0 && (now - m_InvCacheTime) < INV_CACHE_TTL){
+			return; // Cache still valid
+		}
+		m_InvCacheTime = now;
+		m_CachedHasCompass = false;
+		m_CachedHasPen = false;
+		m_CachedHasSelfItem = false;
+		m_CachedHasMapItem = false;
+		m_CachedHasGPS = false;
+		
+		if (!GetGame().IsClient()){
+			return;
+		}
+		DayZPlayer player = DayZPlayer.Cast(GetGame().GetPlayer());
+		if (!player || !player.GetInventory()){
+			return;
+		}
+		
+		string requiredSelfItem = GetBasicMapConfig().ItemRequiredToSeeSelf;
+		requiredSelfItem.ToLower();
+		
+		array<EntityAI> itemsArray = new array<EntityAI>;
+		player.GetInventory().EnumerateInventory(InventoryTraversalType.PREORDER, itemsArray);
+		
+		for (int i = 0; i < itemsArray.Count(); i++){
+			EntityAI item;
+			if (!Class.CastTo(item, itemsArray.Get(i))){
+				continue;
+			}
+			string itemType = item.GetType();
+			itemType.ToLower();
+			
+			if (itemType.Contains("compass") != -1 && !item.IsRuined()){
+				m_CachedHasCompass = true;
+			}
+			if (itemType.Contains("pen_") != -1){
+				m_CachedHasPen = true;
+			}
+			if ((itemType.Contains("gps") != -1 || itemType.Contains("navigator") != -1) && item.GetCompEM() && item.GetCompEM().IsSwitchedOn() && item.GetCompEM().IsWorking()){
+				m_CachedHasGPS = true;
+			}
+			if (itemType.Contains(requiredSelfItem) != -1){
+				// Self-item may require power (compass/navigator)
+				if (!item.GetCompEM() || (item.GetCompEM().IsSwitchedOn() && item.GetCompEM().IsWorking())){
+					m_CachedHasSelfItem = true;
+				}
+			}
+			if (item.IsKindOf("ItemMap")){
+				m_CachedHasMapItem = true;
+			}
+		}
+	}
+	
+	bool HasCachedCompass(){
+		RefreshInventoryCache();
+		return m_CachedHasCompass;
+	}
+	
+	bool HasCachedPen(){
+		RefreshInventoryCache();
+		return m_CachedHasPen;
+	}
+	
+	bool HasCachedSelfItem(){
+		RefreshInventoryCache();
+		return m_CachedHasSelfItem;
+	}
+	
+	bool HasCachedMapItem(){
+		RefreshInventoryCache();
+		return m_CachedHasMapItem;
+	}
+	
+	bool HasCachedGPS(){
+		RefreshInventoryCache();
+		return m_CachedHasGPS;
+	}
+	
 	void Init(){
 		if (!IsInit){
 			IsInit = true;
@@ -300,6 +390,23 @@ class BasicMapController extends Managed{
 		return count;
 	}
 	
+	// Returns a flat array of ALL markers across all groups.
+	// Use this for bulk iteration instead of repeated Marker(i) calls,
+	// which is O(n) per call making loops O(n²).
+	array<BasicMapMarker> GetAllMarkers(){
+		array<BasicMapMarker> all = new array<BasicMapMarker>;
+		for (int j = 0; j < Markers.Count(); j++){
+			array<autoptr BasicMapMarker> group = Markers.GetElement(j);
+			for (int k = 0; k < group.Count(); k++){
+				BasicMapMarker m = BasicMapMarker.Cast(group.Get(k));
+				if (m){
+					all.Insert(m);
+				}
+			}
+		}
+		return all;
+	}
+	
 	array<autoptr BasicMapMarker> GetMarkers(string id){
 		if (id == ""){
 			return NULL;
@@ -308,17 +415,12 @@ class BasicMapController extends Managed{
 	}
 	
 	void AddMarker(string groupId, BasicMapMarker marker){
-		if (Markers.Get(groupId)){
-			marker.SetGroup(groupId);
-			OnMarkerSave(marker);
-			Markers.Get(groupId).Insert(marker);
-		} else {
-			array<autoptr BasicMapMarker> markers = new array<autoptr BasicMapMarker>;
-			marker.SetGroup(groupId);
-			markers.Insert(marker);
-			OnMarkerSave(marker);
-			Markers.Insert(groupId, markers);
+		marker.SetGroup(groupId);
+		OnMarkerSave(marker);
+		if (!Markers.Get(groupId)){
+			Markers.Insert(groupId, new array<autoptr BasicMapMarker>);
 		}
+		Markers.Get(groupId).Insert(marker);
 	}
 	
 	void CreateMarker(string group, string name, vector pos, bool overrideSettings = false){
@@ -506,7 +608,6 @@ class BasicMapController extends Managed{
 	// Set visibility mode directly
 	void SetVisibilityMode(int mode){
 		m_VisibilityMode = mode;
-		// Update the MarkersOnHUD based on mode
 		if (mode == BasicMapVisibilityMode.HIDE_ALL){
 			MarkersOnHUD = false;
 		} else {
@@ -516,26 +617,19 @@ class BasicMapController extends Managed{
 	
 	// Cycle to next visibility mode: Show All -> Server Only -> Local Only -> Hide All -> Show All
 	void CycleVisibilityMode(){
-		m_VisibilityMode++;
-		if (m_VisibilityMode > BasicMapVisibilityMode.HIDE_ALL){
-			m_VisibilityMode = BasicMapVisibilityMode.SHOW_ALL;
+		int mode = m_VisibilityMode + 1;
+		if (mode > BasicMapVisibilityMode.HIDE_ALL){
+			mode = BasicMapVisibilityMode.SHOW_ALL;
 		}
-		// Update MarkersOnHUD based on mode
-		if (m_VisibilityMode == BasicMapVisibilityMode.HIDE_ALL){
-			MarkersOnHUD = false;
-		} else {
-			MarkersOnHUD = true;
-		}
+		SetVisibilityMode(mode);
 	}
 	
 	// Quick toggle between Show All and Hide All (for long press)
 	void QuickToggleVisibility(){
 		if (m_VisibilityMode == BasicMapVisibilityMode.HIDE_ALL){
-			m_VisibilityMode = BasicMapVisibilityMode.SHOW_ALL;
-			MarkersOnHUD = true;
+			SetVisibilityMode(BasicMapVisibilityMode.SHOW_ALL);
 		} else {
-			m_VisibilityMode = BasicMapVisibilityMode.HIDE_ALL;
-			MarkersOnHUD = false;
+			SetVisibilityMode(BasicMapVisibilityMode.HIDE_ALL);
 		}
 	}
 	
@@ -556,22 +650,9 @@ class BasicMapController extends Managed{
 	
 	bool ShowMarkersOnHUD(){
 		if ( GetBasicMapConfig().RequireCompassToSee3d && GetGame().IsClient() ){
-			DayZPlayer player = DayZPlayer.Cast(GetGame().GetPlayer());
-
-            if (player){
-				array<EntityAI> itemsArray = new array<EntityAI>;
-				player.GetInventory().EnumerateInventory(InventoryTraversalType.PREORDER, itemsArray);    	
-                for (int i = 0; i < itemsArray.Count(); i++){
-                    if (itemsArray.Get(i)){ 
-						string itemType = itemsArray.Get(i).GetType();
-						itemType.ToLower();
-						if (itemType.Contains("compass") != -1){
-							return MarkersOnHUD && GetBasicMapConfig().Allow3dMarkers;
-						}
-                    }
-                }
-            }
-			return false;
+			if (!HasCachedCompass()){
+				return false;
+			}
 		}
 		return MarkersOnHUD && GetBasicMapConfig().Allow3dMarkers;
 	}
@@ -609,25 +690,7 @@ class BasicMapController extends Managed{
 	
 	bool ShowSelfOnMap(){
 		if ( GetBasicMapConfig().RequireCompassToSeeSelf && GetGame().IsClient() ){
-			DayZPlayer player = DayZPlayer.Cast(GetGame().GetPlayer());
-
-            if (player){
-				array<EntityAI> itemsArray = new array<EntityAI>;
-				player.GetInventory().EnumerateInventory(InventoryTraversalType.PREORDER, itemsArray);    	
-                for (int i = 0; i < itemsArray.Count(); i++){
-					EntityAI item;
-                    if (Class.CastTo(item, itemsArray.Get(i)) ){ 
-						string itemType = item.GetType();
-						string requiredItem = GetBasicMapConfig().ItemRequiredToSeeSelf;
-						requiredItem.ToLower();
-						itemType.ToLower();
-						if (itemType.Contains(requiredItem) != -1 && (!item.GetCompEM() || (item.GetCompEM().IsSwitchedOn() && item.GetCompEM().IsWorking()))){
-                            return true;
-						}
-                    }
-                }
-            }
-			return false;
+			return HasCachedSelfItem();
 		} 
 		return GetBasicMapConfig().ShowSelfOnMap;
 	}

@@ -115,11 +115,7 @@ class BasicMapMenu extends UIScriptedMenu
 	void Initialize(){
 		m_InfoText.SetText( BasicMap().GetInfoText() );
 		
-		if (BasicMap().ShowSelfOnMap()){
-			m_BackToMe.Show(true);
-		} else {
-			m_BackToMe.Show(false);
-		}
+		m_BackToMe.Show(BasicMap().ShowSelfOnMap());
 		
 		m_Show3dMakersPanel.Show(GetBasicMapConfig().Allow3dMarkers);
 		m_Show3dMakers.SetChecked(!BasicMap().ShowMarkersOnHUD());
@@ -215,15 +211,14 @@ class BasicMapMenu extends UIScriptedMenu
 	}
 	
 	void PopulateMarkerList(){
-		//Print("PopulateMarkerList Pre");
 		ClearMarkerList();
 		if (!m_MarkerListWidget || m_MarkerListWidget.Count() == 0) return;
-		if (BasicMap().GetMarkers(m_CurGroup) && BasicMap().GetMarkers(m_CurGroup).Count() > 0){
+		array<autoptr BasicMapMarker> groupMarkers = BasicMap().GetMarkers(m_CurGroup);
+		if (groupMarkers && groupMarkers.Count() > 0){
 			if (!m_MarkerList){
 				m_MarkerList = new array<autoptr BasicMapMarkerListItem>;
 			}
-			//Print("PopulateMarkerList Start");
-			int max = BasicMap().GetMarkers(m_CurGroup).Count() - 10;
+			int max = groupMarkers.Count() - 10;
 			if (max > 0){
 				while (m_CurrentListOffset > max && m_CurrentListOffset > 0){
 					m_CurrentListOffset--;
@@ -232,11 +227,12 @@ class BasicMapMenu extends UIScriptedMenu
 			int i = 0;
 			int i_M = m_CurrentListOffset;
 			int maxItems = 17;
-			while ( i_M < BasicMap().GetMarkers(m_CurGroup).Count() && i <= maxItems && i < m_MarkerListWidget.Count()){
-				if (BasicMap().GetMarkers(m_CurGroup).Get(i_M) && BasicMap().GetMarkers(m_CurGroup).Get(i_M).OnPanel() && BasicMap().GetMarkers(m_CurGroup).Get(i_M).OnMap()){
+			while ( i_M < groupMarkers.Count() && i <= maxItems && i < m_MarkerListWidget.Count()){
+				BasicMapMarker curMarker = BasicMapMarker.Cast(groupMarkers.Get(i_M));
+				if (curMarker && curMarker.OnPanel() && curMarker.OnMap()){
 					if (m_MarkerListWidget.Get(i)) {
 						m_MarkerListWidget.Get(i).Show(true);
-						m_MarkerList.Insert(new BasicMapMarkerListItem(m_MarkerListWidget.Get(i), this, BasicMap().GetMarkers(m_CurGroup).Get(i_M)));
+						m_MarkerList.Insert(new BasicMapMarkerListItem(m_MarkerListWidget.Get(i), this, curMarker));
 					}
 					i++;
 				}
@@ -282,8 +278,10 @@ class BasicMapMenu extends UIScriptedMenu
 		if (m_PanelIsOpen && m_Map && BasicMap()){
 			BasicMap().SetLastLook(m_Map.GetMapPos(),m_Map.GetScale());
 			m_Map.ClearUserMarks();
-			for (int i = 0; i < BasicMap().Count(); i++) {
-				BasicMapMarker marker = BasicMapMarker.Cast(BasicMap().Marker(i));
+			// Use flat array to avoid O(n²) from repeated Marker(i) lookups
+			array<BasicMapMarker> allMarkers = BasicMap().GetAllMarkers();
+			for (int i = 0; i < allMarkers.Count(); i++) {
+				BasicMapMarker marker = allMarkers.Get(i);
 				if (marker && marker.OnMap()){
 					bool ShowOnMap = !(marker.GetGroup());
 					ShowOnMap = (ShowOnMap || !(BasicMap().GetGroups()));
@@ -358,18 +356,18 @@ class BasicMapMenu extends UIScriptedMenu
 		vector clickPos = MapClickPosition(x,y);
 		float radius = (m_Map.GetScale() * 110) + 5;
         if (w == m_Map && button == MouseState.LEFT) {
-			int counter = 0;
-			if (BasicMap().ClientMarkers()){
-				counter = BasicMap().ClientMarkers().Count();
-			}
-			string name = "Mark - " + counter;
-			if (!BasicMap().GetMarkerByVector(clickPos, radius)){
+			BasicMapMarker foundMarker = BasicMap().GetMarkerByVector(clickPos, radius);
+			if (!foundMarker){
 				if ( IsEditorOpen() ){
 					CloseEditor();
 				}
 				if (GetBasicMapConfig().AllowPlayerMarkers && CanMakeMarkers()){
-					//Print("[BASICMAP] Creating Marker At " + clickPos);
-		           	BasicMap().CreateMarker(m_CurGroup, name, clickPos);
+					int counter = 0;
+					if (BasicMap().ClientMarkers()){
+						counter = BasicMap().ClientMarkers().Count();
+					}
+					string name = "Mark - " + counter;
+					BasicMap().CreateMarker(m_CurGroup, name, clickPos);
 					GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.PopulateMarkerList, 10, false);
 					return true;
 				}
@@ -377,8 +375,7 @@ class BasicMapMenu extends UIScriptedMenu
 				if ( IsEditorOpen() ){
 					CloseEditor();
 				}
-				m_SelectedMarker = BasicMapMarker.Cast( BasicMap().GetMarkerByVector(clickPos, radius) );
-				//Print("[BASICMAP] OpenEditor " + clickPos);
+				m_SelectedMarker = foundMarker;
 				OpenEditor(x, y);
 				return true;
 			}
@@ -454,31 +451,24 @@ class BasicMapMenu extends UIScriptedMenu
 	
 	//On click doesn't seem to work with map Widgets
 	override bool OnMouseButtonDown(Widget w, int x, int y, int button ){
-		//Print("[BASICMAP] OnMouseButtonDown " + w.GetName() + " X: " + x + " Y: " + y + " IsEditorOpen():" + IsEditorOpen() );
 		vector clickPos;
 		float radius;
 		if (w == m_Map && button == MouseState.LEFT && !IsEditorOpen() && !IsRightClickMenuOpen()){
 			clickPos = MapClickPosition(x,y);
 			radius = (m_Map.GetScale() * 110) + 5;
-			if (BasicMap().GetMarkerByVector(clickPos, radius)){
-				m_SelectedMarker = BasicMapMarker.Cast(BasicMap().GetMarkerByVector(clickPos, radius));
-				if (m_SelectedMarker){
-					//Print("[BASICMAP]" + m_SelectedMarker.GetName() + " Marker Found at " + clickPos);
-					OpenEditor(x, y);
-					return true;
-				}
+			m_SelectedMarker = BasicMap().GetMarkerByVector(clickPos, radius);
+			if (m_SelectedMarker){
+				OpenEditor(x, y);
+				return true;
 			}
 		}
 		if ( w == m_Map &&  button == MouseState.RIGHT && !IsEditorOpen() && !IsRightClickMenuOpen()){
 			clickPos = MapClickPosition(x,y);
 			radius = (m_Map.GetScale() * 110) + 5;
-			if (BasicMap().GetMarkerByVector(clickPos, radius)){
-				m_SelectedMarker = BasicMapMarker.Cast(BasicMap().GetMarkerByVector(clickPos, radius));
-				//Print("[BASICMAP]" + m_SelectedMarker.GetName() + " Marker Found at " + clickPos);
-				if (m_SelectedMarker){
-					OpenRightClick(x, y);
-					return true;
-				}
+			m_SelectedMarker = BasicMap().GetMarkerByVector(clickPos, radius);
+			if (m_SelectedMarker){
+				OpenRightClick(x, y);
+				return true;
 			}
 		}
 		if ( w && w.GetParent() && button == MouseState.LEFT && IsRightClickMenuOpen()){
@@ -517,13 +507,8 @@ class BasicMapMenu extends UIScriptedMenu
 	
 	void StepIconsList(int i){
 		m_CurrentListOffset = m_CurrentListOffset + i;
-		if (m_CurrentListOffset < 0){
-			m_CurrentListOffset = 0;
-		}
 		int max = BasicMap().GetMarkers(m_CurGroup).Count() - 10;
-		if (m_CurrentListOffset > max){
-			m_CurrentListOffset = max;
-		}
+		m_CurrentListOffset = Math.Clamp(m_CurrentListOffset, 0, max);
 		PopulateMarkerList();
 	}
 	
@@ -630,22 +615,9 @@ class BasicMapMenu extends UIScriptedMenu
 	
 	bool CanMakeMarkers(){
 		if ( GetBasicMapConfig().RequirePenToMark && GetGame().IsClient() ){
-			DayZPlayer player = DayZPlayer.Cast(GetGame().GetPlayer());
-
-            if (player){
-				array<EntityAI> itemsArray = new array<EntityAI>;
-				player.GetInventory().EnumerateInventory(InventoryTraversalType.PREORDER, itemsArray);    	
-                for (int i = 0; i < itemsArray.Count(); i++){
-                    if (itemsArray.Get(i)){ 
-						string itemType = itemsArray.Get(i).GetType();
-						itemType.ToLower();
-						if (itemType.Contains("pen_") != -1){
-                            return GetBasicMapConfig().AllowPlayerMarkers;
-						}
-                    }
-                }
-            }
-			return false;
+			if (!BasicMap().HasCachedPen()){
+				return false;
+			}
 		} 
 		return GetBasicMapConfig().AllowPlayerMarkers;
 	}

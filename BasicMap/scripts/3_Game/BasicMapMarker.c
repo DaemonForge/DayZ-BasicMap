@@ -17,6 +17,10 @@ class BasicMapMarker extends Managed{
 	protected bool CanEdit = true;
 	protected string Group = BasicMap().CLIENT_KEY;
 	
+	// Cached current world name (same for all markers, never changes at runtime)
+	protected static string s_CachedCurrentMap = "";
+	protected static bool s_CurrentMapCached = false;
+	
 	
 	void BasicMapMarker(string name, vector pos, string icon = "", array<int> colour = NULL, int alpha = 235, bool onHUD = false) {
 		Name = name;
@@ -52,37 +56,57 @@ class BasicMapMarker extends Managed{
 		return MapToShowOn;
 	}
 	
-	bool IsCorrectMap(){
-		if (!GetMapToShowOn() || GetMapToShowOn() == "" || GetMapToShowOn() == "any" || GetMapToShowOn() == "all"){
-			return true;
+	// Get the cached current map name (avoids repeated GetWorldName calls)
+	protected static string GetCurrentMapCached(){
+		if (!s_CurrentMapCached){
+			GetGame().GetWorldName(s_CachedCurrentMap);
+			s_CachedCurrentMap.ToLower();
+			s_CurrentMapCached = true;
 		}
-		string CurrentMap = "";
-		GetGame().GetWorldName(CurrentMap);
-		CurrentMap.ToLower();
-		return (CurrentMap == GetMapToShowOn());
+		return s_CachedCurrentMap;
 	}
 	
-	bool OnHUD(){
-		if (!IsCorrectMap()) {
-			return false;
+	bool IsCorrectMap(){
+		string showOn = GetMapToShowOn();
+		if (!showOn || showOn == "" || showOn == "any" || showOn == "all"){
+			return true;
 		}
+		return (GetCurrentMapCached() == showOn);
+	}
+	
+	// Shared render-distance check used by OnHUD() and OnMap()
+	// Returns false if the marker is outside its configured render range
+	protected bool IsWithinRenderDistance(){
 		if (!MinRenderDistance){
 			MinRenderDistance = -1;
 		}
 		if (!MaxRenderDistance){
 			MaxRenderDistance = -1;
 		}
-		DayZPlayer thePlayer = DayZPlayer.Cast(GetGame().GetPlayer());
-		if ( MinRenderDistance != -1 && thePlayer){
-			if (vector.Distance( thePlayer.GetPosition(), GetPosition()) <= MinRenderDistance){
-				return false;
-			}
+		if (MinRenderDistance == -1 && MaxRenderDistance == -1){
+			return true;
 		}
-		if ( MaxRenderDistance != -1 && thePlayer){
-			if (vector.Distance( thePlayer.GetPosition(), GetPosition()) >= MaxRenderDistance){
-				return false;
-			}
-		} 
+		DayZPlayer thePlayer = DayZPlayer.Cast(GetGame().GetPlayer());
+		if (!thePlayer){
+			return true;
+		}
+		float dist = vector.Distance(thePlayer.GetPosition(), GetPosition());
+		if (MinRenderDistance != -1 && dist <= MinRenderDistance){
+			return false;
+		}
+		if (MaxRenderDistance != -1 && dist >= MaxRenderDistance){
+			return false;
+		}
+		return true;
+	}
+	
+	bool OnHUD(){
+		if (!IsCorrectMap()) {
+			return false;
+		}
+		if (!IsWithinRenderDistance()){
+			return false;
+		}
 		return Is3DMarker;
 	}
 	
@@ -179,23 +203,8 @@ class BasicMapMarker extends Managed{
 		if (!IsCorrectMap()) {
 			return false;
 		}
-		if (!MinRenderDistance){
-			MinRenderDistance = -1;
-		}
-		if (!MaxRenderDistance){
-			MaxRenderDistance = -1;
-		}
-		
-		DayZPlayer thePlayer = DayZPlayer.Cast(GetGame().GetPlayer());
-		if (MinRenderDistance != -1 && thePlayer){
-			if (vector.Distance( thePlayer.GetPosition(), GetPosition()) <= MinRenderDistance){
-				return false;
-			}
-		}
-		if (MaxRenderDistance != -1 && thePlayer){
-			if (vector.Distance( thePlayer.GetPosition(), GetPosition()) >= MaxRenderDistance){
-				return false;
-			}
+		if (!IsWithinRenderDistance()){
+			return false;
 		}
 		return !HideOnMap;
 	}

@@ -170,74 +170,24 @@ class BasicMapNavigationHUD extends Managed
 		}
 		
 		// Update compass if player has one
-		if (m_HasCompass && m_CompassRoot)
+		if (m_CompassRoot)
 		{
-			m_CompassRoot.Show(true);
-			UpdateCompass(player);
-		}
-		else if (m_CompassRoot)
-		{
-			m_CompassRoot.Show(false);
+			m_CompassRoot.Show(m_HasCompass);
+			if (m_HasCompass) UpdateCompass(player);
 		}
 		
-		// Update minimap if player has GPS (GPS takes priority)
-		if (m_HasGPS && m_MinimapRoot)
+		// Update minimap if player has GPS
+		if (m_MinimapRoot)
 		{
-			m_MinimapRoot.Show(true);
-			UpdateMinimap(player);
-		}
-		else if (m_MinimapRoot)
-		{
-			m_MinimapRoot.Show(false);
+			m_MinimapRoot.Show(m_HasGPS);
+			if (m_HasGPS) UpdateMinimap(player);
 		}
 	}
 	
 	protected void CheckNavigationItems(Man player)
 	{
-		m_HasCompass = false;
-		m_HasGPS = false;
-		
-		if (!player || !player.GetInventory())
-		{
-			return;
-		}
-		
-		array<EntityAI> itemsArray = new array<EntityAI>;
-		player.GetInventory().EnumerateInventory(InventoryTraversalType.PREORDER, itemsArray);
-		
-		for (int i = 0; i < itemsArray.Count(); i++)
-		{
-			EntityAI item = itemsArray.Get(i);
-			if (!item)
-			{
-				continue;
-			}
-			
-			// Get item type as lowercase string for comparison
-			string itemType = item.GetType();
-			itemType.ToLower();
-			
-			// Check for compass (type name contains "compass")
-			if (itemType.Contains("compass") != -1)
-			{
-				// Only count non-ruined compasses
-				if (!item.IsRuined())
-				{
-					m_HasCompass = true;
-				}
-			}
-			
-			// Check for GPS (type name contains "gps")
-			// Also check for BM_Navigator which is the BasicMap GPS item
-			if (itemType.Contains("gps") != -1 || itemType.Contains("navigator") != -1)
-			{
-				// GPS/Navigator needs to be on (has power)
-				if (item.GetCompEM() && item.GetCompEM().IsSwitchedOn() && item.GetCompEM().IsWorking())
-				{
-					m_HasGPS = true;
-				}
-			}
-		}
+		m_HasCompass = BasicMap().HasCachedCompass();
+		m_HasGPS = BasicMap().HasCachedGPS();
 	}
 	
 	protected void UpdateCompass(Man player)

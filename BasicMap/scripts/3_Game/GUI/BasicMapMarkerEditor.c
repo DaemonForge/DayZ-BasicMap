@@ -63,11 +63,7 @@ class BasicMapMarkerEditor  extends ScriptedWidgetEventHandler {
 		m_Editor_Colour_Alpha 		= SliderWidget.Cast(m_EditorRoot.FindAnyWidget( "Alpha" ));
 		
 		m_EditorRoot.SetHandler(this);
-		if (BasicMap().PARTY_KEY != ""){
-			m_Editor_PartyMarker.Show(true);
-		} else {
-			m_Editor_PartyMarker.Show(false);
-		}
+		m_Editor_PartyMarker.Show(BasicMap().PARTY_KEY != "");
 		m_EditorRoot.Show(false);
 	}
 	
@@ -93,61 +89,57 @@ class BasicMapMarkerEditor  extends ScriptedWidgetEventHandler {
 		return super.OnClick(w, x, y, button);
 	}
 	
+	// Helper to update a color slider's visual feedback and the marker value
+	// channel: 0=R, 1=G, 2=B, 3=Alpha
+	protected void UpdateColorSlider(SliderWidget slider, int channel){
+		int val = slider.GetCurrent();
+		if (channel < 3){
+			m_SelectedMarker.Colour[channel] = val;
+		} else {
+			m_SelectedMarker.Alpha = val;
+		}
+		
+		if (val <= 0){
+			int dimR = 0; int dimG = 0; int dimB = 0;
+			if (channel == 0) dimR = 35;
+			if (channel == 2) dimB = 35;
+			if (channel == 3){ dimR = 55; dimG = 55; dimB = 55; }
+			slider.SetColor(ARGB(200, dimR, dimG, dimB));
+		} else {
+			float barColour = val / 255.0;
+			int baseRange = 205;
+			int baseOffset = 120;
+			if (channel == 3){
+				baseRange = 150;
+				baseOffset = 55;
+			}
+			barColour = barColour * baseRange;
+			barColour = barColour + baseOffset;
+			int safeVal = Math.Clamp(barColour, 120, 255);
+			int cR = 0; int cG = 0; int cB = 0;
+			if (channel == 0) cR = safeVal;
+			if (channel == 1) cG = safeVal;
+			if (channel == 2) cB = safeVal;
+			if (channel == 3){ cR = safeVal; cG = safeVal; cB = safeVal; }
+			int sliderAlpha = 200;
+			slider.SetColor(ARGB(sliderAlpha, cR, cG, cB));
+		}
+		RefreshEditorIcon();
+	}
+	
 	override bool OnChange(Widget w, int x, int y, bool finished)
 	{
-		float barColour = 255;
-		int safeBarColour = 255;
 		if (w == m_Editor_Colour_Red){
-			m_SelectedMarker.Colour[0] = m_Editor_Colour_Red.GetCurrent();
-			if (m_Editor_Colour_Red.GetCurrent() <= 0){
-				m_Editor_Colour_Red.SetColor(ARGB(200, 35, 0, 0));
-			} else {
-				barColour =  m_Editor_Colour_Red.GetCurrent() / 255;
-				barColour = barColour * 205;
-				barColour = barColour + 120; // So people can still tell which color each bar should of been
-				safeBarColour = Math.Clamp(barColour, 120, 255); 
-				m_Editor_Colour_Red.SetColor(ARGB(200,safeBarColour, 0, 0));
-			}
-			RefreshEditorIcon();
+			UpdateColorSlider(m_Editor_Colour_Red, 0);
 		}
-		if (w ==  m_Editor_Colour_Green){
-			m_SelectedMarker.Colour[1] = m_Editor_Colour_Green.GetCurrent();
-			if (m_Editor_Colour_Green.GetCurrent() <= 0){
-				m_Editor_Colour_Green.SetColor(ARGB(200, 35, 0, 0));
-			} else {
-				barColour =  m_Editor_Colour_Green.GetCurrent() / 255;
-				barColour = barColour * 205;
-				barColour = barColour + 120; // So people can still tell which color each bar should of been
-				safeBarColour = Math.Clamp(barColour, 120, 255); 
-				m_Editor_Colour_Green.SetColor(ARGB(200, 0, safeBarColour, 0));
-			}
-			RefreshEditorIcon();
+		if (w == m_Editor_Colour_Green){
+			UpdateColorSlider(m_Editor_Colour_Green, 1);
 		}
 		if (w == m_Editor_Colour_Blue){
-			m_SelectedMarker.Colour[2] = m_Editor_Colour_Blue.GetCurrent();
-			if (m_Editor_Colour_Blue.GetCurrent() <= 0){
-				m_Editor_Colour_Blue.SetColor(ARGB(255, 0, 0, 35));
-			} else {
-				barColour =  m_Editor_Colour_Blue.GetCurrent() / 255;
-				barColour = barColour * 205;
-				barColour = barColour + 120; // So people can still tell which color each bar should of been
-				safeBarColour = Math.Clamp(barColour, 120, 255); 
-				m_Editor_Colour_Blue.SetColor(ARGB(200, 0, 0, safeBarColour));
-			}
-			RefreshEditorIcon();
+			UpdateColorSlider(m_Editor_Colour_Blue, 2);
 		}
 		if (w == m_Editor_Colour_Alpha){
-			m_SelectedMarker.Alpha = m_Editor_Colour_Alpha.GetCurrent();
-			if (m_Editor_Colour_Alpha.GetCurrent() <= 0){
-				m_Editor_Colour_Alpha.SetColor(ARGB(200, 55, 55, 55));
-			} else {
-				barColour =  m_Editor_Colour_Alpha.GetCurrent() / 255;
-				barColour = barColour * 150;
-				barColour = barColour + 55; // So people can still tell which color each bar should of been
-				safeBarColour = Math.Clamp(barColour, 120, 255);  
-				m_Editor_Colour_Alpha.SetColor(ARGB(200, safeBarColour, safeBarColour, safeBarColour));
-			}
-			RefreshEditorIcon();
+			UpdateColorSlider(m_Editor_Colour_Alpha, 3);
 		}
 		if (w == m_Editor_Name){
 			m_SelectedMarker.SetName(m_Editor_Name.GetText());

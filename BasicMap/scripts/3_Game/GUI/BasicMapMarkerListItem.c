@@ -11,6 +11,11 @@ class BasicMapMarkerListItem  extends ScriptedWidgetEventHandler {
 	
 	ButtonWidget		m_Selector;
 	
+	// Cache to avoid reloading icon/color every refresh
+	protected string	m_LastIcon = "";
+	protected int		m_LastColor = 0;
+	protected string	m_LastName = "";
+	
 	void BasicMapMarkerListItem(Widget parent, BasicMapMenu mapMenu, BasicMapMarker marker){
 		m_Marker 			= marker;
 		m_MapMenu			= mapMenu;
@@ -62,10 +67,23 @@ class BasicMapMarkerListItem  extends ScriptedWidgetEventHandler {
 
 	bool Refresh(){
 		if (m_Marker){
-			m_icon.LoadImageFile(0, m_Marker.GetIcon());
-			m_icon.SetColor(m_Marker.GetColour());
+			string curIcon = m_Marker.GetIcon();
+			int curColor = m_Marker.GetColour();
+			string curName = m_Marker.GetName();
 			
-			m_name.SetText(m_Marker.GetName());
+			// Only update widgets when values actually changed
+			if (curIcon != m_LastIcon){
+				m_LastIcon = curIcon;
+				m_icon.LoadImageFile(0, curIcon);
+			}
+			if (curColor != m_LastColor){
+				m_LastColor = curColor;
+				m_icon.SetColor(curColor);
+			}
+			if (curName != m_LastName){
+				m_LastName = curName;
+				m_name.SetText(curName);
+			}
 			return true;
 		}
 		Delete();
