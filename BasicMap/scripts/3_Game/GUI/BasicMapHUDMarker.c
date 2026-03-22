@@ -24,8 +24,8 @@ class BasicMapHUDMarker extends Managed {
 	protected string					m_LastLoadedIcon = "";
 	
 	// Proximity fade settings - text shows when looking near marker
-	protected float						m_ProximityRadius = 0.28; // 28% of screen from center (name starts fading)
-	protected float						m_DistanceProximityRadius = 0.20; // 20% - distance fades in closer
+	protected float						m_ProximityRadius = 0.364; // 36.4% of screen from center (name starts fading)
+	protected float						m_DistanceProximityRadius = 0.26; // 26% - distance fades in closer
 	protected float						m_CurrentTextAlpha = 0;
 	protected float						m_CurrentDistanceAlpha = 0;
 	protected float						m_CurrentIconAlpha = 0.8; // Icon starts at 80%
